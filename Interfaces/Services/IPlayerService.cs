@@ -1,11 +1,10 @@
 ﻿using ShapeDungeon.DTOs;
-using ShapeDungeon.Entities.Enums;
-
 namespace ShapeDungeon.Interfaces.Services
 {
     public interface IPlayerService
     {
-        Task<bool> CreatePlayerAsync(string name, PlayerShape shape);
+        Task<bool> CreatePlayerAsync(PlayerDto pDto);
+        Task<IEnumerable<PlayerDto>> GetAllPlayersAsync();
         Task<PlayerDto?> GetPlayerAsync(string name);
 
         void Dispose();

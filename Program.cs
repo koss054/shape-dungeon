@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using ShapeDungeon.Data;
+using ShapeDungeon.Interfaces.Repositories;
 using ShapeDungeon.Interfaces.Services;
 using ShapeDungeon.Services;
 
@@ -10,6 +11,7 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddDbContext<AppDbContext>(options => 
     options.UseSqlServer(connectionString));
 
+builder.Services.AddScoped<IDbContext, AppDbContext>();
 builder.Services.AddScoped<IPlayerService, PlayerService>();
 builder.Services.AddControllersWithViews();
 

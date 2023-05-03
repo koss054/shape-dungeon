@@ -2,7 +2,6 @@
 
 using ShapeDungeon.DTOs;
 using ShapeDungeon.Entities;
-using ShapeDungeon.Entities.Enums;
 using ShapeDungeon.Interfaces.Repositories;
 using ShapeDungeon.Interfaces.Services;
 
@@ -17,29 +16,44 @@ namespace ShapeDungeon.Services
             _context = context;
         }
 
-        public async Task<bool> CreatePlayerAsync(string name, PlayerShape shape)
+        public async Task<bool> CreatePlayerAsync(PlayerDto pDto)
         {
-            if (_context.Players.Any(x => x.Name == name))
+            if (_context.Players.Any(x => x.Name == pDto.Name))
                 return false;
 
             var player = new Player()
             {
-                Name = name,
-                Strength = 5,
-                Vigor = 10,
-                Agility = 5,
-                Level = 1,
-                CurrentExp = 0,
-                ExpToNextLevel = 25,
-                CurrentSkillpoints = 1,
-                Shape = shape
+                Name = pDto.Name,
+                Strength = pDto.Strength,
+                Vigor = pDto.Vigor,
+                Agility = pDto.Agility,
+                Level = pDto.Level,
+                CurrentExp = pDto.CurrentExp,
+                ExpToNextLevel = pDto.ExpToNextLevel,
+                CurrentSkillpoints = pDto.CurrentSkillpoints,
+                Shape = pDto.Shape
             };
 
             await _context.Players.AddAsync(player);
             await _context.SaveChangesAsync();
 
-            return _context.Players.Any(x => x.Name == name);
+            return _context.Players.Any(x => x.Name == pDto.Name);
         }
+
+        public async Task<IEnumerable<PlayerDto>> GetAllPlayersAsync()
+            => await _context.Players
+                .Select(x => new PlayerDto()
+                {
+                    Name = x.Name,
+                    Strength = x.Strength,
+                    Vigor = x.Vigor,
+                    Agility = x.Agility,
+                    Level = x.Level,
+                    CurrentExp = x.CurrentExp,
+                    ExpToNextLevel = x.ExpToNextLevel,
+                    CurrentSkillpoints = x.CurrentSkillpoints,
+                    Shape = x.Shape
+                }).ToListAsync();
 
         public async Task<PlayerDto?> GetPlayerAsync(string name)
         {
