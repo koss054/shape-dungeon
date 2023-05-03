@@ -1,5 +1,14 @@
-﻿@{
+﻿@using ShapeDungeon.DTOs
+@using ShapeDungeon.Entities.Enums
+@model PlayerDto
+
+@{
     ViewData["Title"] = "Home Page";
+}
+
+@if (Model.Shape == PlayerShape.Square)
+{
+    <h1>@Model.Shape.ToString()</h1>
 }
 
 <div class="text-center">

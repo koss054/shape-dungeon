@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using ShapeDungeon.Entities.Enums;
+using ShapeDungeon.Interfaces.Services;
 using ShapeDungeon.Models;
 using System.Diagnostics;
 
@@ -6,21 +8,26 @@ namespace ShapeDungeon.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly IPlayerService _playerService;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(IPlayerService playerService)
         {
-            _logger = logger;
+            _playerService = playerService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
-        }
+            var player = await _playerService.GetPlayerAsync("test");
 
-        public IActionResult Privacy()
-        {
-            return View();
+            if (player == null)
+            {
+                bool isCreated = await _playerService.CreatePlayerAsync("test", PlayerShape.Square);
+
+                if (isCreated)
+                    player = await _playerService.GetPlayerAsync("test");
+            }
+
+            return View(player);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

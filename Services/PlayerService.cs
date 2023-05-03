@@ -18,6 +18,9 @@ namespace ShapeDungeon.Services
 
         public async Task<bool> CreatePlayerAsync(string name, PlayerShape shape)
         {
+            if (_context.Players.Any(x => x.Name == name))
+                return false;
+
             var player = new Player()
             {
                 Name = name,
