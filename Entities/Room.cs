@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using ShapeDungeon.Interfaces.Entity;
+﻿using ShapeDungeon.Interfaces.Entity;
 
 namespace ShapeDungeon.Entities
 {
@@ -8,6 +7,14 @@ namespace ShapeDungeon.Entities
         public Guid Id { get; init; }
 
         public bool IsActive { get; set; }
+
+        public bool CanGoLeft { get; set; }
+
+        public bool CanGoRight { get; set; }
+
+        public bool CanGoUp { get; set; }
+
+        public bool CanGoDown { get; set; }
 
         public bool IsStartRoom { get; init; }
 
