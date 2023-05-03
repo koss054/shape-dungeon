@@ -1,15 +1,16 @@
 using Microsoft.EntityFrameworkCore;
 using ShapeDungeon.Data;
+using ShapeDungeon.Interfaces.Services;
+using ShapeDungeon.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-var connectionString 
-    = builder.Configuration.GetConnectionString("DefaultConnection");
-
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<AppDbContext>(options => 
     options.UseSqlServer(connectionString));
 
+builder.Services.AddScoped<IPlayerService, PlayerService>();
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
