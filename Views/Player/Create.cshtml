@@ -1,0 +1,72 @@
+﻿@using ShapeDungeon.DTOs
+@model PlayerDto
+
+@{
+    ViewBag.Title = "Create Player";
+}
+
+<div class="container" style="width:100vw;height:75vh">
+    <div class="row text-center mt-4" style="height:10%">
+        <h2>Create Player</h2>
+    </div>
+    <div class="row align-items-center" style="height:80%">
+        <form method="post" class="col-sm-6">
+            <div class="form-group d-flex justify-content-between">
+                <div>
+                    <label for="square" class="form-check-label me-2">Square</label>
+                    <input type="radio" id="square" class="form-check-input" name="player-shape" value="Square" checked>
+                </div>
+                <div>
+                    <label for="triangle" class="form-check-label me-2">Triangle</label>
+                    <input type="radio" id="triangle" class="form-check-input" name="player-shape" value="Triangle">
+                </div>
+                <div>
+                    <label for="circle" class="form-check-label me-2">Circle</label>
+                    <input type="radio" id="circle" class="form-check-input" name="player-shape" value="Circle">
+                </div>
+            </div>
+
+            <hr class="border-3 border-top border-success">
+
+            <div class="form-group row">
+                <label for="player-name" class="col-sm-3 col-form-label">Player Name:</label>
+                <div class="col-9">
+                    <input type="text" class="form-control" asp-for="@Model.Name" placeholder="Squary" />
+                </div>
+            </div>
+
+            <hr class="border-3 border-top border-success">
+
+            <div class="form-group row">
+                <label for="strength" class="col-sm-3 col-form-label">Strength:</label>
+                <div class="col-sm-1">
+                    <input type="text" readonly class="form-control-plaintext" id="strength" asp-for="@Model.Strength" value="5">
+                </div>
+
+                <label for="vigor" class="col-sm-3 col-form-label">Vigor:</label>
+                <div class="col-sm-1">
+                    <input type="text" readonly class="form-control-plaintext" id="vigor" asp-for="@Model.Vigor" value="5">
+                </div>
+
+                <label for="agility" class="col-sm-3 col-form-label">Agility:</label>
+                <div class="col-sm-1">
+                    <input type="text" readonly class="form-control-plaintext" id="agility" asp-for="@Model.Strength" value="5">
+                </div>
+            </div>
+
+            <hr class="border-3 border-top border-success">
+
+            <div class="form-group row mx-auto" style="width:90%">
+                <input class="btn btn-outline-success text-center" type="button" value="Create" />
+            </div>
+        </form>
+
+        <div class="col-sm-5 position-relative">
+            <div 
+                style="height:10rem;width:10rem;background-color:limegreen"
+                class="position-absolute top-50 start-50 translate-middle"
+            >
+            </div>
+        </div>
+    </div>
+</div>

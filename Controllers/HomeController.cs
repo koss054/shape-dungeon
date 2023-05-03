@@ -21,13 +21,8 @@ namespace ShapeDungeon.Controllers
 
             if (player == null)
             {
-                bool isCreated = await _playerService.CreatePlayerAsync("test", PlayerShape.Square);
-
-                if (isCreated)
-                    player = await _playerService.GetPlayerAsync("test");
             }
 
-            _playerService.Dispose();
             return View(player);
         }
 
