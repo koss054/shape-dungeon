@@ -1,4 +1,5 @@
-﻿using ShapeDungeon.Interfaces.Entity;
+﻿using ShapeDungeon.Entities.Enums;
+using ShapeDungeon.Interfaces.Entity;
 
 namespace ShapeDungeon.Entities
 {
@@ -22,5 +23,7 @@ namespace ShapeDungeon.Entities
         public int ExpToNextLevel { get; set; }
 
         public int CurrentSkillpoints { get; set; }
+
+        public PlayerShape Shape { get; set; }
     }
 }
