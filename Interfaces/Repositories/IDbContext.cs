@@ -5,7 +5,6 @@ namespace ShapeDungeon.Interfaces.Repositories
 {
     public interface IDbContext
     {
-        public DbSet<Backpack> Backpacks { get; }
         public DbSet<Enemy> Enemies { get; }
         public DbSet<Item> Items { get; }
         public DbSet<Player> Players { get; }

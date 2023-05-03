@@ -12,7 +12,6 @@ namespace ShapeDungeon.Data
         public AppDbContext(DbContextOptions<AppDbContext> options)
             : base(options) { }
 
-        public DbSet<Backpack> Backpacks { get; set; }
         public DbSet<Enemy> Enemies { get; set; }
         public DbSet<Item> Items { get; set; }
         public DbSet<Player> Players { get; set; }
