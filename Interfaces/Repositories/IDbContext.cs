@@ -11,5 +11,6 @@ namespace ShapeDungeon.Interfaces.Repositories
         public DbSet<Room> Rooms { get; }
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
+        void Dispose();
     }
 }

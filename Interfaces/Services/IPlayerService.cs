@@ -7,5 +7,7 @@ namespace ShapeDungeon.Interfaces.Services
     {
         Task<bool> CreatePlayerAsync(string name, PlayerShape shape);
         Task<PlayerDto?> GetPlayerAsync(string name);
+
+        void Dispose();
     }
 }

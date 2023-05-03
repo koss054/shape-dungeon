@@ -8,7 +8,7 @@ using ShapeDungeon.Interfaces.Services;
 
 namespace ShapeDungeon.Services
 {
-    public class PlayerService : IPlayerService
+    public class PlayerService : IPlayerService, IDisposable
     {
         private readonly IDbContext _context;
 
@@ -59,6 +59,23 @@ namespace ShapeDungeon.Services
                 }).FirstOrDefaultAsync();
 
             return player;
+        }
+
+        private bool disposed = false;
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!this.disposed)
+                if (disposing)
+                    _context.Dispose();
+
+            this.disposed = true;
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
     }
 }

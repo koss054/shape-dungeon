@@ -27,6 +27,7 @@ namespace ShapeDungeon.Controllers
                     player = await _playerService.GetPlayerAsync("test");
             }
 
+            _playerService.Dispose();
             return View(player);
         }
 
