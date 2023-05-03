@@ -7,6 +7,8 @@ namespace ShapeDungeon.Entities
     {
         public Guid Id { get; init; }
 
+        public bool IsActive { get; set; }
+
         public bool IsStartRoom { get; init; }
 
         public bool IsEnemyRoom { get; init; }
@@ -15,19 +17,11 @@ namespace ShapeDungeon.Entities
 
         public bool IsEndRoom { get; init; }
 
-        public IEnumerable<IEnemy> Enemies { get; init; }
-            = new List<IEnemy>();
+        public IEnumerable<Enemy> Enemies { get; init; }
+            = new List<Enemy>();
 
-        [ForeignKey(nameof(PreviousRoom))]
         public Guid PreviousRoomId { get; init; }
 
-        public Room PreviousRoom { get; init; }
-            = new Room();
-
-        [ForeignKey(nameof(NextRoom))]
         public Guid NextRoomId { get; init; }
-
-        public Room NextRoom { get; init; }
-            = new Room();
     }
 }
