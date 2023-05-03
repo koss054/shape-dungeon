@@ -1,17 +1,18 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using ShapeDungeon.Data;
+
 using ShapeDungeon.DTOs;
 using ShapeDungeon.Entities;
 using ShapeDungeon.Entities.Enums;
+using ShapeDungeon.Interfaces.Repositories;
 using ShapeDungeon.Interfaces.Services;
 
 namespace ShapeDungeon.Services
 {
     public class PlayerService : IPlayerService
     {
-        private readonly AppDbContext _context;
+        private readonly IDbContext _context;
 
-        public PlayerService(AppDbContext context)
+        public PlayerService(IDbContext context)
         {
             _context = context;
         }
