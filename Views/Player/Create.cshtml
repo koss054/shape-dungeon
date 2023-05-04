@@ -11,19 +11,13 @@
     </div>
     <div class="row align-items-center" style="height:80%">
         <form method="post" class="col-sm-6">
-            <div class="form-group d-flex justify-content-between">
-                <div>
-                    <label for="square" class="form-check-label me-2">Square</label>
-                    <input type="radio" id="square" class="form-check-input" name="player-shape" value="Square" checked>
-                </div>
-                <div>
-                    <label for="triangle" class="form-check-label me-2">Triangle</label>
-                    <input type="radio" id="triangle" class="form-check-input" name="player-shape" value="Triangle">
-                </div>
-                <div>
-                    <label for="circle" class="form-check-label me-2">Circle</label>
-                    <input type="radio" id="circle" class="form-check-input" name="player-shape" value="Circle">
-                </div>
+            <div class="btn-group" role="group" aria-label="Choose Shape:" style="width:100%">
+              <input type="radio" class="btn-check" name="shape" id="square" asp-for="@Model.Shape" value="Square" checked>
+              <label class="btn btn-outline-success" for="square">Square</label>
+              <input type="radio" class="btn-check" name="shape" id="triangle" asp-for="@Model.Shape" value="Triangle">
+              <label class="btn btn-outline-success" for="triangle">Triangle</label>
+              <input type="radio" class="btn-check" name="shape" id="circle" asp-for="@Model.Shape" value="Circle">
+              <label class="btn btn-outline-success" for="circle">Circle</label>
             </div>
 
             <hr class="border-3 border-top border-success">
@@ -40,7 +34,7 @@
             <div class="form-group row">
                 <label for="strength" class="col-sm-3 col-form-label">Strength:</label>
                 <div class="col-sm-1">
-                    <input type="text" readonly class="form-control-plaintext" id="strength" asp-for="@Model.Strength" value="5">
+                    <input type="text" readonly class="form-control-plaintext" id="strength" asp-for="@Model.Strength" value="2">
                 </div>
 
                 <label for="vigor" class="col-sm-3 col-form-label">Vigor:</label>
@@ -50,19 +44,20 @@
 
                 <label for="agility" class="col-sm-3 col-form-label">Agility:</label>
                 <div class="col-sm-1">
-                    <input type="text" readonly class="form-control-plaintext" id="agility" asp-for="@Model.Strength" value="5">
+                    <input type="text" readonly class="form-control-plaintext" id="agility" asp-for="@Model.Agility" value="1">
                 </div>
             </div>
 
             <hr class="border-3 border-top border-success">
 
             <div class="form-group row mx-auto" style="width:90%">
-                <input class="btn btn-outline-success text-center" type="button" value="Create" />
+                <button class="btn btn-outline-success text-center" type="submit">Create</button>
             </div>
         </form>
 
         <div class="col-sm-5 position-relative">
-            <div 
+            <div
+                id="selected-shape"
                 style="height:10rem;width:10rem;background-color:limegreen"
                 class="position-absolute top-50 start-50 translate-middle"
             >
@@ -70,3 +65,5 @@
         </div>
     </div>
 </div>
+
+<script src=~/js/player/create.js></script>
