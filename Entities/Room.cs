@@ -27,8 +27,9 @@ namespace ShapeDungeon.Entities
         public IEnumerable<Enemy> Enemies { get; init; }
             = new List<Enemy>();
 
-        public Guid PreviousRoomId { get; init; }
-
-        public Guid NextRoomId { get; init; }
+        public Guid? LeftRoomId { get; init; }
+        public Guid? RightRoomId { get; init; }
+        public Guid? TopRoomId { get; init; }
+        public Guid? DownRoomId { get; init; }
     }
 }
