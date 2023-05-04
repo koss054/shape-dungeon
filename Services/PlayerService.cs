@@ -27,10 +27,10 @@ namespace ShapeDungeon.Services
                 Strength = pDto.Strength,
                 Vigor = pDto.Vigor,
                 Agility = pDto.Agility,
-                Level = pDto.Level,
-                CurrentExp = pDto.CurrentExp,
-                ExpToNextLevel = pDto.ExpToNextLevel,
-                CurrentSkillpoints = pDto.CurrentSkillpoints,
+                Level = 1,
+                CurrentExp = 0,
+                ExpToNextLevel = 100,
+                CurrentSkillpoints = 0,
                 Shape = pDto.Shape
             };
 
