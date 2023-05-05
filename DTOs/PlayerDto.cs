@@ -8,17 +8,11 @@ namespace ShapeDungeon.DTOs
             = null!;
 
         public int Strength { get; set; }
-
         public int Vigor { get; set; }
-
         public int Agility { get; set; }
-
         public int Level { get; set; }
-
         public int CurrentExp { get; set; }
-
         public int ExpToNextLevel { get; set; }
-
         public int CurrentSkillpoints { get; set; }
 
         public PlayerShape Shape { get; set; }
