@@ -6,11 +6,6 @@
     ViewData["Title"] = "Home Page";
 }
 
-@if (Model.Shape == PlayerShape.Square)
-{
-    <h1>@Model.Shape.ToString()</h1>
-}
-
 <div class="text-center">
     <div class="row align-middle">
         <table style="height:75vh">
@@ -30,6 +25,41 @@
                             class="position-absolute top-50 start-50 translate-middle"
                             style="height:50vh;width:50vh;border:solid 1rem white"
                         >
+                            <div 
+                                id="move-up"
+                                class="position-absolute start-50 translate-middle"
+                                style="width:100%;top:-2.5rem;"
+                            >
+                                <button type="button" class="btn btn-outline-primary">Move ⇧</button>
+                                <button type="button" class="btn btn-outline-secondary">Scout ⇧</button>
+                            </div>
+
+                            <div 
+                                id="move-down"
+                                class="position-absolute start-50 translate-middle"
+                                style="width:100%;bottom:-5rem;"
+                            >
+                                <button type="button" class="btn btn-outline-primary">Move ⇩</button>
+                                <button type="button" class="btn btn-outline-secondary">Scout ⇩</button>
+                            </div>
+
+                            <div 
+                                id="move-left"
+                                class="position-absolute top-50 translate-middle"
+                                style="width:40%;left:-4.5rem;"
+                            >
+                                <button type="button" class="btn btn-outline-primary mb-1">Move ⇦</button>
+                                <button type="button" class="btn btn-outline-secondary">Scout ⇦</button>
+                            </div>
+
+                            <div 
+                                id="move-right"
+                                class="position-absolute top-50 start-100 translate-middle-y ms-1"
+                                style="width:40%;"
+                            >
+                                <button type="button" class="btn btn-outline-primary mb-1">Move ⇨</button>
+                                <button type="button" class="btn btn-outline-secondary">Scout ⇨</button>
+                            </div>
                         </div>
                     </td>
                 </tr>
