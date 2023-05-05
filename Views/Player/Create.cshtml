@@ -67,3 +67,10 @@
 </div>
 
 <script src=~/js/player/create.js></script>
+
+@if (@TempData["error"] != null)
+{
+    <script>
+        toastr.error("Player name can't be empty.");
+    </script>
+}
