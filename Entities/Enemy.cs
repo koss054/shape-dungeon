@@ -19,10 +19,5 @@ namespace ShapeDungeon.Entities
         public int Level { get; set; }
 
         public int DroppedExp { get; set; }
-
-        [ForeignKey(nameof(Room))]
-        public Guid RoomId { get; set; }
-
-        public Room? Room { get; set; }
     }
 }

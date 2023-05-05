@@ -24,8 +24,7 @@ namespace ShapeDungeon.Entities
 
         public bool IsEndRoom { get; init; }
 
-        public IEnumerable<Enemy> Enemies { get; init; }
-            = new List<Enemy>();
+        public Enemy? Enemy { get; init; }
 
         public Guid? LeftRoomId { get; init; }
         public Guid? RightRoomId { get; init; }

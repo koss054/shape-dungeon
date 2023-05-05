@@ -13,7 +13,7 @@ namespace ShapeDungeon.Interfaces.Entity
         bool IsEnemyRoom { get; }
         bool IsSafeRoom { get; }
         bool IsEndRoom { get; }
-        IEnumerable<Enemy> Enemies { get; }
+        Enemy? Enemy { get; }
 
         Guid? LeftRoomId { get; }
         Guid? RightRoomId { get; }
