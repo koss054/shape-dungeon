@@ -51,6 +51,6 @@ function setPlayerAttributes(shape) {
     }
 
     strengthEl.value = newStrength;
-    vigorEl.value = newVigor
+    vigorEl.value = newVigor;
     agilityEl.value = newAgility;
 }
