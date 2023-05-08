@@ -13,6 +13,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 builder.Services.AddScoped<IDbContext, AppDbContext>();
 builder.Services.AddScoped<IPlayerService, PlayerService>();
+builder.Services.AddScoped<IRoomService, RoomService>();
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
