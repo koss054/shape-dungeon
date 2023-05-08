@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using ShapeDungeon.DTOs;
 using ShapeDungeon.Entities.Enums;
 using ShapeDungeon.Interfaces.Services;
 using ShapeDungeon.Models;
@@ -23,7 +24,8 @@ namespace ShapeDungeon.Controllers
             {
             }
 
-            return View(player);
+            var game = new GameDto() { Player = player };
+            return View(game);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
