@@ -1,0 +1,67 @@
+﻿@using ShapeDungeon.DTOs
+@model PlayerDto
+
+@{
+    ViewBag.Title = "Create Room";
+}
+
+<div class="container" style="width:100vw;height:75vh">
+    <div class="row text-center mt-4" style="height:10%">
+        <h2>Create Room</h2>
+    </div>
+    <div class="row align-items-center" style="height:80%">
+        <form method="post" class="col-sm-6">
+            <p class="text-center">Which directions can you go to from this room?</p>
+            <div class="btn-group" role="group" aria-label="Choose Directions:" style="width:100%">
+              <input type="radio" class="btn-check" name="go-left" id="left-dir" asp-for="@Model.Shape" value="left">
+              <label class="btn btn-outline-success" for="left-dir">Left</label>
+              <input type="radio" class="btn-check" name="go-right" id="right-dir" asp-for="@Model.Shape" value="right">
+              <label class="btn btn-outline-success" for="right-dir">Right</label>
+              <input type="radio" class="btn-check" name="go-up" id="up-dir" asp-for="@Model.Shape" value="up">
+              <label class="btn btn-outline-success" for="up-dir">Up</label>
+              <input type="radio" class="btn-check" name="go-down" id="down-dir" asp-for="@Model.Shape" value="down">
+              <label class="btn btn-outline-success" for="down-dir">Down</label>
+            </div>
+
+            <hr class="border-3 border-top border-success">
+
+            <p class="text-center">What properties does the room have?</p>
+            <div class="btn-group" role="group" aria-label="Choose Properties:" style="width:100%">
+              <input type="radio" class="btn-check" name="make-start" id="start-room-option" asp-for="@Model.Shape" value="start">
+              <label class="btn btn-outline-primary" for="start-room-option">Start Room</label>
+              <input type="radio" class="btn-check" name="make-safe" id="safe-room-option" asp-for="@Model.Shape" value="safe">
+              <label class="btn btn-outline-success" for="safe-room-option">Safe Room</label>
+              <input type="radio" class="btn-check" name="make-enemy" id="enemy-room-option" asp-for="@Model.Shape" value="enemy">
+              <label class="btn btn-outline-danger" for="enemy-room-option">Enemy Room</label>
+            </div>
+
+            <hr class="border-3 border-top border-success">
+
+            Insert extra stuff here homie
+
+            <hr class="border-3 border-top border-success">
+
+            <div class="form-group row mx-auto" style="width:90%">
+                <button class="btn btn-outline-success text-center" type="submit">Create</button>
+            </div>
+        </form>
+
+        <div class="col-sm-5 position-relative">
+            <div
+                id="room"
+                class="position-absolute top-50 start-50 translate-middle"
+                style="height:50vh;width:50vh;border:solid 1rem white"
+            >
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src=~/js/room/create.js></script>
+
+@if (@TempData["error"] != null)
+{
+    <script>
+        toastr.error("Player name can't be empty.");
+    </script>
+}
