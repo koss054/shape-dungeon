@@ -27,12 +27,12 @@
 
             <p class="text-center">What properties does the room have?</p>
             <div class="btn-group" role="group" aria-label="Choose Properties:" style="width:100%">
-              <input type="radio" class="btn-check" name="make-start" id="start-room-option" asp-for="@Model.Shape" value="start">
-              <label class="btn btn-outline-primary" for="start-room-option">Start Room</label>
-              <input type="radio" class="btn-check" name="make-safe" id="safe-room-option" asp-for="@Model.Shape" value="safe">
-              <label class="btn btn-outline-success" for="safe-room-option">Safe Room</label>
-              <input type="radio" class="btn-check" name="make-enemy" id="enemy-room-option" asp-for="@Model.Shape" value="enemy">
-              <label class="btn btn-outline-danger" for="enemy-room-option">Enemy Room</label>
+              <input type="radio" class="btn-check" name="room-option" id="start-room-option" asp-for="@Model.Shape" value="start">
+              <label class="btn btn-outline-primary" for="start-room-option" id="start-label">Start Room</label>
+              <input type="radio" class="btn-check" name="room-option" id="safe-room-option" asp-for="@Model.Shape" value="safe" checked>
+              <label class="btn btn-outline-success" for="safe-room-option" id="safe-label">Safe Room</label>
+              <input type="radio" class="btn-check" name="room-option" id="enemy-room-option" asp-for="@Model.Shape" value="enemy">
+              <label class="btn btn-outline-danger" for="enemy-room-option" id="enemy-label">Enemy Room</label>
             </div>
 
             <hr class="border-3 border-top border-success">
