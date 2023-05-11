@@ -63,7 +63,7 @@ function toggleRoomOptionBackground() {
     const currRoomOption = this.id;
     switch (currRoomOption) {
         case "start-label": roomEl.style.background = "#2a9fd669"; break;
-        case "safe-label": roomEl.style.background = "#cc000069"; break;
+        case "safe-label": roomEl.style.background = "#77b30069"; break;
         case "enemy-label": roomEl.style.background = "#cc000069"; break;
         case "end-label": roomEl.style.background = "#9933cc69"; break;
         default: console.log("bruh, room option error..."); break;
