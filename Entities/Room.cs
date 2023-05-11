@@ -8,6 +8,8 @@ namespace ShapeDungeon.Entities
 
         public bool IsActive { get; set; }
 
+        public bool IsActiveForEdit { get; set; }
+
         public bool CanGoLeft { get; set; }
 
         public bool CanGoRight { get; set; }

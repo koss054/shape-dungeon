@@ -5,6 +5,8 @@ namespace ShapeDungeon.Interfaces.Entity
     public interface IRoom : IGuidEntity
     {
         bool IsActive { get; }
+
+        bool IsActiveForEdit { get; }
         bool CanGoLeft { get; }
         bool CanGoRight { get; }
         bool CanGoUp { get; }
