@@ -6,9 +6,11 @@ const downRadioBtn = document.getElementById("down-dir");
 const startBtnLabel = document.getElementById("start-label");
 const safeBtnLabel = document.getElementById("safe-label");
 const enemyBtnLabel = document.getElementById("enemy-label");
+const endBtnLabel = document.getElementById("end-label");
 const startRadioBtn = document.getElementById("start-room-option");
 const safeRadioBtn = document.getElementById("safe-room-option");
 const enemyRadioBtn = document.getElementById("enemy-room-option");
+const endRadioBtn = document.getElementById("end-room-option");
 
 const roomEl = document.getElementById("room");
 
@@ -27,6 +29,7 @@ downRadioBtn.addEventListener("click", function () { toggleRadioBtn("down") }, f
 startBtnLabel.addEventListener("click", toggleRoomOptionBackground);
 safeBtnLabel.addEventListener("click", toggleRoomOptionBackground);
 enemyBtnLabel.addEventListener("click", toggleRoomOptionBackground);
+endBtnLabel.addEventListener("click", toggleRoomOptionBackground);
 
 updateRoom();
 
@@ -59,9 +62,10 @@ function toggleRadioHighlight(direction) {
 function toggleRoomOptionBackground() {
     const currRoomOption = this.id;
     switch (currRoomOption) {
-        case "start-label": roomEl.style.background = "#00608b69"; break;
-        case "safe-label": roomEl.style.background = "#00640069"; break;
-        case "enemy-label": roomEl.style.background = "#8b000069"; break;
+        case "start-label": roomEl.style.background = "#2a9fd669"; break;
+        case "safe-label": roomEl.style.background = "#cc000069"; break;
+        case "enemy-label": roomEl.style.background = "#cc000069"; break;
+        case "end-label": roomEl.style.background = "#9933cc69"; break;
         default: console.log("bruh, room option error..."); break;
     }
 }
@@ -79,7 +83,8 @@ function updateRoom() {
 
     room.setAttribute("style", `height:50vh;width:50vh;${leftBorder};${rightBorder};${topBorder};${bottomBorder}`);
 
-    if (startRadioBtn.checked) roomEl.style.background = "#00608b69";
-    if (safeRadioBtn.checked) roomEl.style.background = "#00640069";
-    if (enemyRadioBtn.checked) roomEl.style.background = "#8b000069";
+    if (startRadioBtn.checked) roomEl.style.background = "#2a9fd669";
+    else if (safeRadioBtn.checked) roomEl.style.background = "#77b30069";
+    else if (enemyRadioBtn.checked) roomEl.style.background = "#cc000069";
+    else if (endRadioBtn.checked) roomEl.style.background = "#9933cc69";
 }
