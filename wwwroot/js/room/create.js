@@ -12,6 +12,8 @@ const safeRadioBtn = document.getElementById("safe-room-option");
 const enemyRadioBtn = document.getElementById("enemy-room-option");
 const endRadioBtn = document.getElementById("end-room-option");
 
+const radioBtnArr = [startRadioBtn, safeRadioBtn, enemyRadioBtn, endRadioBtn];
+
 const roomEl = document.getElementById("room");
 
 // Doing this becuase bootstrap changes the checked property to true.
@@ -67,6 +69,10 @@ function toggleRoomOptionBackground() {
         case "enemy-label": roomEl.style.background = "#cc000069"; break;
         case "end-label": roomEl.style.background = "#9933cc69"; break;
         default: console.log("bruh, room option error..."); break;
+    }
+
+    for (const radioBtn of radioBtnArr) {
+        if (radioBtn.id != currRoomOption) radioBtn.checked = false;
     }
 }
 
