@@ -16,7 +16,8 @@ namespace ShapeDungeon.Controllers
         [HttpGet]
         public IActionResult Create()
         {
-            return View();
+            var room = new RoomDto();
+            return View(room);
         }
 
         [HttpPost]
