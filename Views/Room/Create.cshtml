@@ -1,5 +1,5 @@
 ﻿@using ShapeDungeon.DTOs
-@model PlayerDto
+@model RoomDto
 
 @{
     ViewBag.Title = "Create Room";
@@ -13,13 +13,13 @@
         <form method="post" class="col-sm-6">
             <p class="text-center">Which directions can you go to from this room?</p>
             <div class="btn-group" role="group" aria-label="Choose Directions:" style="width:100%">
-              <input type="radio" class="btn-check" name="go-left" id="left-dir" asp-for="@Model.Shape" value="left">
+              <input type="radio" class="btn-check" name="go-left" id="left-dir" asp-for="@Model.CanGoLeft" value="left">
               <label class="btn btn-outline-success" for="left-dir">Left</label>
-              <input type="radio" class="btn-check" name="go-right" id="right-dir" asp-for="@Model.Shape" value="right">
+              <input type="radio" class="btn-check" name="go-right" id="right-dir" asp-for="@Model.CanGoRight" value="right">
               <label class="btn btn-outline-success" for="right-dir">Right</label>
-              <input type="radio" class="btn-check" name="go-up" id="up-dir" asp-for="@Model.Shape" value="up">
+              <input type="radio" class="btn-check" name="go-up" id="up-dir" asp-for="@Model.CanGoUp" value="up">
               <label class="btn btn-outline-success" for="up-dir">Up</label>
-              <input type="radio" class="btn-check" name="go-down" id="down-dir" asp-for="@Model.Shape" value="down">
+              <input type="radio" class="btn-check" name="go-down" id="down-dir" asp-for="@Model.CanGoDown" value="down">
               <label class="btn btn-outline-success" for="down-dir">Down</label>
             </div>
 
@@ -27,12 +27,14 @@
 
             <p class="text-center">What properties does the room have?</p>
             <div class="btn-group" role="group" aria-label="Choose Properties:" style="width:100%">
-              <input type="radio" class="btn-check" name="room-option" id="start-room-option" asp-for="@Model.Shape" value="start">
+              <input type="radio" class="btn-check" name="room-option" id="start-room-option" asp-for="@Model.IsStartRoom" value="start">
               <label class="btn btn-outline-primary" for="start-room-option" id="start-label">Start Room</label>
-              <input type="radio" class="btn-check" name="room-option" id="safe-room-option" asp-for="@Model.Shape" value="safe" checked>
+              <input type="radio" class="btn-check" name="room-option" id="safe-room-option" asp-for="@Model.IsSafeRoom" value="safe" checked>
               <label class="btn btn-outline-success" for="safe-room-option" id="safe-label">Safe Room</label>
-              <input type="radio" class="btn-check" name="room-option" id="enemy-room-option" asp-for="@Model.Shape" value="enemy">
+              <input type="radio" class="btn-check" name="room-option" id="enemy-room-option" asp-for="@Model.IsEnemyRoom" value="enemy">
               <label class="btn btn-outline-danger" for="enemy-room-option" id="enemy-label">Enemy Room</label>
+              <input type="radio" class="btn-check" name="room-option" id="end-room-option" asp-for="@Model.IsEndRoom" value="end">
+              <label class="btn btn-outline-info" for="end-room-option" id="end-label">End Room</label>
             </div>
 
             <hr class="border-3 border-top border-success">
