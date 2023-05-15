@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ShapeDungeon.DTOs;
-using ShapeDungeon.Entities.Enums;
 using ShapeDungeon.Interfaces.Services;
 using ShapeDungeon.Models;
 using System.Diagnostics;
@@ -10,21 +9,30 @@ namespace ShapeDungeon.Controllers
     public class HomeController : Controller
     {
         private readonly IPlayerService _playerService;
+        private readonly IRoomService _roomService;
 
-        public HomeController(IPlayerService playerService)
+        public HomeController(
+            IPlayerService playerService,
+            IRoomService roomService)
         {
             _playerService = playerService;
+            _roomService = roomService;
         }
 
         public async Task<IActionResult> Index()
         {
             var player = await _playerService.GetPlayerAsync("Nov Kryg Homiesss");
+            var room = await _roomService.GetActiveRoomAsync();
 
             if (player == null)
             {
             }
 
-            var game = new GameDto() { Player = player };
+            if (room == null)
+            {
+            }
+
+            var game = new GameDto() { Player = player, Room = room };
             return View(game);
         }
 
