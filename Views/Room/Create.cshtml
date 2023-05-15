@@ -1,5 +1,5 @@
-﻿@using ShapeDungeon.DTOs
-@model RoomDto
+﻿@using ShapeDungeon.DTOs.Room
+@model RoomCreateDto
 
 @{
     ViewBag.Title = "Create Room";
@@ -29,7 +29,7 @@
             <div class="btn-group" role="group" aria-label="Choose Properties:" style="width:100%">
                 <input type="radio" class="btn-check" name="IsStartRoom" id="start-room-option" asp-for="@Model.IsStartRoom" value="true">
                 <label class="btn btn-outline-primary" for="start-room-option" id="start-label">Start Room</label>
-                <input type="radio" class="btn-check" name="IsSafeRoom" id="safe-room-option" asp-for="@Model.IsSafeRoom" value="true" checked>
+                <input type="radio" class="btn-check" name="IsSafeRoom" id="safe-room-option" asp-for="@Model.IsSafeRoom" value="true">
                 <label class="btn btn-outline-success" for="safe-room-option" id="safe-label">Safe Room</label>
                 <input type="radio" class="btn-check" name="IsEnemyRoom" id="enemy-room-option" asp-for="@Model.IsEnemyRoom" value="true">
                 <label class="btn btn-outline-danger" for="enemy-room-option" id="enemy-label">Enemy Room</label>
@@ -44,7 +44,7 @@
             <hr class="border-3 border-top border-success">
 
             <div class="form-group row mx-auto" style="width:90%">
-                <button class="btn btn-outline-success text-center" type="submit">Create</button>
+                <button class="btn btn-outline-success text-center" id="create-room-btn" type="submit">Create</button>
             </div>
         </form>
 
@@ -55,7 +55,7 @@
                 <div id="move-up"
                      class="position-absolute translate-middle-y"
                      style="width:100%;top:-2.5rem;left:7.5rem">
-                    @if (Model.CanGoUp)
+                    @if (Model.TopRoomId != null)
                     {
                         <button type="button" class="btn btn-outline-dark">Go ⇧</button>
                     }
@@ -68,7 +68,7 @@
                 <div id="move-down"
                      class="position-absolute translate-middle-y"
                      style="width:100%;bottom:-4.75rem;left:7.5rem">
-                    @if (Model.CanGoDown)
+                    @if (Model.DownRoomId != null)
                     {
                         <button type="button" class="btn btn-outline-dark">Go ⇩</button>
                     }
@@ -81,20 +81,20 @@
                 <div id="move-left"
                      class="position-absolute top-50 translate-middle"
                      style="width:40%;left:-3.25rem;">
-                    @if (Model.CanGoLeft)
+                    @if (Model.LeftRoomId != null)
                     {
-                        <button type="button" class="btn btn-outline-dark">Go ⇦</button>
+                        <button type="button" class="btn btn-outline-dark">⇦ Go</button>
                     }
                     else
                     {
-                        <button type="button" class="btn btn-outline-primary">Create ⇦</button>
+                        <button type="button" class="btn btn-outline-primary">⇦ Create</button>
                     }
                 </div>
 
                 <div id="move-right"
                      class="position-absolute top-50 translate-middle-y"
                      style="width:40%;right:-9.5rem">
-                    @if (Model.CanGoRight)
+                    @if (Model.RightRoomId != null)
                     {
                         <button type="button" class="btn btn-outline-dark">Go ⇨</button>
                     }
@@ -110,9 +110,9 @@
 
 <script src=~/js/room/create.js></script>
 
-@if (@TempData["error"] != null)
+@if (Model.IsActiveForEdit)
 {
     <script>
-        toastr.error("Player name can't be empty.");
+        disableCreationBtns();
     </script>
 }
