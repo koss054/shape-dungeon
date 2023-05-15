@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using ShapeDungeon.DTOs;
+using ShapeDungeon.DTOs.Room;
 using ShapeDungeon.Interfaces.Services;
 
 namespace ShapeDungeon.Controllers
@@ -14,14 +14,14 @@ namespace ShapeDungeon.Controllers
         }
 
         [HttpGet]
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            var room = new RoomDto();
+            var room = await _roomService.GetActiveForEditRoomAsync();
             return View(room);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(RoomDto room)
+        public async Task<IActionResult> Create(RoomCreateDto room)
         {
             if (!ModelState.IsValid)
             {
