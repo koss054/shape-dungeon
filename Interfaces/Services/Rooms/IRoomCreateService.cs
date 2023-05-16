@@ -13,6 +13,6 @@ namespace ShapeDungeon.Interfaces.Services.Rooms
 
         // Method used when user is on room creation page.
         // Happens when a blue "Create" button is pressed.
-        Task<bool> CreateRoomAsync(RoomCreateDto roomDto);
+        Task<Guid> CreateRoomAsync(RoomCreateDto roomDto);
     }
 }

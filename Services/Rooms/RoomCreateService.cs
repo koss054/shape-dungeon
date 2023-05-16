@@ -14,7 +14,7 @@ namespace ShapeDungeon.Services.Rooms
             _context = context;
         }
 
-        public async Task<bool> CreateRoomAsync(RoomCreateDto roomDto)
+        public async Task<Guid> CreateRoomAsync(RoomCreateDto roomDto)
         {
             Room room = new()
             {
@@ -36,8 +36,8 @@ namespace ShapeDungeon.Services.Rooms
             };
 
             await _context.Rooms.AddAsync(room);
-            var result = await _context.SaveChangesAsync();
-            return result > 0;
+            await _context.SaveChangesAsync();
+            return room.Id;
         }
 
         public RoomCreateDto InitializeLeftRoom(Guid rightRoomId)
