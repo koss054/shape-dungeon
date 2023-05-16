@@ -17,8 +17,8 @@ namespace ShapeDungeon.Services.Rooms
 
         public async Task<bool> ChangeActiveForEditRoomAsync(Guid oldRoomId, Guid newRoomId)
         {
-            var oldRoom = await _context.Rooms.FirstOrDefaultAsync(x => x.Id == oldRoomId);
-            var newRoom = await _context.Rooms.FirstOrDefaultAsync(x => x.Id == newRoomId);
+            var oldRoom = await _context.Rooms.FindAsync(oldRoomId);
+            var newRoom = await _context.Rooms.FindAsync(newRoomId);
 
             if (oldRoom != null && newRoom != null)
             {
