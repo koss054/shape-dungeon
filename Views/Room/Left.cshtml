@@ -11,7 +11,7 @@
         <h2>Create Room</h2>
     </div>
     <div class="row align-items-center" style="height:80%">
-        <form asp-action="Create" method="post" class="col-sm-6">
+        <form asp-action="Left" method="post" class="col-sm-6">
             <partial name="_CreationForm" />
         </form>
 
@@ -20,10 +20,3 @@
 </div>
 
 <script src=~/js/room/create.js></script>
-
-@if (Model.IsActiveForEdit)
-{
-    <script>
-        disableCreationBtns();
-    </script>
-}

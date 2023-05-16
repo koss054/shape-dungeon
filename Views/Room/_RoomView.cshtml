@@ -1,0 +1,69 @@
+﻿@using ShapeDungeon.DTOs.Room
+@model RoomCreateDto
+
+<div class="col-sm-6 position-relative">
+    <div id="room"
+         class="position-absolute top-50 start-50 translate-middle"
+         style="height:50vh;width:50vh;border:solid 1rem white">
+        @if (Model.IsActiveForEdit)
+        {
+
+            <div id="move-up"
+             class="position-absolute translate-middle-y"
+             style="width:100%;top:-2.5rem;left:7.5rem">
+                @if (Model.TopRoomId != null)
+                {
+                    <button type="button" class="btn btn-outline-dark">Go ⇧</button>
+                }
+                else
+                {
+                    <button type="button" class="btn btn-outline-primary">Create ⇧</button>
+                }
+            </div>
+
+            <div id="move-down"
+             class="position-absolute translate-middle-y"
+             style="width:100%;bottom:-4.75rem;left:7.5rem">
+                @if (Model.DownRoomId != null)
+                {
+                    <button type="button" class="btn btn-outline-dark">Go ⇩</button>
+                }
+                else
+                {
+                    <button type="button" class="btn btn-outline-primary">Create ⇩</button>
+                }
+            </div>
+
+            <div id="move-left"
+             class="position-absolute top-50 translate-middle"
+             style="width:40%;left:-3.25rem;">
+                @if (Model.LeftRoomId != null)
+                {
+                    <button type="button" class="btn btn-outline-dark">⇦ Go</button>
+                }
+                else
+                {
+                    <a type="button"
+               class="btn btn-outline-primary"
+               asp-controller="Room"
+               asp-action="Left">
+                        ⇦ Create
+                    </a>
+                }
+            </div>
+
+            <div id="move-right"
+             class="position-absolute top-50 translate-middle-y"
+             style="width:40%;right:-9.5rem">
+                @if (Model.RightRoomId != null)
+                {
+                    <button type="button" class="btn btn-outline-dark">Go ⇨</button>
+                }
+                else
+                {
+                    <button type="button" class="btn btn-outline-primary">Create ⇨</button>
+                }
+            </div>
+        }
+    </div>
+</div>
