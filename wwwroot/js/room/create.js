@@ -25,10 +25,10 @@ let isRightChecked = false;
 let isUpChecked = false;
 let isDownChecked = false;
 
-leftRadioBtn.addEventListener("click", function() { toggleRadioBtn("left") }, false);
-rightRadioBtn.addEventListener("click", function() { toggleRadioBtn("right") }, false);
-upRadioBtn.addEventListener("click", function () { toggleRadioBtn("up") }, false);
-downRadioBtn.addEventListener("click", function () { toggleRadioBtn("down") }, false);
+leftRadioBtn.addEventListener("click", toggleRadioBtn);
+rightRadioBtn.addEventListener("click", toggleRadioBtn);
+upRadioBtn.addEventListener("click", toggleRadioBtn);
+downRadioBtn.addEventListener("click", toggleRadioBtn);
 
 startBtnLabel.addEventListener("click", toggleRoomOptionBackground);
 safeBtnLabel.addEventListener("click", toggleRoomOptionBackground);
@@ -37,7 +37,10 @@ endBtnLabel.addEventListener("click", toggleRoomOptionBackground);
 
 updateRoomOnLoad();
 
-function toggleRadioBtn(direction) {
+function toggleRadioBtn() {
+    let direction = this.id;
+    direction = direction.replace("-dir", "");
+
     toggleCheckedBool(direction);
     toggleRadioHighlight(direction);
     updateRoom();
@@ -140,19 +143,27 @@ function disableCreationBtns() {
 }
 
 function disableLeftRadioBtn() {
-    leftRadioBtn.setAttribute("disabled", "disabled");
+    isLeftChecked = true;
+    leftRadioBtn.checked = true;
+    leftRadioBtn.removeEventListener("click", toggleRadioBtn);
 }
 
 function disableRightRadioBtn() {
-    rightRadioBtn.setAttribute("disabled", "disabled");
+    isRightChecked = true;
+    rightRadioBtn.checked = true;
+    rightRadioBtn.removeEventListener("click", toggleRadioBtn);
 }
 
 function disableUpRadioBtn() {
-    upRadioBtn.setAttribute("disabled", "disabled");
+    isUpChecked = true;
+    upRadioBtn.checked = true;
+    upRadioBtn.removeEventListener("click", toggleRadioBtn);
 }
 
 function disableBottomRadioBtn() {
-    downRadioBtn.setAttribute("disabled", "disabled");
+    isDownChecked = true;
+    downRadioBtn.checked = true;
+    downRadioBtn.removeEventListener("click", toggleRadioBtn);
 }
 
 function defaultRoomTypeChecked() {
