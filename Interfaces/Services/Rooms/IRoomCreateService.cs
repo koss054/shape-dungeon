@@ -11,6 +11,11 @@ namespace ShapeDungeon.Interfaces.Services.Rooms
         RoomCreateDto InitializeUpRoom(Guid bottomRoomId);
         RoomCreateDto InitializeBottomRoom(Guid upRoomId);
 
+        Task AddLeftNeighborAsync(Guid oldRoomId, Guid leftRoomId);
+        Task AddRightNeighborAsync(Guid oldRoomId, Guid rightRoomId);
+        Task AddUpNeighborAsync(Guid oldRoomId, Guid upRoomId);
+        Task AddBottomNeighborAsync(Guid oldRoomId, Guid bottomRoomId);
+
         // Method used when user is on room creation page.
         // Happens when a blue "Create" button is pressed.
         Task<Guid> CreateRoomAsync(RoomCreateDto roomDto);

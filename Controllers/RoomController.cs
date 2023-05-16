@@ -50,7 +50,10 @@ namespace ShapeDungeon.Controllers
         {
             var oldRoomId = roomDto.RightRoomId!.Value;
             var newRoomId = await _roomCreateService.CreateRoomAsync(roomDto);
+
+            await _roomCreateService.AddLeftNeighborAsync(oldRoomId, newRoomId);
             await _roomService.ChangeActiveForEditRoomAsync(oldRoomId, newRoomId);
+
             return RedirectToAction("Create");
         }
     }

@@ -51,5 +51,49 @@ namespace ShapeDungeon.Services.Rooms
 
         public RoomCreateDto InitializeBottomRoom(Guid upRoomId)
             => new() { CanGoUp = true, TopRoomId = upRoomId };
+
+        public async Task AddLeftNeighborAsync(Guid oldRoomId, Guid leftRoomId)
+        {
+            var oldRoom = await _context.Rooms.FindAsync(oldRoomId);
+
+            if (oldRoom != null)
+            {
+                oldRoom.LeftRoomId = leftRoomId;
+                await _context.SaveChangesAsync();
+            }
+        }
+
+        public async Task AddRightNeighborAsync(Guid oldRoomId, Guid rightRoomId)
+        {
+            var oldRoom = await _context.Rooms.FindAsync(oldRoomId);
+
+            if (oldRoom != null)
+            {
+                oldRoom.RightRoomId = rightRoomId;
+                await _context.SaveChangesAsync();
+            }
+        }
+
+        public async Task AddUpNeighborAsync(Guid oldRoomId, Guid upRoomId)
+        {
+            var oldRoom = await _context.Rooms.FindAsync(oldRoomId);
+
+            if (oldRoom != null)
+            {
+                oldRoom.TopRoomId = upRoomId;
+                await _context.SaveChangesAsync();
+            }
+        }
+
+        public async Task AddBottomNeighborAsync(Guid oldRoomId, Guid bottomRoomId)
+        {
+            var oldRoom = await _context.Rooms.FindAsync(oldRoomId);
+
+            if (oldRoom != null)
+            {
+                oldRoom.DownRoomId = bottomRoomId;
+                await _context.SaveChangesAsync();
+            }
+        }
     }
 }
