@@ -2,7 +2,7 @@
 using ShapeDungeon.DTOs.Room;
 using ShapeDungeon.Entities;
 using ShapeDungeon.Interfaces.Repositories;
-using ShapeDungeon.Interfaces.Services.Room;
+using ShapeDungeon.Interfaces.Services.Rooms;
 
 namespace ShapeDungeon.Services.Rooms
 {
@@ -94,6 +94,12 @@ namespace ShapeDungeon.Services.Rooms
                     TopRoomId = x.TopRoomId,
                     DownRoomId = x.DownRoomId
                 }).FirstOrDefaultAsync();
+
+        public async Task<Guid> GetActiveForEditRoomIdAsync()
+            => await _context.Rooms
+                .Where(x => x.IsActiveForEdit)
+                .Select(x => x.Id)
+                .FirstOrDefaultAsync();
 
         public async Task<RoomDto?> GetActiveRoomAsync()
             => await _context.Rooms
