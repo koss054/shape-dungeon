@@ -76,6 +76,8 @@ function toggleRoomOptionBackground() {
     for (const radioBtn of roomTypeBtnArr) {
         if (radioBtn.id != currRoomOption) radioBtn.checked = false;
     }
+
+    defaultRoomTypeChecked();
 }
 
 function updateRoom() {
@@ -135,4 +137,27 @@ function disableCreationBtns() {
     for (const btn of roomDirectionBtnArr) btn.setAttribute("disabled", "disabled");
     for (const btn of roomTypeBtnArr) btn.setAttribute("disabled", "disabled");
     roomCreateBtn.setAttribute("disabled", "disabled");
+}
+
+function disableLeftRadioBtn() {
+    leftRadioBtn.setAttribute("disabled", "disabled");
+}
+
+function disableRightRadioBtn() {
+    rightRadioBtn.setAttribute("disabled", "disabled");
+}
+
+function disableUpRadioBtn() {
+    upRadioBtn.setAttribute("disabled", "disabled");
+}
+
+function disableBottomRadioBtn() {
+    downRadioBtn.setAttribute("disabled", "disabled");
+}
+
+function defaultRoomTypeChecked() {
+    roomCreateBtn.setAttribute("disabled", "disabled");
+    for (const btn of roomTypeBtnArr) {
+        btn.addEventListener("click", function () { roomCreateBtn.removeAttribute("disabled") });
+    }
 }
