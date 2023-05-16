@@ -2,9 +2,9 @@ using Microsoft.EntityFrameworkCore;
 using ShapeDungeon.Data;
 using ShapeDungeon.Interfaces.Repositories;
 using ShapeDungeon.Interfaces.Services;
-using ShapeDungeon.Interfaces.Services.Room;
+using ShapeDungeon.Interfaces.Services.Rooms;
 using ShapeDungeon.Services;
-using ShapeDungeon.Services.Room;
+using ShapeDungeon.Services.Rooms;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +16,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddScoped<IDbContext, AppDbContext>();
 builder.Services.AddScoped<IPlayerService, PlayerService>();
 builder.Services.AddScoped<IRoomService, RoomService>();
+builder.Services.AddScoped<IRoomCreateService, RoomCreateService>();
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
