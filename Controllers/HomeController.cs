@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ShapeDungeon.DTOs;
 using ShapeDungeon.Interfaces.Services;
+using ShapeDungeon.Interfaces.Services.Room;
 using ShapeDungeon.Models;
 using System.Diagnostics;
 
