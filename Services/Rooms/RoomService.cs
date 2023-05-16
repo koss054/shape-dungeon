@@ -2,9 +2,9 @@
 using ShapeDungeon.DTOs.Room;
 using ShapeDungeon.Entities;
 using ShapeDungeon.Interfaces.Repositories;
-using ShapeDungeon.Interfaces.Services;
+using ShapeDungeon.Interfaces.Services.Room;
 
-namespace ShapeDungeon.Services
+namespace ShapeDungeon.Services.Rooms
 {
     public class RoomService : IRoomService
     {

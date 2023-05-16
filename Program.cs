@@ -2,7 +2,9 @@ using Microsoft.EntityFrameworkCore;
 using ShapeDungeon.Data;
 using ShapeDungeon.Interfaces.Repositories;
 using ShapeDungeon.Interfaces.Services;
+using ShapeDungeon.Interfaces.Services.Room;
 using ShapeDungeon.Services;
+using ShapeDungeon.Services.Room;
 
 var builder = WebApplication.CreateBuilder(args);
 

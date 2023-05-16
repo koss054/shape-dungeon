@@ -1,6 +1,6 @@
 ﻿using ShapeDungeon.DTOs.Room;
 
-namespace ShapeDungeon.Interfaces.Services
+namespace ShapeDungeon.Interfaces.Services.Rooms
 {
     public interface IRoomService
     {
