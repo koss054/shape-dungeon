@@ -2,7 +2,7 @@
 @model RoomCreateDto
 
 @{
-    ViewBag.Title = "Create Left Room";
+    ViewBag.Title = "Create Right Room";
 }
 
 <div class="container" style="width:100vw;height:75vh">
@@ -12,7 +12,7 @@
     <div class="row align-items-center" style="height:80%">
         <form asp-action="Left" method="post" class="col-sm-6">
             <partial name="_CreationForm" />
-            <input type="hidden" name="RightRoomId" asp-for="@Model.RightRoomId" value="@Model.RightRoomId" />
+            <input type="hidden" name="LeftRoomId" asp-for="@Model.LeftRoomId" value="@Model.LeftRoomId" />
         </form>
 
         <partial name="_RoomView" />
