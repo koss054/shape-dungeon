@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ShapeDungeon.DTOs.Room;
+using ShapeDungeon.Helpers.Enums;
 using ShapeDungeon.Interfaces.Services.Rooms;
 
 namespace ShapeDungeon.Controllers
@@ -7,20 +8,23 @@ namespace ShapeDungeon.Controllers
     public class RoomController : Controller
     {
         private readonly IRoomService _roomService;
+        private readonly IGetRoomService _getRoomService;
         private readonly IRoomCreateService _roomCreateService;
 
         public RoomController(
             IRoomService roomService,
+            IGetRoomService getRoomService,
             IRoomCreateService roomCreateService)
         {
             _roomService = roomService;
+            _getRoomService = getRoomService;
             _roomCreateService = roomCreateService;
         }
 
         [HttpGet]
         public async Task<IActionResult> Create()
         {
-            var room = await _roomService.GetActiveForEditRoomAsync();
+            var room = await _getRoomService.GetActiveForEditAsync();
             return View(room);
         }
 
@@ -33,96 +37,23 @@ namespace ShapeDungeon.Controllers
                 return View(room);
             }
 
-            await _roomService.CreateRoomAsync(room);
+            await _roomCreateService.CreateAsync(room);
             return RedirectToAction("Index", "Home");
         }
 
-        #region Left Creation
         [HttpGet]
-        public async Task<IActionResult> Left()
+        public async Task<IActionResult> Directional(RoomDirection direction)
         {
-            var rightRoomId = await _roomService.GetActiveForEditRoomIdAsync();
-            var roomDto =  _roomCreateService.InitializeLeftRoom(rightRoomId);
+            var roomDto = await _roomCreateService.InitializeRoomAsync(direction);
             return View(roomDto);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Left(RoomCreateDto roomDto)
+        public async Task<IActionResult> Directional(RoomCreateDto roomDto)
         {
-            var oldRoomId = roomDto.RightRoomId!.Value;
-            var newRoomId = await _roomCreateService.CreateRoomAsync(roomDto);
-
-            await _roomCreateService.AddLeftNeighborAsync(oldRoomId, newRoomId);
-            await _roomService.ChangeActiveForEditRoomAsync(oldRoomId, newRoomId);
-
+            var newRoomId = await _roomCreateService.CreateAsync(roomDto);
+            await _roomService.ApplyActiveForEditAsync(newRoomId);
             return RedirectToAction("Create");
         }
-        #endregion
-
-        #region Right Creation
-        [HttpGet]
-        public async Task<IActionResult> Right()
-        {
-            var leftRoomId = await _roomService.GetActiveForEditRoomIdAsync();
-            var roomDto = _roomCreateService.InitializeRightRoom(leftRoomId);
-            return View(roomDto);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Right(RoomCreateDto roomDto)
-        {
-            var oldRoomId = roomDto.LeftRoomId!.Value;
-            var newRoomId = await _roomCreateService.CreateRoomAsync(roomDto);
-
-            await _roomCreateService.AddRightNeighborAsync(oldRoomId, newRoomId);
-            await _roomService.ChangeActiveForEditRoomAsync(oldRoomId, newRoomId);
-
-            return RedirectToAction("Create");
-        }
-        #endregion
-
-        #region Top Creation
-        [HttpGet]
-        public async Task<IActionResult> Top()
-        {
-            var downRoomId = await _roomService.GetActiveForEditRoomIdAsync();
-            var roomDto = _roomCreateService.InitializeTopRoom(downRoomId);
-            return View(roomDto);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Top(RoomCreateDto roomDto)
-        {
-            var oldRoomId = roomDto.DownRoomId!.Value;
-            var newRoomId = await _roomCreateService.CreateRoomAsync(roomDto);
-
-            await _roomCreateService.AddTopNeighborAsync(oldRoomId, newRoomId);
-            await _roomService.ChangeActiveForEditRoomAsync(oldRoomId, newRoomId);
-
-            return RedirectToAction("Create");
-        }
-        #endregion
-
-        #region Down Creation
-        [HttpGet]
-        public async Task<IActionResult> Down()
-        {
-            var topRoomId = await _roomService.GetActiveForEditRoomIdAsync();
-            var roomDto = _roomCreateService.InitializeDownRoom(topRoomId);
-            return View(roomDto);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Down(RoomCreateDto roomDto)
-        {
-            var oldRoomId = roomDto.TopRoomId!.Value;
-            var newRoomId = await _roomCreateService.CreateRoomAsync(roomDto);
-
-            await _roomCreateService.AddDownNeighborAsync(oldRoomId, newRoomId);
-            await _roomService.ChangeActiveForEditRoomAsync(oldRoomId, newRoomId);
-
-            return RedirectToAction("Create");
-        }
-        #endregion
     }
 }
