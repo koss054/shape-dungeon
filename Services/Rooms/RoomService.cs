@@ -13,38 +13,30 @@ namespace ShapeDungeon.Services.Rooms
             _context = context;
         }
 
-        public async Task<bool> ChangeActiveForEditRoomAsync(Guid oldRoomId, Guid newRoomId)
+        public async Task ApplyActiveForEditAsync(Guid roomId)
         {
-            var oldRoom = await _context.Rooms.FindAsync(oldRoomId);
-            var newRoom = await _context.Rooms.FindAsync(newRoomId);
-
-            if (oldRoom != null && newRoom != null)
+            var isOldActiveForEditRemoved = await RemoveCurrentActiveForEditAsync();
+            if (isOldActiveForEditRemoved)
             {
-                oldRoom.IsActiveForEdit = false;
-                newRoom.IsActiveForEdit = true;
+                var newRoom = await _context.Rooms.FirstOrDefaultAsync(x => x.Id == roomId);
 
-                await _context.SaveChangesAsync();
-                return true;
+                if (newRoom != null)
+                {
+                    newRoom.IsActiveForEdit = true;
+                    await _context.SaveChangesAsync();
+                }
             }
-
-            return false;
         }
 
-        public async Task<bool> ChangeActiveRoomAsync(Guid oldRoomId, Guid newRoomId)
+        private async Task<bool> RemoveCurrentActiveForEditAsync()
         {
-            var oldRoom = await _context.Rooms.FirstOrDefaultAsync(x => x.Id == oldRoomId);
-            var newRoom = await _context.Rooms.FirstOrDefaultAsync(x => x.Id == newRoomId);
+            var oldRoom = await _context.Rooms.FirstOrDefaultAsync(x => x.IsActiveForEdit);
+            if (oldRoom == null)
+                return false;
 
-            if (oldRoom != null && newRoom != null)
-            {
-                oldRoom.IsActive = false;
-                newRoom.IsActive = true;
-
-                await _context.SaveChangesAsync();
-                return true;
-            }
-
-            return false;
+            oldRoom.IsActiveForEdit = false;
+            await _context.SaveChangesAsync();
+            return true;
         }
     }
 }

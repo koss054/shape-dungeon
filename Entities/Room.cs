@@ -28,7 +28,7 @@ namespace ShapeDungeon.Entities
 
         public Enemy? Enemy { get; init; }
 
-        public int CoordX { get; init; }
-        public int CoordY { get; init; }
+        public int CoordX { get; set; }
+        public int CoordY { get; set; }
     }
 }

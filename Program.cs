@@ -16,6 +16,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddScoped<IDbContext, AppDbContext>();
 builder.Services.AddScoped<IPlayerService, PlayerService>();
 builder.Services.AddScoped<IRoomService, RoomService>();
+builder.Services.AddScoped<IGetRoomService, GetRoomService>();
 builder.Services.AddScoped<IRoomCreateService, RoomCreateService>();
 builder.Services.AddControllersWithViews();
 

@@ -1,5 +1,7 @@
-﻿using ShapeDungeon.DTOs.Room;
+﻿using Microsoft.EntityFrameworkCore;
+using ShapeDungeon.DTOs.Room;
 using ShapeDungeon.Entities;
+using ShapeDungeon.Helpers.Enums;
 using ShapeDungeon.Interfaces.Repositories;
 using ShapeDungeon.Interfaces.Services.Rooms;
 
@@ -14,12 +16,12 @@ namespace ShapeDungeon.Services.Rooms
             _context = context;
         }
 
-        public async Task<Guid> CreateRoomAsync(RoomCreateDto roomDto)
+        public async Task<Guid> CreateAsync(RoomCreateDto roomDto)
         {
             Room room = new()
             {
                 IsActive = false,
-                IsActiveForEdit = true,
+                IsActiveForEdit = roomDto.IsStartRoom,
                 CanGoLeft = roomDto.CanGoLeft,
                 CanGoRight = roomDto.CanGoRight,
                 CanGoUp = roomDto.CanGoUp,
@@ -29,12 +31,51 @@ namespace ShapeDungeon.Services.Rooms
                 IsEnemyRoom = roomDto.IsEnemyRoom,
                 IsEndRoom = roomDto.IsEndRoom,
                 Enemy = null,
+                CoordX = roomDto.CoordX,
+                CoordY = roomDto.CoordY,
             };
 
+            if (room.IsStartRoom)
+            {
+                room.CoordX = 0;
+                room.CoordY = 0;
+            }
+                
             await _context.Rooms.AddAsync(room);
             await _context.SaveChangesAsync();
             return room.Id;
         }
 
+        public async Task<RoomCreateDto> InitializeRoomAsync(RoomDirection roomDirection)
+        {
+            var roomDto = new RoomCreateDto();
+            int coordX = await GetActiveForEditCoordX();
+            int coordY = await GetActiveForEditCoordY();
+
+            switch (roomDirection)
+            {
+                case RoomDirection.Left: coordX--; roomDto.CanGoRight = true; break;
+                case RoomDirection.Right: coordX++; roomDto.CanGoLeft = true;  break;
+                case RoomDirection.Top: coordY--; roomDto.CanGoDown = true; break;
+                case RoomDirection.Bottom: coordY++; roomDto.CanGoUp = true; break;
+                default: throw new ArgumentOutOfRangeException(nameof(roomDirection));
+            }
+
+            roomDto.CoordX = coordX;
+            roomDto.CoordY = coordY;
+            return roomDto;
+        }
+
+        private async Task<int> GetActiveForEditCoordX()
+            => await _context.Rooms
+                .Where(x => x.IsActiveForEdit)
+                .Select(x => x.CoordX)
+                .SingleOrDefaultAsync();
+
+        private async Task<int> GetActiveForEditCoordY()
+            => await _context.Rooms
+                .Where(x => x.IsActiveForEdit)
+                .Select(x => x.CoordY)
+                .SingleOrDefaultAsync();
     }
 }

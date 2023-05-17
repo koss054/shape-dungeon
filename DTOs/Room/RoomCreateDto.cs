@@ -14,7 +14,7 @@
         public bool IsEndRoom { get; init; }
         public EnemyDto? Enemy { get; init; }
 
-        public int CoordX { get; init; }
-        public int CoordY { get; init; }
+        public int CoordX { get; set; }
+        public int CoordY { get; set; }
     }
 }
