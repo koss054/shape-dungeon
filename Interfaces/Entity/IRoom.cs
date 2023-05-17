@@ -17,9 +17,7 @@ namespace ShapeDungeon.Interfaces.Entity
         bool IsEndRoom { get; }
         Enemy? Enemy { get; }
 
-        Guid? LeftRoomId { get; }
-        Guid? RightRoomId { get; }
-        Guid? TopRoomId { get; }
-        Guid? DownRoomId { get; }
+        int CoordX { get; }
+        int CoordY { get; }
     }
 }

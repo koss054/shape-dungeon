@@ -29,10 +29,6 @@ namespace ShapeDungeon.Services.Rooms
                 IsEnemyRoom = roomDto.IsEnemyRoom,
                 IsEndRoom = roomDto.IsEndRoom,
                 Enemy = null,
-                LeftRoomId = roomDto.LeftRoomId,
-                RightRoomId = roomDto.RightRoomId,
-                TopRoomId = roomDto.TopRoomId,
-                DownRoomId = roomDto.DownRoomId,
             };
 
             await _context.Rooms.AddAsync(room);
@@ -40,60 +36,5 @@ namespace ShapeDungeon.Services.Rooms
             return room.Id;
         }
 
-        public RoomCreateDto InitializeLeftRoom(Guid rightRoomId)
-            => new() { CanGoRight = true, RightRoomId = rightRoomId };
-
-        public RoomCreateDto InitializeRightRoom(Guid leftRoomId)
-            => new() { CanGoLeft = true, LeftRoomId = leftRoomId };
-
-        public RoomCreateDto InitializeTopRoom(Guid downRoomId)
-            => new() { CanGoDown = true, DownRoomId = downRoomId };
-
-        public RoomCreateDto InitializeDownRoom(Guid topRoomId)
-            => new() { CanGoUp = true, TopRoomId = topRoomId };
-
-        public async Task AddLeftNeighborAsync(Guid oldRoomId, Guid leftRoomId)
-        {
-            var oldRoom = await _context.Rooms.FindAsync(oldRoomId);
-
-            if (oldRoom != null)
-            {
-                oldRoom.LeftRoomId = leftRoomId;
-                await _context.SaveChangesAsync();
-            }
-        }
-
-        public async Task AddRightNeighborAsync(Guid oldRoomId, Guid rightRoomId)
-        {
-            var oldRoom = await _context.Rooms.FindAsync(oldRoomId);
-
-            if (oldRoom != null)
-            {
-                oldRoom.RightRoomId = rightRoomId;
-                await _context.SaveChangesAsync();
-            }
-        }
-
-        public async Task AddTopNeighborAsync(Guid oldRoomId, Guid upRoomId)
-        {
-            var oldRoom = await _context.Rooms.FindAsync(oldRoomId);
-
-            if (oldRoom != null)
-            {
-                oldRoom.TopRoomId = upRoomId;
-                await _context.SaveChangesAsync();
-            }
-        }
-
-        public async Task AddDownNeighborAsync(Guid oldRoomId, Guid bottomRoomId)
-        {
-            var oldRoom = await _context.Rooms.FindAsync(oldRoomId);
-
-            if (oldRoom != null)
-            {
-                oldRoom.DownRoomId = bottomRoomId;
-                await _context.SaveChangesAsync();
-            }
-        }
     }
 }

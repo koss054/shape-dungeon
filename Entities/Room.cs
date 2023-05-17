@@ -28,9 +28,7 @@ namespace ShapeDungeon.Entities
 
         public Enemy? Enemy { get; init; }
 
-        public Guid? LeftRoomId { get; set; }
-        public Guid? RightRoomId { get; set; }
-        public Guid? TopRoomId { get; set; }
-        public Guid? DownRoomId { get; set; }
+        public int CoordX { get; init; }
+        public int CoordY { get; init; }
     }
 }
