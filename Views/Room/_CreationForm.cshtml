@@ -1,38 +1,43 @@
 ﻿@using ShapeDungeon.DTOs.Room
 @model RoomCreateDto
 
-<p class="text-center">Which directions can you go to from this room?</p>
-<div class="btn-group" role="group" aria-label="Choose Directions:" style="width:100%">
-    <input type="radio" class="btn-check" name="CanGoLeft" id="left-dir" asp-for="@Model.CanGoLeft" value="true">
-    <label class="btn btn-outline-success" for="left-dir">Left</label>
-    <input type="radio" class="btn-check" name="CanGoRight" id="right-dir" asp-for="@Model.CanGoRight" value="true">
-    <label class="btn btn-outline-success" for="right-dir">Right</label>
-    <input type="radio" class="btn-check" name="CanGoUp" id="up-dir" asp-for="@Model.CanGoUp" value="true">
-    <label class="btn btn-outline-success" for="up-dir">Up</label>
-    <input type="radio" class="btn-check" name="CanGoDown" id="down-dir" asp-for="@Model.CanGoDown" value="true">
-    <label class="btn btn-outline-success" for="down-dir">Down</label>
-</div>
+<form asp-action="Directional" method="post" class="col-sm-6">
+    <p class="text-center">Which directions can you go to from this room?</p>
+    <div class="btn-group" role="group" aria-label="Choose Directions:" style="width:100%">
+        <input type="radio" class="btn-check" name="CanGoLeft" id="left-dir" asp-for="@Model.CanGoLeft" value="true">
+        <label class="btn btn-outline-success" for="left-dir">Left</label>
+        <input type="radio" class="btn-check" name="CanGoRight" id="right-dir" asp-for="@Model.CanGoRight" value="true">
+        <label class="btn btn-outline-success" for="right-dir">Right</label>
+        <input type="radio" class="btn-check" name="CanGoUp" id="up-dir" asp-for="@Model.CanGoUp" value="true">
+        <label class="btn btn-outline-success" for="up-dir">Up</label>
+        <input type="radio" class="btn-check" name="CanGoDown" id="down-dir" asp-for="@Model.CanGoDown" value="true">
+        <label class="btn btn-outline-success" for="down-dir">Down</label>
+    </div>
 
-<hr class="border-3 border-top border-success">
+    <hr class="border-3 border-top border-success">
 
-<p class="text-center">What properties does the room have?</p>
-<div class="btn-group" role="group" aria-label="Choose Properties:" style="width:100%">
-    <input type="radio" class="btn-check" name="IsStartRoom" id="start-room-option" asp-for="@Model.IsStartRoom" value="true">
-    <label class="btn btn-outline-primary" for="start-room-option" id="start-label">Start Room</label>
-    <input type="radio" class="btn-check" name="IsSafeRoom" id="safe-room-option" asp-for="@Model.IsSafeRoom" value="true">
-    <label class="btn btn-outline-success" for="safe-room-option" id="safe-label">Safe Room</label>
-    <input type="radio" class="btn-check" name="IsEnemyRoom" id="enemy-room-option" asp-for="@Model.IsEnemyRoom" value="true">
-    <label class="btn btn-outline-danger" for="enemy-room-option" id="enemy-label">Enemy Room</label>
-    <input type="radio" class="btn-check" name="IsEndRoom" id="end-room-option" asp-for="@Model.IsEndRoom" value="true">
-    <label class="btn btn-outline-info" for="end-room-option" id="end-label">End Room</label>
-</div>
+    <p class="text-center">What properties does the room have?</p>
+    <div class="btn-group" role="group" aria-label="Choose Properties:" style="width:100%">
+        <input type="radio" class="btn-check" name="IsStartRoom" id="start-room-option" asp-for="@Model.IsStartRoom" value="true">
+        <label class="btn btn-outline-primary" for="start-room-option" id="start-label">Start Room</label>
+        <input type="radio" class="btn-check" name="IsSafeRoom" id="safe-room-option" asp-for="@Model.IsSafeRoom" value="true">
+        <label class="btn btn-outline-success" for="safe-room-option" id="safe-label">Safe Room</label>
+        <input type="radio" class="btn-check" name="IsEnemyRoom" id="enemy-room-option" asp-for="@Model.IsEnemyRoom" value="true">
+        <label class="btn btn-outline-danger" for="enemy-room-option" id="enemy-label">Enemy Room</label>
+        <input type="radio" class="btn-check" name="IsEndRoom" id="end-room-option" asp-for="@Model.IsEndRoom" value="true">
+        <label class="btn btn-outline-info" for="end-room-option" id="end-label">End Room</label>
+    </div>
 
-<hr class="border-3 border-top border-success">
+    <hr class="border-3 border-top border-success">
 
-            Insert extra stuff here homie
+    <input type="hidden" name="CoordX" asp-for="@Model.CoordX" value="@Model.CoordX" />
+    <input type="hidden" name="CoordY" asp-for="@Model.CoordY" value="@Model.CoordY" />
 
-<hr class="border-3 border-top border-success">
+    Insert extra stuff here homie
 
-<div class="form-group row mx-auto" style="width:90%">
-    <button class="btn btn-outline-success text-center" id="create-room-btn" type="submit">Create</button>
-</div>
+    <hr class="border-3 border-top border-success">
+
+    <div class="form-group row mx-auto" style="width:90%">
+        <button class="btn btn-outline-success text-center" id="create-room-btn" type="submit">Create</button>
+    </div>
+</form>

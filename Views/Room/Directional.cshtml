@@ -2,7 +2,7 @@
 @model RoomCreateDto
 
 @{
-    ViewBag.Title = "Create Down Room";
+    ViewBag.Title = "Create Top Room";
 }
 
 <div class="container" style="width:100vw;height:75vh">
@@ -10,17 +10,11 @@
         <h2>Create Room</h2>
     </div>
     <div class="row align-items-center" style="height:80%">
-        <form asp-action="Down" method="post" class="col-sm-6">
-            <partial name="_CreationForm" />
-            <input type="hidden" name="TopRoomId" asp-for="@Model.TopRoomId" value="@Model.TopRoomId" />
-        </form>
-
+        <partial name="_CreationForm" />
         <partial name="_RoomView" />
     </div>
 </div>
 
 <script src=~/js/room/create.js></script>
 <script>
-    disableUpRadioBtn();
-    defaultRoomTypeChecked();
 </script>
