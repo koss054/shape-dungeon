@@ -10,20 +10,20 @@ namespace ShapeDungeon.Controllers
     public class HomeController : Controller
     {
         private readonly IPlayerService _playerService;
-        private readonly IRoomService _roomService;
+        private readonly IGetRoomService _getRoomService;
 
         public HomeController(
             IPlayerService playerService,
-            IRoomService roomService)
+            IGetRoomService getRoomService)
         {
             _playerService = playerService;
-            _roomService = roomService;
+            _getRoomService = getRoomService;
         }
 
         public async Task<IActionResult> Index()
         {
             var player = await _playerService.GetPlayerAsync("Nov Kryg Homiesss");
-            var room = await _roomService.GetActiveRoomAsync();
+            var room = await _getRoomService.GetActiveAsync();
 
             if (player == null)
             {
