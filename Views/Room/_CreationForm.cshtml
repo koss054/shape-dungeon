@@ -1,7 +1,7 @@
 ﻿@using ShapeDungeon.DTOs.Room
 @model RoomDetailsDto
 
-<form asp-action="Directional" method="post" class="col-sm-6">
+<form asp-action="Create" method="post" class="col-sm-6">
     <p class="text-center">Which directions can you go to from this room?</p>
     <div class="btn-group" role="group" aria-label="Choose Directions:" style="width:100%">
         <input type="radio" class="btn-check" name="CanGoLeft" id="left-dir" asp-for="@Model.CanGoLeft" value="true">
