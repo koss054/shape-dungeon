@@ -34,29 +34,25 @@ namespace ShapeDungeon.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(RoomDetailsDto room)
+        public async Task<IActionResult> Create(RoomDetailsDto roomDto)
         {
-            if (!ModelState.IsValid)
-            {
-                TempData["error"] = "Invalid room!";
-                return View(room);
-            }
-
-            await _roomCreateService.CreateAsync(room);
-            return RedirectToAction("Index", "Home");
+            var newRoomId = await _roomCreateService.CreateAsync(roomDto);
+            await _roomService.ApplyActiveForEditAsync(newRoomId);
+            return RedirectToAction("Create");
         }
 
         [HttpGet]
         public async Task<IActionResult> Directional(RoomDirection direction)
         {
-            var roomDto = await _roomCreateService.InitializeRoomAsync(direction);
-            return View(roomDto);
+            var roomDetails = await _roomCreateService.InitializeRoomAsync(direction);
+            var room = new RoomCreateDto() { Details = roomDetails };
+            return View(room);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Directional(RoomDetailsDto roomDto)
+        public async Task<IActionResult> Directional(RoomCreateDto roomDto)
         {
-            var newRoomId = await _roomCreateService.CreateAsync(roomDto);
+            var newRoomId = await _roomCreateService.CreateAsync(roomDto.Details);
             await _roomService.ApplyActiveForEditAsync(newRoomId);
             return RedirectToAction("Create");
         }
