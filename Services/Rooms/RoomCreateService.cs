@@ -56,8 +56,8 @@ namespace ShapeDungeon.Services.Rooms
             {
                 case RoomDirection.Left: coordX--; roomDto.CanGoRight = true; break;
                 case RoomDirection.Right: coordX++; roomDto.CanGoLeft = true;  break;
-                case RoomDirection.Top: coordY--; roomDto.CanGoDown = true; break;
-                case RoomDirection.Bottom: coordY++; roomDto.CanGoUp = true; break;
+                case RoomDirection.Top: coordY++; roomDto.CanGoDown = true; break;
+                case RoomDirection.Bottom: coordY--; roomDto.CanGoUp = true; break;
                 default: throw new ArgumentOutOfRangeException(nameof(roomDirection));
             }
 
@@ -77,10 +77,5 @@ namespace ShapeDungeon.Services.Rooms
                 .Where(x => x.IsActiveForEdit)
                 .Select(x => x.CoordY)
                 .SingleOrDefaultAsync();
-
-        private async Task SetHasNeighborPropsAsync(RoomDetailsDto roomDto)
-        {
-
-        }
     }
 }
