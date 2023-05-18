@@ -18,6 +18,7 @@ builder.Services.AddScoped<IPlayerService, PlayerService>();
 builder.Services.AddScoped<IRoomService, RoomService>();
 builder.Services.AddScoped<IGetRoomService, GetRoomService>();
 builder.Services.AddScoped<IRoomCreateService, RoomCreateService>();
+builder.Services.AddScoped<ICheckRoomNeighborsService, CheckRoomNeighborsService>();
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
