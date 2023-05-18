@@ -1,5 +1,5 @@
 ﻿@using ShapeDungeon.DTOs.Room
-@model RoomDetailsDto
+@model RoomCreateDto
 
 @{
     ViewBag.Title = "Create Top Room";
@@ -10,8 +10,8 @@
         <h2>Create Room</h2>
     </div>
     <div class="row align-items-center" style="height:80%">
-        <partial name="_CreationForm" />
-        <partial name="_RoomView" />
+        <partial name="_CreationForm" for="Details" />
+        <partial name="_RoomView" for="Nav" />
     </div>
 </div>
 
