@@ -48,13 +48,5 @@ namespace ShapeDungeon.Controllers
             var room = new RoomCreateDto() { Details = roomDetails };
             return View(room);
         }
-
-        [HttpPost]
-        public async Task<IActionResult> Directional(RoomCreateDto roomDto)
-        {
-            var newRoomId = await _roomCreateService.CreateAsync(roomDto.Details);
-            await _roomService.ApplyActiveForEditAsync(newRoomId);
-            return RedirectToAction("Create");
-        }
     }
 }
