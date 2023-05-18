@@ -6,96 +6,99 @@
     <div id="room"
          class="position-absolute top-50 start-50 translate-middle"
          style="height:50vh;width:50vh;border:solid 1rem white">
-        @if (Model.CanGoUp)
+        @if (Model != null)
         {
-            <div id="move-up"
-                 class="position-absolute translate-middle-y"
-                 style="width:100%;top:-2.5rem;left:7.5rem">
-                @if (Model.HasUpNeighbor)
-                {
-                    <button type="button" class="btn btn-outline-dark">Go ⇧</button>
-                }
-                else
-                {
-                    <a 
-                        type="button"
-                        class="btn btn-outline-primary"
-                        asp-controller="Room"
-                        asp-action="Directional"
-                        asp-route-direction="@RoomDirection.Top">
-                        Create ⇧
-                    </a>
-                }
-            </div>
-        }
+             @if (Model.CanGoUp)
+            {
+                <div id="move-up"
+                     class="position-absolute translate-middle-y"
+                     style="width:100%;top:-2.5rem;left:7.5rem">
+                    @if (Model.HasUpNeighbor)
+                    {
+                        <button type="button" class="btn btn-outline-dark">Go ⇧</button>
+                    }
+                    else
+                    {
+                        <a 
+                            type="button"
+                            class="btn btn-outline-primary"
+                            asp-controller="Room"
+                            asp-action="Directional"
+                            asp-route-direction="@RoomDirection.Top">
+                            Create ⇧
+                        </a>
+                    }
+                </div>
+            }
 
-        @if (Model.CanGoDown)
-        {
-            <div id="move-down"
-                 class="position-absolute translate-middle-y"
-                 style="width:100%;bottom:-4.75rem;left:7.5rem">
-                @if (Model.HasDownNeighbor)
-                {
-                    <button type="button" class="btn btn-outline-dark">Go ⇩</button>
-                }
-                else
-                {
-                    <a 
-                        type="button"
-                        class="btn btn-outline-primary"
-                        asp-controller="Room"
-                        asp-action="Directional"
-                        asp-route-direction="@RoomDirection.Bottom">
-                        Create ⇩
-                    </a>
-                }
-            </div>
-        }
+            @if (Model.CanGoDown)
+            {
+                <div id="move-down"
+                     class="position-absolute translate-middle-y"
+                     style="width:100%;bottom:-4.75rem;left:7.5rem">
+                    @if (Model.HasDownNeighbor)
+                    {
+                        <button type="button" class="btn btn-outline-dark">Go ⇩</button>
+                    }
+                    else
+                    {
+                        <a 
+                            type="button"
+                            class="btn btn-outline-primary"
+                            asp-controller="Room"
+                            asp-action="Directional"
+                            asp-route-direction="@RoomDirection.Bottom">
+                            Create ⇩
+                        </a>
+                    }
+                </div>
+            }
 
-        @if (Model.CanGoLeft)
-        {
-            <div id="move-left"
-                 class="position-absolute top-50 translate-middle"
-                 style="width:40%;left:-3.25rem;">
-                @if (Model.HasLeftNeighbor)
-                {
-                    <button type="button" class="btn btn-outline-dark">⇦ Go</button>
-                }
-                else
-                {
-                    <a 
-                        type="button"
-                        class="btn btn-outline-primary"
-                        asp-controller="Room"
-                        asp-action="Directional"
-                        asp-route-direction="@RoomDirection.Left">
-                        ⇦ Create
-                    </a>
-                }
-            </div>
-        }
+            @if (Model.CanGoLeft)
+            {
+                <div id="move-left"
+                     class="position-absolute top-50 translate-middle"
+                     style="width:40%;left:-3.25rem;">
+                    @if (Model.HasLeftNeighbor)
+                    {
+                        <button type="button" class="btn btn-outline-dark">⇦ Go</button>
+                    }
+                    else
+                    {
+                        <a 
+                            type="button"
+                            class="btn btn-outline-primary"
+                            asp-controller="Room"
+                            asp-action="Directional"
+                            asp-route-direction="@RoomDirection.Left">
+                            ⇦ Create
+                        </a>
+                    }
+                </div>
+            }
 
-        @if (Model.CanGoRight)
-        {
-            <div id="move-right"
-                 class="position-absolute top-50 translate-middle-y"
-                 style="width:40%;right:-9.5rem">
-                @if (Model.HasRightNeighbor)
-                {
-                    <button type="button" class="btn btn-outline-dark">Go ⇨</button>
-                }
-                else
-                {
-                    <a 
-                        type="button"
-                        class="btn btn-outline-primary"
-                        asp-controller="Room"
-                        asp-action="Directional"
-                        asp-route-direction="@RoomDirection.Right">
-                        Create ⇨
-                    </a>
-                }
-            </div>
+            @if (Model.CanGoRight)
+            {
+                <div id="move-right"
+                     class="position-absolute top-50 translate-middle-y"
+                     style="width:40%;right:-9.5rem">
+                    @if (Model.HasRightNeighbor)
+                    {
+                        <button type="button" class="btn btn-outline-dark">Go ⇨</button>
+                    }
+                    else
+                    {
+                        <a 
+                            type="button"
+                            class="btn btn-outline-primary"
+                            asp-controller="Room"
+                            asp-action="Directional"
+                            asp-route-direction="@RoomDirection.Right">
+                            Create ⇨
+                        </a>
+                    }
+                </div>
+            }
         }
     </div>
 </div>
