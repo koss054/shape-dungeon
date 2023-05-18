@@ -33,10 +33,10 @@ namespace ShapeDungeon.Services.Rooms
                 })
                 .SingleOrDefaultAsync();
 
-        public async Task<RoomCreateDto?> GetActiveForEditAsync()
+        public async Task<RoomDetailsDto?> GetActiveForEditAsync()
             => await _context.Rooms
                 .Where(x => x.IsActiveForEdit)
-                .Select(x => new RoomCreateDto()
+                .Select(x => new RoomDetailsDto()
                 {
                     Id = x.Id,
                     IsActiveForEdit = x.IsActiveForEdit,

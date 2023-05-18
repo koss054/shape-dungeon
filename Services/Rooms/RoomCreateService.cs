@@ -16,7 +16,7 @@ namespace ShapeDungeon.Services.Rooms
             _context = context;
         }
 
-        public async Task<Guid> CreateAsync(RoomCreateDto roomDto)
+        public async Task<Guid> CreateAsync(RoomDetailsDto roomDto)
         {
             Room room = new()
             {
@@ -46,9 +46,9 @@ namespace ShapeDungeon.Services.Rooms
             return room.Id;
         }
 
-        public async Task<RoomCreateDto> InitializeRoomAsync(RoomDirection roomDirection)
+        public async Task<RoomDetailsDto> InitializeRoomAsync(RoomDirection roomDirection)
         {
-            var roomDto = new RoomCreateDto();
+            var roomDto = new RoomDetailsDto();
             int coordX = await GetActiveForEditCoordX();
             int coordY = await GetActiveForEditCoordY();
 
@@ -77,5 +77,10 @@ namespace ShapeDungeon.Services.Rooms
                 .Where(x => x.IsActiveForEdit)
                 .Select(x => x.CoordY)
                 .SingleOrDefaultAsync();
+
+        private async Task SetHasNeighborPropsAsync(RoomDetailsDto roomDto)
+        {
+
+        }
     }
 }

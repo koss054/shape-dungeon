@@ -5,7 +5,7 @@ namespace ShapeDungeon.Interfaces.Services.Rooms
 {
     public interface IRoomCreateService
     {
-        Task<Guid> CreateAsync(RoomCreateDto roomDto);
-        Task<RoomCreateDto> InitializeRoomAsync(RoomDirection roomDirection);
+        Task<Guid> CreateAsync(RoomDetailsDto roomDto);
+        Task<RoomDetailsDto> InitializeRoomAsync(RoomDirection roomDirection);
     }
 }
