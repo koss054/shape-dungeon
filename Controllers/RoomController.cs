@@ -10,26 +10,31 @@ namespace ShapeDungeon.Controllers
         private readonly IRoomService _roomService;
         private readonly IGetRoomService _getRoomService;
         private readonly IRoomCreateService _roomCreateService;
+        private readonly ICheckRoomNeighborsService _checkRoomNeighborsService;
 
         public RoomController(
             IRoomService roomService,
             IGetRoomService getRoomService,
-            IRoomCreateService roomCreateService)
+            IRoomCreateService roomCreateService, 
+            ICheckRoomNeighborsService checkRoomNeighborsService)
         {
             _roomService = roomService;
             _getRoomService = getRoomService;
             _roomCreateService = roomCreateService;
+            _checkRoomNeighborsService = checkRoomNeighborsService;
         }
 
         [HttpGet]
         public async Task<IActionResult> Create()
         {
-            var room = await _getRoomService.GetActiveForEditAsync();
+            var roomDetails = await _getRoomService.GetActiveForEditAsync();
+            var roomNav = await _checkRoomNeighborsService.SetDtoNeighborsAsync(roomDetails.CoordX, roomDetails.CoordY);
+            var room = new RoomCreateDto() { Details = roomDetails, Nav = roomNav };
             return View(room);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(RoomCreateDto room)
+        public async Task<IActionResult> Create(RoomDetailsDto room)
         {
             if (!ModelState.IsValid)
             {
@@ -49,7 +54,7 @@ namespace ShapeDungeon.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Directional(RoomCreateDto roomDto)
+        public async Task<IActionResult> Directional(RoomDetailsDto roomDto)
         {
             var newRoomId = await _roomCreateService.CreateAsync(roomDto);
             await _roomService.ApplyActiveForEditAsync(newRoomId);
