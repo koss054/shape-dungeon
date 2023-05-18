@@ -12,16 +12,16 @@
     </div>
     <div class="row align-items-center" style="height:80%">
         <form asp-action="Create" method="post" class="col-sm-6">
-            <partial name="_CreationForm" />
+            <partial name="_CreationForm" for="Details" />
         </form>
 
-        <partial name="_RoomView" />
+        <partial name="_RoomView" for="Nav" />
     </div>
 </div>
 
 <script src=~/js/room/create.js></script>
 
-@if (Model.IsActiveForEdit)
+@if (Model.Details.IsActiveForEdit)
 {
     <script>
         disableCreationBtns();
