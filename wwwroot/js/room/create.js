@@ -172,3 +172,10 @@ function defaultRoomTypeChecked() {
         btn.addEventListener("click", function () { roomCreateBtn.removeAttribute("disabled") });
     }
 }
+
+function disableRadioBtnOnDirectionalCreate() {
+    if (leftRadioBtn.checked) disableLeftRadioBtn();
+    else if (rightRadioBtn.checked) disableRightRadioBtn();
+    else if (upRadioBtn.checked) disableUpRadioBtn();
+    else if (downRadioBtn.checked) disableBottomRadioBtn();
+}

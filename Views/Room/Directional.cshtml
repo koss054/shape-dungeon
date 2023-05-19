@@ -2,7 +2,7 @@
 @model RoomCreateDto
 
 @{
-    ViewBag.Title = "Create Top Room";
+    ViewBag.Title = "Create Room";
 }
 
 <div class="container" style="width:100vw;height:75vh">
@@ -16,5 +16,8 @@
 </div>
 
 <script src=~/js/room/create.js></script>
+
 <script>
+    disableRadioBtnOnDirectionalCreate();
+    defaultRoomTypeChecked();
 </script>
