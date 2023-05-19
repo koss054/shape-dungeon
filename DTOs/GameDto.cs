@@ -1,4 +1,6 @@
-﻿namespace ShapeDungeon.DTOs
+﻿using ShapeDungeon.DTOs.Room;
+
+namespace ShapeDungeon.DTOs
 {
     public class GameDto
     {

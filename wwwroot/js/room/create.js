@@ -12,9 +12,11 @@ const safeRadioBtn = document.getElementById("safe-room-option");
 const enemyRadioBtn = document.getElementById("enemy-room-option");
 const endRadioBtn = document.getElementById("end-room-option");
 
-const radioBtnArr = [startRadioBtn, safeRadioBtn, enemyRadioBtn, endRadioBtn];
-
 const roomEl = document.getElementById("room");
+const roomCreateBtn = document.getElementById("create-room-btn");
+
+const roomDirectionBtnArr = [leftRadioBtn, rightRadioBtn, upRadioBtn, downRadioBtn];
+const roomTypeBtnArr = [startRadioBtn, safeRadioBtn, enemyRadioBtn, endRadioBtn];
 
 // Doing this becuase bootstrap changes the checked property to true.
 // When the script loads this.checked is already true and the button never gets the right checked value.
@@ -23,19 +25,22 @@ let isRightChecked = false;
 let isUpChecked = false;
 let isDownChecked = false;
 
-leftRadioBtn.addEventListener("click", function() { toggleRadioBtn("left") }, false);
-rightRadioBtn.addEventListener("click", function() { toggleRadioBtn("right") }, false);
-upRadioBtn.addEventListener("click", function () { toggleRadioBtn("up") }, false);
-downRadioBtn.addEventListener("click", function () { toggleRadioBtn("down") }, false);
+leftRadioBtn.addEventListener("click", toggleRadioBtn);
+rightRadioBtn.addEventListener("click", toggleRadioBtn);
+upRadioBtn.addEventListener("click", toggleRadioBtn);
+downRadioBtn.addEventListener("click", toggleRadioBtn);
 
 startBtnLabel.addEventListener("click", toggleRoomOptionBackground);
 safeBtnLabel.addEventListener("click", toggleRoomOptionBackground);
 enemyBtnLabel.addEventListener("click", toggleRoomOptionBackground);
 endBtnLabel.addEventListener("click", toggleRoomOptionBackground);
 
-updateRoom();
+updateRoomOnLoad();
 
-function toggleRadioBtn(direction) {
+function toggleRadioBtn() {
+    let direction = this.id;
+    direction = direction.replace("-dir", "");
+
     toggleCheckedBool(direction);
     toggleRadioHighlight(direction);
     updateRoom();
@@ -71,9 +76,11 @@ function toggleRoomOptionBackground() {
         default: console.log("bruh, room option error..."); break;
     }
 
-    for (const radioBtn of radioBtnArr) {
+    for (const radioBtn of roomTypeBtnArr) {
         if (radioBtn.id != currRoomOption) radioBtn.checked = false;
     }
+
+    defaultRoomTypeChecked();
 }
 
 function updateRoom() {
@@ -93,4 +100,82 @@ function updateRoom() {
     else if (safeRadioBtn.checked) roomEl.style.background = "#77b30069";
     else if (enemyRadioBtn.checked) roomEl.style.background = "#cc000069";
     else if (endRadioBtn.checked) roomEl.style.background = "#9933cc69";
+}
+
+function updateRoomOnLoad() {
+    let leftBorder = "border-left:solid 1rem white";
+    let rightBorder = "border-right:solid 1rem white";
+    let topBorder = "border-top:solid 1rem white";
+    let bottomBorder = "border-bottom:solid 1rem white";
+
+    if (leftRadioBtn.checked) {
+        isLeftChecked = true;
+        leftBorder = leftBorder.replace("white", "dimgray");
+    }
+
+    if (rightRadioBtn.checked) {
+        isRightChecked = true;
+        rightBorder = rightBorder.replace("white", "dimgray");
+    }
+
+    if (upRadioBtn.checked) {
+        isUpChecked = true;
+        topBorder = topBorder.replace("white", "dimgray");
+    }
+
+    if (downRadioBtn.checked) {
+        isDownChecked = true;
+        bottomBorder = bottomBorder.replace("white", "dimgray");
+    }
+
+    room.setAttribute("style", `height:50vh;width:50vh;${leftBorder};${rightBorder};${topBorder};${bottomBorder}`);
+
+    if (startRadioBtn.checked) roomEl.style.background = "#2a9fd669";
+    else if (safeRadioBtn.checked) roomEl.style.background = "#77b30069";
+    else if (enemyRadioBtn.checked) roomEl.style.background = "#cc000069";
+    else if (endRadioBtn.checked) roomEl.style.background = "#9933cc69";
+}
+
+function disableCreationBtns() {
+    for (const btn of roomDirectionBtnArr) btn.setAttribute("disabled", "disabled");
+    for (const btn of roomTypeBtnArr) btn.setAttribute("disabled", "disabled");
+    roomCreateBtn.setAttribute("disabled", "disabled");
+}
+
+function disableLeftRadioBtn() {
+    isLeftChecked = true;
+    leftRadioBtn.checked = true;
+    leftRadioBtn.removeEventListener("click", toggleRadioBtn);
+}
+
+function disableRightRadioBtn() {
+    isRightChecked = true;
+    rightRadioBtn.checked = true;
+    rightRadioBtn.removeEventListener("click", toggleRadioBtn);
+}
+
+function disableUpRadioBtn() {
+    isUpChecked = true;
+    upRadioBtn.checked = true;
+    upRadioBtn.removeEventListener("click", toggleRadioBtn);
+}
+
+function disableBottomRadioBtn() {
+    isDownChecked = true;
+    downRadioBtn.checked = true;
+    downRadioBtn.removeEventListener("click", toggleRadioBtn);
+}
+
+function defaultRoomTypeChecked() {
+    roomCreateBtn.setAttribute("disabled", "disabled");
+    for (const btn of roomTypeBtnArr) {
+        btn.addEventListener("click", function () { roomCreateBtn.removeAttribute("disabled") });
+    }
+}
+
+function disableRadioBtnOnDirectionalCreate() {
+    if (leftRadioBtn.checked) disableLeftRadioBtn();
+    else if (rightRadioBtn.checked) disableRightRadioBtn();
+    else if (upRadioBtn.checked) disableUpRadioBtn();
+    else if (downRadioBtn.checked) disableBottomRadioBtn();
 }
