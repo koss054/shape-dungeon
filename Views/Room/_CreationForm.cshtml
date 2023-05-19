@@ -18,7 +18,10 @@
 
     <p class="text-center">What properties does the room have?</p>
     <div class="btn-group" role="group" aria-label="Choose Properties:" style="width:100%">
-        <input type="radio" class="btn-check" name="IsStartRoom" id="start-room-option" asp-for="@Model.IsStartRoom" value="true">
+        @*IsStartRoom radio btn isn't enabled currently since only one room can have this option.
+        The room that has this option will be automatically created when a scenario is made.
+        Button is kept visible for clarity on rooms with blue bg color (and bcs atm I'm not sure how to remove it without breaking the script :D).*@
+        <input type="radio" class="btn-check" name="IsStartRoom" id="start-room-option" asp-for="@Model.IsStartRoom" value="true" disabled>
         <label class="btn btn-outline-primary" for="start-room-option" id="start-label">Start Room</label>
         <input type="radio" class="btn-check" name="IsSafeRoom" id="safe-room-option" asp-for="@Model.IsSafeRoom" value="true">
         <label class="btn btn-outline-success" for="safe-room-option" id="safe-label">Safe Room</label>
