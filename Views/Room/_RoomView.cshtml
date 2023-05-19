@@ -15,7 +15,15 @@
                      style="width:100%;top:-2.5rem;left:7.5rem">
                     @if (Model.HasUpNeighbor)
                     {
-                        <button type="button" class="btn btn-outline-dark">Go ⇧</button>
+                        <a 
+                            type="button"
+                            class="btn btn-outline-dark"
+                            asp-controller="Room"
+                            asp-action="Go"
+                            asp-route-coordX="@Model.CoordX"
+                            asp-route-coordY="@(Model.CoordY + 1)">
+                            Go ⇧
+                        </a>
                     }
                     else
                     {
@@ -38,7 +46,15 @@
                      style="width:100%;bottom:-4.75rem;left:7.5rem">
                     @if (Model.HasDownNeighbor)
                     {
-                        <button type="button" class="btn btn-outline-dark">Go ⇩</button>
+                        <a 
+                            type="button"
+                            class="btn btn-outline-dark"
+                            asp-controller="Room"
+                            asp-action="Go"
+                            asp-route-coordX="@Model.CoordX"
+                            asp-route-coordY="@(Model.CoordY - 1)">
+                            Go ⇩
+                        </a>
                     }
                     else
                     {
@@ -61,7 +77,15 @@
                      style="width:40%;left:-3.25rem;">
                     @if (Model.HasLeftNeighbor)
                     {
-                        <button type="button" class="btn btn-outline-dark">⇦ Go</button>
+                        <a 
+                            type="button"
+                            class="btn btn-outline-dark"
+                            asp-controller="Room"
+                            asp-action="Go"
+                            asp-route-coordX="@(Model.CoordX - 1)"
+                            asp-route-coordY="@Model.CoordY">
+                            Go ⇦
+                        </a>
                     }
                     else
                     {
@@ -84,7 +108,15 @@
                      style="width:40%;right:-9.5rem">
                     @if (Model.HasRightNeighbor)
                     {
-                        <button type="button" class="btn btn-outline-dark">Go ⇨</button>
+                        <a 
+                            type="button"
+                            class="btn btn-outline-dark"
+                            asp-controller="Room"
+                            asp-action="Go"
+                            asp-route-coordX="@(Model.CoordX + 1)"
+                            asp-route-coordY="@Model.CoordY">
+                            Go ⇨
+                        </a>
                     }
                     else
                     {
