@@ -4,11 +4,11 @@ using ShapeDungeon.Interfaces.Services.Rooms;
 
 namespace ShapeDungeon.Services.Rooms
 {
-    public class RoomService : IRoomService
+    public class RoomActiveForEditService : IRoomActiveForEditService
     {
         private readonly IDbContext _context;
 
-        public RoomService(IDbContext context)
+        public RoomActiveForEditService(IDbContext context)
         {
             _context = context;
         }
@@ -28,6 +28,23 @@ namespace ShapeDungeon.Services.Rooms
             }
         }
 
+        public async Task MoveActiveForEditAsync(int coordX, int coordY)
+        {
+            var newRoom = await _context.Rooms
+                .SingleOrDefaultAsync(x => x.CoordX == coordX && x.CoordY == coordY);
+
+            if (newRoom != null)
+            {
+                var isOldActiveForEditRemoved = await RemoveCurrentActiveForEditAsync();
+                if (isOldActiveForEditRemoved)
+                {
+                    newRoom.IsActiveForEdit = true;
+                    await _context.SaveChangesAsync();
+                }
+            }
+        }
+        
+        // No _context.SaveChangesAsync(), as we can't leave the DB without an IsActiveForEdit = true.
         private async Task<bool> RemoveCurrentActiveForEditAsync()
         {
             var oldRoom = await _context.Rooms.FirstOrDefaultAsync(x => x.IsActiveForEdit);
@@ -35,7 +52,6 @@ namespace ShapeDungeon.Services.Rooms
                 return false;
 
             oldRoom.IsActiveForEdit = false;
-            await _context.SaveChangesAsync();
             return true;
         }
     }
