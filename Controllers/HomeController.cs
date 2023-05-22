@@ -11,29 +11,37 @@ namespace ShapeDungeon.Controllers
     {
         private readonly IPlayerService _playerService;
         private readonly IGetRoomService _getRoomService;
+        private readonly ICheckRoomNeighborsService _checkRoomNeighborsService;
 
         public HomeController(
             IPlayerService playerService,
-            IGetRoomService getRoomService)
+            IGetRoomService getRoomService, 
+            ICheckRoomNeighborsService checkRoomNeighborsService)
         {
             _playerService = playerService;
             _getRoomService = getRoomService;
+            _checkRoomNeighborsService = checkRoomNeighborsService;
         }
 
         public async Task<IActionResult> Index()
         {
             var player = await _playerService.GetPlayerAsync("Nov Kryg Homiesss");
-            var room = await _getRoomService.GetActiveAsync();
-
             if (player == null)
             {
             }
 
+            var room = await _getRoomService.GetActiveAsync();
             if (room == null)
             {
             }
 
-            var game = new GameDto() { Player = player, Room = room };
+            var roomNav = await _checkRoomNeighborsService.SetDtoNeighborsAsync(room!.CoordX, room!.CoordY);
+            if (roomNav == null)
+            {
+            }
+
+            room = _checkRoomNeighborsService.SetHasNeighborsProperties(room, roomNav!);
+            var game = new GameDto() { Player = player!, Room = room! };
             return View(game);
         }
 

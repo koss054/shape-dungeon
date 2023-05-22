@@ -46,7 +46,7 @@
                             class="position-absolute top-50 start-50 translate-middle"
                             style="height:50vh;width:50vh;border:solid 1rem white"
                         >
-                            @if (Model.Room.CanGoUp)
+                            @if (Model.Room.HasUpNeighbor)
                             {
                                 <div 
                                     id="move-up"
@@ -58,7 +58,7 @@
                                 </div>
                             }
                             
-                            @if (Model.Room.CanGoDown)
+                            @if (Model.Room.HasDownNeighbor)
                             {
                                 <div 
                                     id="move-down"
@@ -70,7 +70,7 @@
                                 </div>
                             }
 
-                            @if (Model.Room.CanGoLeft)
+                            @if (Model.Room.HasLeftNeighbor)
                             {
                                 <div 
                                     id="move-left"
@@ -82,7 +82,7 @@
                                 </div>
                             }
 
-                            @if (Model.Room.CanGoRight)
+                            @if (Model.Room.HasRightNeighbor)
                             {
                                 <div 
                                     id="move-right"

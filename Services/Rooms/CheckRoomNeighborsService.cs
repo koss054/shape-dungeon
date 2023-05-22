@@ -36,6 +36,15 @@ namespace ShapeDungeon.Services.Rooms
             return currRoom;
         }
 
+        public RoomDto SetHasNeighborsProperties(RoomDto room, RoomNavDto roomNav)
+        {
+            room.HasLeftNeighbor = roomNav.HasLeftNeighbor;
+            room.HasRightNeighbor = roomNav.HasRightNeighbor;
+            room.HasUpNeighbor = roomNav.HasUpNeighbor;
+            room.HasDownNeighbor = roomNav.HasDownNeighbor;
+            return room;
+        }
+
         private async Task<RoomNavDto?> InitializeCheckRoomAsync(int coordX, int coordY)
         {
             var room = await _context.Rooms
