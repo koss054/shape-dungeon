@@ -1,4 +1,5 @@
 ﻿@using ShapeDungeon.DTOs.Room
+@using ShapeDungeon.Helpers.Enums
 @model RoomDto
 
 <td class="align-middle position-relative" style="width:50vw">
@@ -11,11 +12,32 @@
              style="width:100%;top:-2.5rem;">
             @if (Model.HasUpNeighbor)
             {
+                @if (Model.IsActiveForMove)
+                {
+                    <a 
+                        type="button"
+                        class="btn btn-outline-dark"
+                        asp-controller="Home"
+                        asp-action="Move"
+                        asp-route-direction="@RoomDirection.Top">
+                        Move ⇧
+                    </a>
+                }
 
-                <button type="button" class="btn btn-outline-dark">Move ⇧</button>
-                <button type="button" class="btn btn-outline-info">Scout ⇧</button>
+                @if (Model.IsActiveForScout)
+                {
+                    <a 
+                        type="button"
+                        class="btn btn-outline-info"
+                        asp-controller="Home"
+                        asp-action="Scout"
+                        asp-route-direction="@RoomDirection.Top">
+                        Scout ⇧
+                    </a> 
+                }
+                
             }
-            else
+            else if (Model.CanGoUp)
             {
                 <button type="button" class="btn btn-outline-danger" disabled>Void!</button>
             }
@@ -26,11 +48,31 @@
              style="width:100%;bottom:-5rem;">
             @if (Model.HasDownNeighbor)
             {
+                @if (Model.IsActiveForMove)
+                {
+                    <a 
+                        type="button"
+                        class="btn btn-outline-dark"
+                        asp-controller="Home"
+                        asp-action="Move"
+                        asp-route-direction="@RoomDirection.Bottom">
+                        Move ⇩
+                    </a>
+                }
 
-                <button type="button" class="btn btn-outline-dark">Move ⇩</button>
-                <button type="button" class="btn btn-outline-info">Scout ⇩</button>
+                @if (Model.IsActiveForScout)
+                {
+                    <a 
+                        type="button"
+                        class="btn btn-outline-info"
+                        asp-controller="Home"
+                        asp-action="Scout"
+                        asp-route-direction="@RoomDirection.Bottom">
+                        Scout ⇩
+                    </a> 
+                }
             }
-            else
+            else if (Model.CanGoDown)
             {
                 <button type="button" class="btn btn-outline-danger" disabled>Void!</button>
             }
@@ -41,11 +83,31 @@
              style="width:40%;left:-4.5rem;">
             @if (Model.HasLeftNeighbor)
             {
+                @if (Model.IsActiveForMove)
+                {
+                    <a 
+                        type="button"
+                        class="btn btn-outline-dark"
+                        asp-controller="Home"
+                        asp-action="Move"
+                        asp-route-direction="@RoomDirection.Left">
+                        ⇦ Move
+                    </a>
+                }
 
-                <button type="button" class="btn btn-outline-dark mb-1">Move ⇦</button>
-                <button type="button" class="btn btn-outline-info">Scout ⇦</button>
+                @if (Model.IsActiveForScout)
+                {
+                    <a 
+                        type="button"
+                        class="btn btn-outline-info"
+                        asp-controller="Home"
+                        asp-action="Scout"
+                        asp-route-direction="@RoomDirection.Left">
+                        ⇦ Scout
+                    </a> 
+                }
             }
-            else
+            else if (Model.CanGoLeft)
             {
                 <button type="button" class="btn btn-outline-danger" disabled>Void!</button>
             }
@@ -56,11 +118,31 @@
              style="width:40%;">
             @if (Model.HasRightNeighbor)
             {
+                @if (Model.IsActiveForMove)
+                {
+                    <a 
+                        type="button"
+                        class="btn btn-outline-dark"
+                        asp-controller="Home"
+                        asp-action="Move"
+                        asp-route-direction="@RoomDirection.Right">
+                        Move ⇨
+                    </a>
+                }
 
-                <button type="button" class="btn btn-outline-dark mb-1">Move ⇨</button>
-                <button type="button" class="btn btn-outline-info">Scout ⇨</button>
+                @if (Model.IsActiveForScout)
+                {
+                    <a 
+                        type="button"
+                        class="btn btn-outline-info"
+                        asp-controller="Home"
+                        asp-action="Scout"
+                        asp-route-direction="@RoomDirection.Right">
+                        Scout ⇨
+                    </a> 
+                }
             }
-            else
+            else if (Model.CanGoRight)
             {
                 <button type="button" class="btn btn-outline-danger" disabled>Void!</button>
             }
