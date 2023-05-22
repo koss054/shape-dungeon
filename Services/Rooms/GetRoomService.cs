@@ -14,12 +14,33 @@ namespace ShapeDungeon.Services.Rooms
             _context = context;
         }
 
-        public async Task<RoomDto?> GetActiveAsync()
+        public async Task<RoomDto?> GetActiveForMoveAsync()
             => await _context.Rooms
-                .Where(x => x.IsActive)
+                .Where(x => x.IsActiveForMove)
                 .Select(x => new RoomDto()
                 {
-                    IsActive = x.IsActive,
+                    IsActiveForMove = x.IsActiveForMove,
+                    IsActiveForScout = x.IsActiveForScout,
+                    CanGoLeft = x.CanGoLeft,
+                    CanGoRight = x.CanGoRight,
+                    CanGoUp = x.CanGoUp,
+                    CanGoDown = x.CanGoDown,
+                    IsStartRoom = x.IsStartRoom,
+                    IsSafeRoom = x.IsSafeRoom,
+                    IsEnemyRoom = x.IsEnemyRoom,
+                    IsEndRoom = x.IsEndRoom,
+                    CoordX = x.CoordX,
+                    CoordY = x.CoordY,
+                })
+                .SingleOrDefaultAsync();
+
+        public async Task<RoomDto?> GetActiveForScoutAsync()
+            => await _context.Rooms
+                .Where(x => x.IsActiveForScout)
+                .Select(x => new RoomDto()
+                {
+                    IsActiveForMove = x.IsActiveForMove,
+                    IsActiveForScout = x.IsActiveForScout,
                     CanGoLeft = x.CanGoLeft,
                     CanGoRight = x.CanGoRight,
                     CanGoUp = x.CanGoUp,

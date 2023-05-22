@@ -2,7 +2,8 @@
 {
     public class RoomDto
     {
-        public bool IsActive { get; set; }
+        public bool IsActiveForMove { get; set; }
+        public bool IsActiveForScout { get; set; }
         public bool CanGoLeft { get; set; }
         public bool CanGoRight { get; set; }
         public bool CanGoUp { get; set; }

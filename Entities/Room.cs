@@ -6,7 +6,9 @@ namespace ShapeDungeon.Entities
     {
         public Guid Id { get; init; }
 
-        public bool IsActive { get; set; }
+        public bool IsActiveForMove { get; set; }
+
+        public bool IsActiveForScout { get; set; }
 
         public bool IsActiveForEdit { get; set; }
 
