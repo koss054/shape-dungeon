@@ -1,5 +1,4 @@
 ﻿@using ShapeDungeon.DTOs
-@using ShapeDungeon.Entities.Enums
 @model GameDto
 
 @{
@@ -11,35 +10,7 @@
         <table style="height:75vh">
             <tbody>
                 <tr>
-                    <td class="align-middle position-relative" style="width:50vw">
-                        @if (Model.Player.Shape == PlayerShape.Square)
-                        {
-                            <div 
-                                id="player"
-                                class="position-absolute top-50 start-50 translate-middle"
-                                style="height:7.5rem;width:7.5rem;background-color:limegreen"
-                            >
-                            </div>
-                        }
-                        else if (Model.Player.Shape == PlayerShape.Triangle)
-                        {
-                             <div 
-                                id="player"
-                                class="position-absolute top-50 start-50 translate-middle"
-                                style="width:0;height:0;border-top: 5rem solid transparent;border-left: 10rem solid limegreen;border-bottom: 5rem solid transparent"
-                            >
-                            </div>
-                        }
-                        else if (Model.Player.Shape == PlayerShape.Circle)
-                        {
-                             <div 
-                                id="player"
-                                class="position-absolute top-50 start-50 translate-middle"
-                                style="height:10rem;width:10rem;background-color:limegreen;border-radius:50%"
-                            >
-                            </div>
-                        }
-                    </td>
+                    <partial name="_Player" for="Player" />
                     <partial name="_RoomWithNav" for="Room" />
                 </tr>
             </tbody>

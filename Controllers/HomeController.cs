@@ -25,7 +25,7 @@ namespace ShapeDungeon.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var player = await _playerService.GetPlayerAsync("Nov Kryg Homiesss");
+            var player = await _playerService.GetPlayerAsync("Trizybeca na Poseidon");
             if (player == null)
             {
             }
