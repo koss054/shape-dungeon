@@ -15,9 +15,10 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 builder.Services.AddScoped<IDbContext, AppDbContext>();
 builder.Services.AddScoped<IPlayerService, PlayerService>();
-builder.Services.AddScoped<IRoomActiveForEditService, RoomActiveForEditService>();
 builder.Services.AddScoped<IGetRoomService, GetRoomService>();
 builder.Services.AddScoped<IRoomCreateService, RoomCreateService>();
+builder.Services.AddScoped<IRoomTravelService, RoomTravelService>();
+builder.Services.AddScoped<IRoomActiveForEditService, RoomActiveForEditService>();
 builder.Services.AddScoped<ICheckRoomNeighborsService, CheckRoomNeighborsService>();
 builder.Services.AddControllersWithViews();
 
