@@ -55,23 +55,23 @@ namespace ShapeDungeon.Services.Rooms
             var newRoom = await _context.Rooms
                 .SingleOrDefaultAsync(x => x.CoordX == coordX && x.CoordY == coordY);
 
-            if (newRoom == null)
-                throw new ArgumentNullException(nameof(newRoom));
-
-            switch (action)
+            if (newRoom != null)
             {
-                case RoomTravelAction.Move:
-                    oldRoom.IsActiveForMove = false;
-                    newRoom.IsActiveForMove = true;
-                    break;
-                case RoomTravelAction.Scout:
-                    oldRoom.IsActiveForScout = false;
-                    newRoom.IsActiveForScout = true;
-                    break;
-                default: throw new ArgumentOutOfRangeException(nameof(action));
+                switch (action)
+                {
+                    case RoomTravelAction.Move:
+                        oldRoom.IsActiveForMove = false;
+                        newRoom.IsActiveForMove = true;
+                        break;
+                    case RoomTravelAction.Scout:
+                        oldRoom.IsActiveForScout = false;
+                        newRoom.IsActiveForScout = true;
+                        break;
+                    default: throw new ArgumentOutOfRangeException(nameof(action));
+                }
+
+                await _context.SaveChangesAsync();
             }
-            
-            await _context.SaveChangesAsync();
         }
 
         public async Task ResetScoutAsync()
