@@ -16,10 +16,11 @@ namespace ShapeDungeon.Services.Rooms
 
         public async Task<RoomDto?> GetActiveAsync()
             => await _context.Rooms
-                .Where(x => x.IsActive)
+                .Where(x => x.IsActiveForMove)
                 .Select(x => new RoomDto()
                 {
-                    IsActive = x.IsActive,
+                    IsActiveForMove = x.IsActiveForMove,
+                    IsActiveForScout = x.IsActiveForScout,
                     CanGoLeft = x.CanGoLeft,
                     CanGoRight = x.CanGoRight,
                     CanGoUp = x.CanGoUp,

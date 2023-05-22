@@ -20,7 +20,8 @@ namespace ShapeDungeon.Services.Rooms
         {
             Room room = new()
             {
-                IsActive = false,
+                IsActiveForMove = false,
+                IsActiveForScout = false,
                 IsActiveForEdit = roomDto.IsStartRoom,
                 CanGoLeft = roomDto.CanGoLeft,
                 CanGoRight = roomDto.CanGoRight,
