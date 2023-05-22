@@ -1,0 +1,70 @@
+﻿@using ShapeDungeon.DTOs.Room
+@model RoomDto
+
+<td class="align-middle position-relative" style="width:50vw">
+    <div id="room"
+         class="position-absolute top-50 start-50 translate-middle"
+         style="height:50vh;width:50vh;border:solid 1rem white">
+
+        <div id="move-up"
+             class="position-absolute start-50 translate-middle"
+             style="width:100%;top:-2.5rem;">
+            @if (Model.HasUpNeighbor)
+            {
+
+                <button type="button" class="btn btn-outline-dark">Move ⇧</button>
+                <button type="button" class="btn btn-outline-info">Scout ⇧</button>
+            }
+            else
+            {
+                <button type="button" class="btn btn-danger" disabled>Void!</button>
+            }
+        </div>
+
+        <div id="move-down"
+             class="position-absolute start-50 translate-middle"
+             style="width:100%;bottom:-5rem;">
+            @if (Model.HasDownNeighbor)
+            {
+
+                <button type="button" class="btn btn-outline-dark">Move ⇩</button>
+                <button type="button" class="btn btn-outline-info">Scout ⇩</button>
+            }
+            else
+            {
+                <button type="button" class="btn btn-danger" disabled>Void!</button>
+            }
+        </div>
+
+        <div id="move-left"
+             class="position-absolute top-50 translate-middle"
+             style="width:40%;left:-4.5rem;">
+            @if (Model.HasLeftNeighbor)
+            {
+
+                <button type="button" class="btn btn-outline-dark mb-1">Move ⇦</button>
+                <button type="button" class="btn btn-outline-info">Scout ⇦</button>
+            }
+            else
+            {
+                <button type="button" class="btn btn-danger" disabled>Void!</button>
+            }
+        </div>
+
+        <div id="move-right"
+             class="position-absolute top-50 start-100 translate-middle-y"
+             style="width:40%;">
+            @if (Model.HasRightNeighbor)
+            {
+
+                <button type="button" class="btn btn-outline-dark mb-1">Move ⇨</button>
+                <button type="button" class="btn btn-outline-info">Scout ⇨</button>
+            }
+            else
+            {
+                <button type="button" class="btn btn-danger" disabled>Void!</button>
+            }
+        </div>
+
+    </div>
+</td>

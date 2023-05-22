@@ -40,61 +40,7 @@
                             </div>
                         }
                     </td>
-                    <td class="align-middle position-relative" style="width:50vw">
-                        <div
-                            id="room"
-                            class="position-absolute top-50 start-50 translate-middle"
-                            style="height:50vh;width:50vh;border:solid 1rem white"
-                        >
-                            @if (Model.Room.HasUpNeighbor)
-                            {
-                                <div 
-                                    id="move-up"
-                                    class="position-absolute start-50 translate-middle"
-                                    style="width:100%;top:-2.5rem;"
-                                >
-                                    <button type="button" class="btn btn-outline-dark">Move ⇧</button>
-                                    <button type="button" class="btn btn-outline-info">Scout ⇧</button>
-                                </div>
-                            }
-                            
-                            @if (Model.Room.HasDownNeighbor)
-                            {
-                                <div 
-                                    id="move-down"
-                                    class="position-absolute start-50 translate-middle"
-                                    style="width:100%;bottom:-5rem;"
-                                >
-                                    <button type="button" class="btn btn-outline-dark">Move ⇩</button>
-                                    <button type="button" class="btn btn-outline-info">Scout ⇩</button>
-                                </div>
-                            }
-
-                            @if (Model.Room.HasLeftNeighbor)
-                            {
-                                <div 
-                                    id="move-left"
-                                    class="position-absolute top-50 translate-middle"
-                                    style="width:40%;left:-4.5rem;"
-                                >
-                                    <button type="button" class="btn btn-outline-dark mb-1">Move ⇦</button>
-                                    <button type="button" class="btn btn-outline-info">Scout ⇦</button>
-                                </div>
-                            }
-
-                            @if (Model.Room.HasRightNeighbor)
-                            {
-                                <div 
-                                    id="move-right"
-                                    class="position-absolute top-50 start-100 translate-middle-y ms-1"
-                                    style="width:40%;"
-                                >
-                                    <button type="button" class="btn btn-outline-dark mb-1">Move ⇨</button>
-                                    <button type="button" class="btn btn-outline-info">Scout ⇨</button>
-                                </div>
-                            }
-                        </div>
-                    </td>
+                    <partial name="_RoomWithNav" for="Room" />
                 </tr>
             </tbody>
         </table>
