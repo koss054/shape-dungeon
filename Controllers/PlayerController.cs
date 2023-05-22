@@ -40,7 +40,7 @@ namespace ShapeDungeon.Controllers
             }
 
             await _playerService.CreatePlayerAsync(player);
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Active", "Home");
         }
     }
 }

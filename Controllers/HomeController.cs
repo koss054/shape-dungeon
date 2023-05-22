@@ -1,9 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ShapeDungeon.DTOs;
+using ShapeDungeon.Helpers.Enums;
 using ShapeDungeon.Interfaces.Services;
 using ShapeDungeon.Interfaces.Services.Rooms;
-using ShapeDungeon.Models;
-using System.Diagnostics;
 
 namespace ShapeDungeon.Controllers
 {
@@ -11,26 +10,35 @@ namespace ShapeDungeon.Controllers
     {
         private readonly IPlayerService _playerService;
         private readonly IGetRoomService _getRoomService;
+        private readonly IRoomTravelService _roomTravelService;
         private readonly ICheckRoomNeighborsService _checkRoomNeighborsService;
 
         public HomeController(
             IPlayerService playerService,
-            IGetRoomService getRoomService, 
+            IGetRoomService getRoomService,
+            IRoomTravelService roomTravelService,
             ICheckRoomNeighborsService checkRoomNeighborsService)
         {
             _playerService = playerService;
             _getRoomService = getRoomService;
+            _roomTravelService = roomTravelService;
             _checkRoomNeighborsService = checkRoomNeighborsService;
         }
 
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
+            => RedirectToAction("Active");
+
+        public async Task<IActionResult> Active()
         {
-            var player = await _playerService.GetPlayerAsync("Trizybeca na Poseidon");
+            // Doing this if player changes the URL manually.
+            await _roomTravelService.ResetScoutAsync();
+
+            var player = await _playerService.GetPlayerAsync("test");
             if (player == null)
             {
             }
 
-            var room = await _getRoomService.GetActiveAsync();
+            var room = await _getRoomService.GetActiveForMoveAsync();
             if (room == null)
             {
             }
@@ -45,10 +53,44 @@ namespace ShapeDungeon.Controllers
             return View(game);
         }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+        [HttpGet]
+        public async Task<IActionResult> Scouting()
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            var player = await _playerService.GetPlayerAsync("test");
+            if (player == null)
+            {
+            }
+
+            var room = await _getRoomService.GetActiveForScoutAsync();
+            if (room == null)
+            {
+            }
+
+            if (room.IsActiveForMove)
+                return RedirectToAction("Active");
+
+            var roomNav = await _checkRoomNeighborsService.SetDtoNeighborsAsync(room!.CoordX, room!.CoordY);
+            if (roomNav == null)
+            {
+            }
+
+            room = _checkRoomNeighborsService.SetHasNeighborsProperties(room, roomNav!);
+            var game = new GameDto() { Player = player!, Room = room! };
+            return View(game);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Move(RoomDirection direction)
+        {
+            await _roomTravelService.RoomTravelAsync(direction, RoomTravelAction.Move);
+            return RedirectToAction("Active");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Scout(RoomDirection direction)
+        {
+            await _roomTravelService.RoomTravelAsync(direction, RoomTravelAction.Scout);
+            return RedirectToAction("Scouting");
         }
     }
 }
