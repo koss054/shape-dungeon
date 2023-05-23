@@ -59,7 +59,6 @@ namespace ShapeDungeon.Services.Rooms
                 .Where(x => x.IsActiveForEdit)
                 .Select(x => new RoomDetailsDto()
                 {
-                    Id = x.Id,
                     IsActiveForEdit = x.IsActiveForEdit,
                     CanGoLeft = x.CanGoLeft,
                     CanGoRight = x.CanGoRight,
