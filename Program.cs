@@ -1,10 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using ShapeDungeon.Data;
-using ShapeDungeon.Interfaces.Repositories;
-using ShapeDungeon.Interfaces.Services;
-using ShapeDungeon.Interfaces.Services.Rooms;
-using ShapeDungeon.Services;
-using ShapeDungeon.Services.Rooms;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,13 +8,7 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddDbContext<AppDbContext>(options => 
     options.UseSqlServer(connectionString));
 
-builder.Services.AddScoped<IDbContext, AppDbContext>();
-builder.Services.AddScoped<IPlayerService, PlayerService>();
-builder.Services.AddScoped<IGetRoomService, GetRoomService>();
-builder.Services.AddScoped<IRoomCreateService, RoomCreateService>();
-builder.Services.AddScoped<IRoomTravelService, RoomTravelService>();
-builder.Services.AddScoped<IRoomActiveForEditService, RoomActiveForEditService>();
-builder.Services.AddScoped<ICheckRoomNeighborsService, CheckRoomNeighborsService>();
+builder.Services.AddApplicationServices();
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
