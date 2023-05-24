@@ -11,17 +11,20 @@ namespace ShapeDungeon.Controllers
         private readonly IPlayerService _playerService;
         private readonly IGetRoomService _getRoomService;
         private readonly IRoomTravelService _roomTravelService;
+        private readonly IPlayerScoutService _playerScoutService;
         private readonly ICheckRoomNeighborsService _checkRoomNeighborsService;
 
         public HomeController(
             IPlayerService playerService,
             IGetRoomService getRoomService,
             IRoomTravelService roomTravelService,
+            IPlayerScoutService playerScoutService,
             ICheckRoomNeighborsService checkRoomNeighborsService)
         {
             _playerService = playerService;
             _getRoomService = getRoomService;
             _roomTravelService = roomTravelService;
+            _playerScoutService = playerScoutService;
             _checkRoomNeighborsService = checkRoomNeighborsService;
         }
 
@@ -32,6 +35,7 @@ namespace ShapeDungeon.Controllers
         {
             // Doing this if player changes the URL manually.
             await _roomTravelService.ResetScoutAsync();
+            await _playerScoutService.UpdateActiveScoutEnergyAsync(PlayerScoutAction.Refill);
 
             var player = await _playerService.GetPlayerAsync("Nov Kryg Homiesss");
             if (player == null)
@@ -89,6 +93,7 @@ namespace ShapeDungeon.Controllers
         public async Task<IActionResult> Scout(RoomDirection direction)
         {
             await _roomTravelService.RoomTravelAsync(direction, RoomTravelAction.Scout);
+            await _playerScoutService.UpdateActiveScoutEnergyAsync(PlayerScoutAction.Reduce);
             return RedirectToAction("Scouting");
         }
     }
