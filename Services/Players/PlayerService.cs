@@ -23,6 +23,7 @@ namespace ShapeDungeon.Services.Players
 
             var player = new Player()
             {
+                IsActive = false,
                 Name = pDto.Name,
                 Strength = pDto.Strength,
                 Vigor = pDto.Vigor,
@@ -45,6 +46,7 @@ namespace ShapeDungeon.Services.Players
             => await _context.Players
                 .Select(x => new PlayerDto()
                 {
+                    IsActive = x.IsActive,
                     Name = x.Name,
                     Strength = x.Strength,
                     Vigor = x.Vigor,
@@ -63,6 +65,7 @@ namespace ShapeDungeon.Services.Players
                 .Where(x => x.Name == name)
                 .Select(x => new PlayerDto()
                 {
+                    IsActive = x.IsActive,
                     Name = x.Name,
                     Strength = x.Strength,
                     Vigor = x.Vigor,

@@ -4,6 +4,7 @@ namespace ShapeDungeon.DTOs
 {
     public class PlayerDto
     {
+        public bool IsActive { get; set; }
         public string Name { get; set; }
             = null!;
 
