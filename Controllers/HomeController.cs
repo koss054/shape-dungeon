@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ShapeDungeon.DTOs;
 using ShapeDungeon.Helpers.Enums;
-using ShapeDungeon.Interfaces.Services;
+using ShapeDungeon.Interfaces.Services.Players;
 using ShapeDungeon.Interfaces.Services.Rooms;
 
 namespace ShapeDungeon.Controllers

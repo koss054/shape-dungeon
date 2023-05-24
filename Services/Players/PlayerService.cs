@@ -3,7 +3,7 @@
 using ShapeDungeon.DTOs;
 using ShapeDungeon.Entities;
 using ShapeDungeon.Interfaces.Repositories;
-using ShapeDungeon.Interfaces.Services;
+using ShapeDungeon.Interfaces.Services.Players;
 
 namespace ShapeDungeon.Services.Players
 {

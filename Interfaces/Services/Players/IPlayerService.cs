@@ -1,5 +1,6 @@
 ﻿using ShapeDungeon.DTOs;
-namespace ShapeDungeon.Interfaces.Services
+
+namespace ShapeDungeon.Interfaces.Services.Players
 {
     public interface IPlayerService
     {
