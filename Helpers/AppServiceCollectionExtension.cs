@@ -2,7 +2,7 @@
 using ShapeDungeon.Interfaces.Repositories;
 using ShapeDungeon.Interfaces.Services;
 using ShapeDungeon.Interfaces.Services.Rooms;
-using ShapeDungeon.Services;
+using ShapeDungeon.Services.Players;
 using ShapeDungeon.Services.Rooms;
 
 namespace Microsoft.Extensions.DependencyInjection
