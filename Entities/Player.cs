@@ -24,6 +24,8 @@ namespace ShapeDungeon.Entities
 
         public int CurrentSkillpoints { get; set; }
 
+        public int CurrentScoutEnergy { get; set; }
+
         public PlayerShape Shape { get; set; }
     }
 }

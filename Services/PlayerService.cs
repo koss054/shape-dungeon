@@ -31,6 +31,7 @@ namespace ShapeDungeon.Services
                 CurrentExp = 0,
                 ExpToNextLevel = 100,
                 CurrentSkillpoints = 0,
+                CurrentScoutEnergy = pDto.Agility,
                 Shape = pDto.Shape
             };
 
@@ -52,6 +53,7 @@ namespace ShapeDungeon.Services
                     CurrentExp = x.CurrentExp,
                     ExpToNextLevel = x.ExpToNextLevel,
                     CurrentSkillpoints = x.CurrentSkillpoints,
+                    CurrentScoutEnergy = x.CurrentScoutEnergy,
                     Shape = x.Shape
                 }).ToListAsync();
 
@@ -69,6 +71,7 @@ namespace ShapeDungeon.Services
                     CurrentExp = x.CurrentExp,
                     ExpToNextLevel = x.ExpToNextLevel,
                     CurrentSkillpoints = x.CurrentSkillpoints,
+                    CurrentScoutEnergy = x.CurrentScoutEnergy,
                     Shape = x.Shape
                 }).FirstOrDefaultAsync();
 
