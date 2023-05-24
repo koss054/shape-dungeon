@@ -1,4 +1,4 @@
-﻿using ShapeDungeon.DTOs;
+﻿using ShapeDungeon.DTOs.Player;
 
 namespace ShapeDungeon.Interfaces.Services.Players
 {

@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-
-using ShapeDungeon.DTOs;
+using ShapeDungeon.DTOs.Player;
 using ShapeDungeon.Entities;
 using ShapeDungeon.Interfaces.Repositories;
 using ShapeDungeon.Interfaces.Services.Players;
