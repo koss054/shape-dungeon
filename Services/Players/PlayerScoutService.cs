@@ -39,7 +39,7 @@ namespace ShapeDungeon.Services.Players
 
             var currScoutEnergy = currActivePlayer.CurrentScoutEnergy;
 
-            if (action == PlayerScoutAction.Reduce)
+            if (action == PlayerScoutAction.Reduce && currScoutEnergy > 0)
             {
                 currScoutEnergy--;
             }
