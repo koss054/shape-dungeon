@@ -36,7 +36,7 @@ namespace ShapeDungeon.Controllers
             await _roomTravelService.ResetScoutAsync(); // Doing this if player changes the URL manually.
             await _playerScoutService.UpdateActiveScoutEnergyAsync(PlayerScoutAction.Refill);
 
-            var player = await _playerService.GetPlayerAsync("Nov Kryg Homiesss");
+            var player = await _playerService.GetPlayerAsync("Trizybeca na Poseidon");
             if (player == null)
             {
             }
@@ -59,7 +59,7 @@ namespace ShapeDungeon.Controllers
         [HttpGet]
         public async Task<IActionResult> Scouting()
         {
-            var player = await _playerService.GetPlayerAsync("Nov Kryg Homiesss");
+            var player = await _playerService.GetPlayerAsync("Trizybeca na Poseidon");
             if (player == null)
             {
             }
