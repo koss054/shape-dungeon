@@ -29,7 +29,7 @@ namespace ShapeDungeon.Services.Players
                 : 0;
         }
 
-        public async Task UpdateActiveScoutEnergyAsync(PlayerScoutAction action)
+        public async Task<int> UpdateActiveScoutEnergyAsync(PlayerScoutAction action)
         {
             var currActivePlayer = await _context.Players
                 .SingleOrDefaultAsync(x => x.IsActive);
@@ -47,9 +47,14 @@ namespace ShapeDungeon.Services.Players
             {
                 currScoutEnergy = currActivePlayer.Agility;
             }
+            else
+            {
+                return -1;
+            }
 
             currActivePlayer.CurrentScoutEnergy = currScoutEnergy;
             await _context.SaveChangesAsync();
+            return currActivePlayer.CurrentScoutEnergy;
         }
     }
 }
