@@ -1,11 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
-
-using ShapeDungeon.DTOs;
+using ShapeDungeon.DTOs.Player;
 using ShapeDungeon.Entities;
 using ShapeDungeon.Interfaces.Repositories;
-using ShapeDungeon.Interfaces.Services;
+using ShapeDungeon.Interfaces.Services.Players;
 
-namespace ShapeDungeon.Services
+namespace ShapeDungeon.Services.Players
 {
     public class PlayerService : IPlayerService, IDisposable
     {
@@ -23,6 +22,7 @@ namespace ShapeDungeon.Services
 
             var player = new Player()
             {
+                IsActive = false,
                 Name = pDto.Name,
                 Strength = pDto.Strength,
                 Vigor = pDto.Vigor,
@@ -31,6 +31,7 @@ namespace ShapeDungeon.Services
                 CurrentExp = 0,
                 ExpToNextLevel = 100,
                 CurrentSkillpoints = 0,
+                CurrentScoutEnergy = pDto.Agility,
                 Shape = pDto.Shape
             };
 
@@ -44,6 +45,7 @@ namespace ShapeDungeon.Services
             => await _context.Players
                 .Select(x => new PlayerDto()
                 {
+                    IsActive = x.IsActive,
                     Name = x.Name,
                     Strength = x.Strength,
                     Vigor = x.Vigor,
@@ -52,6 +54,7 @@ namespace ShapeDungeon.Services
                     CurrentExp = x.CurrentExp,
                     ExpToNextLevel = x.ExpToNextLevel,
                     CurrentSkillpoints = x.CurrentSkillpoints,
+                    CurrentScoutEnergy = x.CurrentScoutEnergy,
                     Shape = x.Shape
                 }).ToListAsync();
 
@@ -61,6 +64,7 @@ namespace ShapeDungeon.Services
                 .Where(x => x.Name == name)
                 .Select(x => new PlayerDto()
                 {
+                    IsActive = x.IsActive,
                     Name = x.Name,
                     Strength = x.Strength,
                     Vigor = x.Vigor,
@@ -69,6 +73,7 @@ namespace ShapeDungeon.Services
                     CurrentExp = x.CurrentExp,
                     ExpToNextLevel = x.ExpToNextLevel,
                     CurrentSkillpoints = x.CurrentSkillpoints,
+                    CurrentScoutEnergy = x.CurrentScoutEnergy,
                     Shape = x.Shape
                 }).FirstOrDefaultAsync();
 
@@ -79,11 +84,11 @@ namespace ShapeDungeon.Services
 
         protected virtual void Dispose(bool disposing)
         {
-            if (!this.disposed)
+            if (!disposed)
                 if (disposing)
                     _context.Dispose();
 
-            this.disposed = true;
+            disposed = true;
         }
 
         public void Dispose()

@@ -7,6 +7,8 @@ namespace ShapeDungeon.Entities
     {
         public Guid Id { get; set; }
 
+        public bool IsActive { get; set; }
+
         public string Name { get; set; } 
             = null!;
 
@@ -23,6 +25,8 @@ namespace ShapeDungeon.Entities
         public int ExpToNextLevel { get; set; }
 
         public int CurrentSkillpoints { get; set; }
+
+        public int CurrentScoutEnergy { get; set; }
 
         public PlayerShape Shape { get; set; }
     }

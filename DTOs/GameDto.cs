@@ -1,4 +1,5 @@
-﻿using ShapeDungeon.DTOs.Room;
+﻿using ShapeDungeon.DTOs.Player;
+using ShapeDungeon.DTOs.Room;
 
 namespace ShapeDungeon.DTOs
 {

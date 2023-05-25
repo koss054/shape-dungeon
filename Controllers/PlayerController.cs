@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using ShapeDungeon.DTOs;
-using ShapeDungeon.Interfaces.Services;
+using ShapeDungeon.DTOs.Player;
+using ShapeDungeon.Interfaces.Services.Players;
 
 namespace ShapeDungeon.Controllers
 {

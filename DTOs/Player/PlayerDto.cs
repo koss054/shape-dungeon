@@ -1,9 +1,10 @@
 ﻿using ShapeDungeon.Entities.Enums;
 
-namespace ShapeDungeon.DTOs
+namespace ShapeDungeon.DTOs.Player
 {
     public class PlayerDto
     {
+        public bool IsActive { get; set; }
         public string Name { get; set; }
             = null!;
 
@@ -14,6 +15,7 @@ namespace ShapeDungeon.DTOs
         public int CurrentExp { get; set; }
         public int ExpToNextLevel { get; set; }
         public int CurrentSkillpoints { get; set; }
+        public int CurrentScoutEnergy { get; set; }
 
         public PlayerShape Shape { get; set; }
     }

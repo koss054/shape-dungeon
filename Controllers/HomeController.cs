@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ShapeDungeon.DTOs;
 using ShapeDungeon.Helpers.Enums;
-using ShapeDungeon.Interfaces.Services;
+using ShapeDungeon.Interfaces.Services.Players;
 using ShapeDungeon.Interfaces.Services.Rooms;
 
 namespace ShapeDungeon.Controllers
@@ -11,17 +11,20 @@ namespace ShapeDungeon.Controllers
         private readonly IPlayerService _playerService;
         private readonly IGetRoomService _getRoomService;
         private readonly IRoomTravelService _roomTravelService;
+        private readonly IPlayerScoutService _playerScoutService;
         private readonly ICheckRoomNeighborsService _checkRoomNeighborsService;
 
         public HomeController(
             IPlayerService playerService,
             IGetRoomService getRoomService,
             IRoomTravelService roomTravelService,
+            IPlayerScoutService playerScoutService,
             ICheckRoomNeighborsService checkRoomNeighborsService)
         {
             _playerService = playerService;
             _getRoomService = getRoomService;
             _roomTravelService = roomTravelService;
+            _playerScoutService = playerScoutService;
             _checkRoomNeighborsService = checkRoomNeighborsService;
         }
 
@@ -30,10 +33,10 @@ namespace ShapeDungeon.Controllers
 
         public async Task<IActionResult> Active()
         {
-            // Doing this if player changes the URL manually.
-            await _roomTravelService.ResetScoutAsync();
+            await _roomTravelService.ResetScoutAsync(); // Doing this if player changes the URL manually.
+            await _playerScoutService.UpdateActiveScoutEnergyAsync(PlayerScoutAction.Refill);
 
-            var player = await _playerService.GetPlayerAsync("Nov Kryg Homiesss");
+            var player = await _playerService.GetPlayerAsync("Trizybeca na Poseidon");
             if (player == null)
             {
             }
@@ -56,7 +59,7 @@ namespace ShapeDungeon.Controllers
         [HttpGet]
         public async Task<IActionResult> Scouting()
         {
-            var player = await _playerService.GetPlayerAsync("Nov Kryg Homiesss");
+            var player = await _playerService.GetPlayerAsync("Trizybeca na Poseidon");
             if (player == null)
             {
             }
@@ -88,7 +91,13 @@ namespace ShapeDungeon.Controllers
         [HttpGet]
         public async Task<IActionResult> Scout(RoomDirection direction)
         {
-            await _roomTravelService.RoomTravelAsync(direction, RoomTravelAction.Scout);
+            var energyLeft = await _playerScoutService.UpdateActiveScoutEnergyAsync(PlayerScoutAction.Reduce);
+
+            if (energyLeft != -1)
+                await _roomTravelService.RoomTravelAsync(direction, RoomTravelAction.Scout);
+            else
+                TempData["no-energy"] = "No scouting energy left... Return to active room!";
+
             return RedirectToAction("Scouting");
         }
     }

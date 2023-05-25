@@ -1,0 +1,34 @@
+﻿@using ShapeDungeon.DTOs.Player
+
+@model PlayerDto
+
+<h5 
+    class="position-absolute d-flex align-items-center gap-2"
+    style="top:69%;left:50%;transform: translate(-50%, -50%);color:#b277cf">
+    <i 
+        class="fa-sharp fa-solid fa-bolt"
+        style="font-size:1rem">
+    </i>
+    <span 
+        id="current-energy">
+        @Model.CurrentScoutEnergy
+    </span> 
+    / 
+    @Model.Agility
+</h5>
+
+@*TODO: Move to own script file*@
+@if(Model.CurrentScoutEnergy == 0) 
+{
+    <script>
+        const currEnergy = document.getElementById("current-energy");
+        currEnergy.style.color = "#fd4444";
+    </script>
+}
+else if(Model.CurrentScoutEnergy <= Math.Floor((double)Model.Agility / 2))
+{
+    <script>
+        const currEnergy = document.getElementById("current-energy");
+        currEnergy.style.color = "#fcb534";
+    </script>
+}
