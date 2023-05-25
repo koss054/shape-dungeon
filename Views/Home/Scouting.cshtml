@@ -19,3 +19,10 @@
 </div>
 
 <partial name="_RoomStyle" for="Room">
+
+@if (@TempData["no-energy"] != null)
+{
+    <script>
+        toastr.error("No scouting energy... return to active room!");
+    </script>
+}

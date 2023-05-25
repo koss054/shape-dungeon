@@ -91,8 +91,13 @@ namespace ShapeDungeon.Controllers
         [HttpGet]
         public async Task<IActionResult> Scout(RoomDirection direction)
         {
-            await _roomTravelService.RoomTravelAsync(direction, RoomTravelAction.Scout);
-            await _playerScoutService.UpdateActiveScoutEnergyAsync(PlayerScoutAction.Reduce);
+            var energyLeft = await _playerScoutService.UpdateActiveScoutEnergyAsync(PlayerScoutAction.Reduce);
+
+            if (energyLeft != -1)
+                await _roomTravelService.RoomTravelAsync(direction, RoomTravelAction.Scout);
+            else
+                TempData["no-energy"] = "No scouting energy left... Return to active room!";
+
             return RedirectToAction("Scouting");
         }
     }
