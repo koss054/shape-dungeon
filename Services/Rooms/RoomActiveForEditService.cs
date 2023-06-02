@@ -1,58 +1,54 @@
-﻿using Microsoft.EntityFrameworkCore;
-using ShapeDungeon.Interfaces.Repositories;
+﻿using ShapeDungeon.Data;
+using ShapeDungeon.Interfaces.Entity;
 using ShapeDungeon.Interfaces.Services.Rooms;
+using ShapeDungeon.Repos;
 
 namespace ShapeDungeon.Services.Rooms
 {
     public class RoomActiveForEditService : IRoomActiveForEditService
     {
-        private readonly IDbContext _context;
+        private readonly IRoomRepository _roomRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public RoomActiveForEditService(IDbContext context)
+        public RoomActiveForEditService
+            (IRoomRepository roomRepository, 
+            IUnitOfWork unitOfWork)
         {
-            _context = context;
+            _roomRepository = roomRepository;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task ApplyActiveForEditAsync(Guid roomId)
         {
-            var isOldActiveForEditRemoved = await RemoveCurrentActiveForEditAsync();
-            if (isOldActiveForEditRemoved)
+            var oldRoom = await _roomRepository.GetActiveForEdit();
+            if (oldRoom != null)
             {
-                var newRoom = await _context.Rooms.FirstOrDefaultAsync(x => x.Id == roomId);
-
+                var newRoom = await _roomRepository.GetById(roomId);
                 if (newRoom != null)
-                {
-                    newRoom.IsActiveForEdit = true;
-                    await _context.SaveChangesAsync();
-                }
+                    await ToggleActiveForEdit(oldRoom, newRoom);
             }
         }
 
         public async Task MoveActiveForEditAsync(int coordX, int coordY)
         {
-            var newRoom = await _context.Rooms
-                .SingleOrDefaultAsync(x => x.CoordX == coordX && x.CoordY == coordY);
-
-            if (newRoom != null)
+            var oldRoom = await _roomRepository.GetActiveForEdit();
+            if (oldRoom != null)
             {
-                var isOldActiveForEditRemoved = await RemoveCurrentActiveForEditAsync();
-                if (isOldActiveForEditRemoved)
-                {
-                    newRoom.IsActiveForEdit = true;
-                    await _context.SaveChangesAsync();
-                }
+                var newRoom = await _roomRepository.GetByCoords(coordX, coordY);
+                if (newRoom != null)
+                    await ToggleActiveForEdit(oldRoom, newRoom);
             }
         }
-        
-        // No _context.SaveChangesAsync(), as we can't leave the DB without an IsActiveForEdit = true.
-        private async Task<bool> RemoveCurrentActiveForEditAsync()
-        {
-            var oldRoom = await _context.Rooms.FirstOrDefaultAsync(x => x.IsActiveForEdit);
-            if (oldRoom == null)
-                return false;
 
+        private async Task ToggleActiveForEdit(IRoom oldRoom, IRoom newRoom)
+        {
             oldRoom.IsActiveForEdit = false;
-            return true;
+            newRoom.IsActiveForEdit = true;
+            await _unitOfWork.Commit(() =>
+            {
+                _roomRepository.Update(oldRoom);
+                _roomRepository.Update(newRoom);
+            });
         }
     }
 }
