@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using ShapeDungeon.Entities;
 using ShapeDungeon.Interfaces.Entity;
 using ShapeDungeon.Interfaces.Repositories;
 
@@ -9,6 +10,22 @@ namespace ShapeDungeon.Repos
         public RoomRepository(IDbContext context) : base(context)
         {
         }
+
+        #region Get methods
+        /// <summary>
+        /// </summary>
+        /// <param name="id">Guid for the room's id.</param>
+        /// <returns>Room with matching id.</returns>
+        public async Task<IRoom?> GetById(Guid id)
+            => await this.Context.Rooms.FirstOrDefaultAsync(x => x.Id == id);
+
+        /// <summary>
+        /// </summary>
+        /// <param name="coordX">CoordX of the Room.</param>
+        /// <param name="coordY">CoordY of the ROom.</param>
+        /// <returns>Room with matching coords or null.</returns>
+        public async Task<IRoom?> GetByCoords(int coordX, int coordY) 
+            => await this.Context.Rooms.SingleOrDefaultAsync(x => x.CoordX == coordX && x.CoordY == coordY);
 
         /// <summary>
         /// Not possible for the room to be null.
@@ -36,5 +53,12 @@ namespace ShapeDungeon.Repos
         /// <returns>The room that is currently active in edit mode.</returns>
         public async Task<IRoom> GetActiveForEdit()
             => await this.Context.Rooms.SingleAsync(x => x.IsActiveForEdit);
+        #endregion
+
+        public void Update(IRoom room)
+        {
+            var updatedRoom = (Room)room;
+            this.Context.Rooms.Update(updatedRoom);
+        }
     }
 }
