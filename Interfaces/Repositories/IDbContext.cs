@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using ShapeDungeon.Entities;
 
 namespace ShapeDungeon.Interfaces.Repositories
@@ -12,5 +13,6 @@ namespace ShapeDungeon.Interfaces.Repositories
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
         void Dispose();
+        DatabaseFacade Database { get;  }
     }
 }
