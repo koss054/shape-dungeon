@@ -27,6 +27,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddScoped<ICheckRoomNeighborsService, CheckRoomNeighborsService>();
 
             // Repos
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IRoomRepository, RoomRepository>();
 
             return services;
