@@ -6,7 +6,7 @@ namespace ShapeDungeon.Interfaces.Entity
     {
         bool IsActiveForMove { get; }
         bool IsActiveForScout { get; }
-        bool IsActiveForEdit { get; }
+        bool IsActiveForEdit { get; set; }
         bool CanGoLeft { get; }
         bool CanGoRight { get; }
         bool CanGoUp { get; }
