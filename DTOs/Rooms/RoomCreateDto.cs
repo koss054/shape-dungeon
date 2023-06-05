@@ -1,4 +1,4 @@
-﻿namespace ShapeDungeon.DTOs.Room
+﻿namespace ShapeDungeon.DTOs.Rooms
 {
     public class RoomCreateDto
     {

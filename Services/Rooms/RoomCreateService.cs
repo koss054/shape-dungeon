@@ -1,5 +1,5 @@
 ﻿using ShapeDungeon.Data;
-using ShapeDungeon.DTOs.Room;
+using ShapeDungeon.DTOs.Rooms;
 using ShapeDungeon.Entities;
 using ShapeDungeon.Helpers.Enums;
 using ShapeDungeon.Interfaces.Services.Rooms;

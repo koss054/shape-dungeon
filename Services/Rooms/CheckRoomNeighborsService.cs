@@ -1,4 +1,4 @@
-﻿using ShapeDungeon.DTOs.Room;
+﻿using ShapeDungeon.DTOs.Rooms;
 using ShapeDungeon.Interfaces.Services.Rooms;
 using ShapeDungeon.Repos;
 

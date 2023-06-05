@@ -1,5 +1,5 @@
 ﻿using ShapeDungeon.DTOs.Players;
-using ShapeDungeon.DTOs.Room;
+using ShapeDungeon.DTOs.Rooms;
 
 namespace ShapeDungeon.DTOs
 {
