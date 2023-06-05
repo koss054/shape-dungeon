@@ -56,7 +56,7 @@ namespace ShapeDungeon.Repos
         Task<int> GetActiveForEditCoordY();
         #endregion
 
-        void AddAsync(IRoom room);
+        Task AddAsync(IRoom room);
 
         void Update(IRoom room);
     }

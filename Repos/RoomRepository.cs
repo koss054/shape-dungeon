@@ -77,7 +77,7 @@ namespace ShapeDungeon.Repos
                 .SingleOrDefaultAsync();
         #endregion
 
-        public async void AddAsync(IRoom room)
+        public async Task AddAsync(IRoom room)
         {
             var roomToAdd = (Room)room;
             await this.Context.Rooms.AddAsync(roomToAdd);
