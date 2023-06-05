@@ -7,6 +7,7 @@ namespace ShapeDungeon.Interfaces.Entity
         int CurrentExp { get; }
         int ExpToNextLevel { get; }
         int CurrentSkillpoints { get; }
+        int CurrentScoutEnergy { get; set; }
         PlayerShape Shape { get; }
     }
 }

@@ -1,59 +1,49 @@
-﻿using Microsoft.EntityFrameworkCore;
-using ShapeDungeon.DTOs.Player;
+﻿using ShapeDungeon.Data;
 using ShapeDungeon.Helpers.Enums;
-using ShapeDungeon.Interfaces.Repositories;
 using ShapeDungeon.Interfaces.Services.Players;
+using ShapeDungeon.Repos;
 
 namespace ShapeDungeon.Services.Players
 {
     public class PlayerScoutService : IPlayerScoutService
     {
-        private readonly IDbContext _context;
+        private readonly IPlayerRepository _playerRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public PlayerScoutService(IDbContext context)
+        public PlayerScoutService( 
+            IPlayerRepository playerRepository, 
+            IUnitOfWork unitOfWork)
         {
-            _context = context;
+            _playerRepository = playerRepository;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<int> GetActiveScoutEnergyAsync()
         {
-            var currActivePlayer = await _context.Players
-                .Where(x => x.IsActive)
-                .Select(x => new PlayerEnergyDto()
-                {
-                    CurrentScoutEnergy = x.CurrentScoutEnergy,
-                }).SingleOrDefaultAsync();
-
-            return currActivePlayer != null 
-                ? currActivePlayer.CurrentScoutEnergy 
-                : 0;
+            var currScoutEnergy = await _playerRepository.GetActiveScoutEnergy();
+            return currScoutEnergy ?? 0;
         }
 
         public async Task<int> UpdateActiveScoutEnergyAsync(PlayerScoutAction action)
         {
-            var currActivePlayer = await _context.Players
-                .SingleOrDefaultAsync(x => x.IsActive);
-
+            var currActivePlayer = await _playerRepository.GetActive();
             if (currActivePlayer == null)
                 throw new NullReferenceException(nameof(currActivePlayer));
 
             var currScoutEnergy = currActivePlayer.CurrentScoutEnergy;
 
             if (action == PlayerScoutAction.Reduce && currScoutEnergy > 0)
-            {
                 currScoutEnergy--;
-            }
             else if (action == PlayerScoutAction.Refill)
-            {
                 currScoutEnergy = currActivePlayer.Agility;
-            }
             else
-            {
                 return -1;
-            }
 
-            currActivePlayer.CurrentScoutEnergy = currScoutEnergy;
-            await _context.SaveChangesAsync();
+            await _unitOfWork.Commit(() =>
+            {
+                currActivePlayer.CurrentScoutEnergy = currScoutEnergy;
+            });
+
             return currActivePlayer.CurrentScoutEnergy;
         }
     }
