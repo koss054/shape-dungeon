@@ -29,6 +29,7 @@ namespace Microsoft.Extensions.DependencyInjection
             // Repos
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IRoomRepository, RoomRepository>();
+            services.AddScoped<IPlayerRepository, PlayerRepository>();
 
             return services;
         }
