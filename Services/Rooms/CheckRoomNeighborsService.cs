@@ -1,5 +1,4 @@
 ﻿using ShapeDungeon.DTOs.Room;
-using ShapeDungeon.Interfaces.Repositories;
 using ShapeDungeon.Interfaces.Services.Rooms;
 using ShapeDungeon.Repos;
 
@@ -9,7 +8,7 @@ namespace ShapeDungeon.Services.Rooms
     {
         private readonly IRoomRepository _roomRepository;
 
-        public CheckRoomNeighborsService(IDbContext context, IRoomRepository roomRepository)
+        public CheckRoomNeighborsService(IRoomRepository roomRepository)
         {
             _roomRepository = roomRepository;
         }
