@@ -54,6 +54,7 @@ namespace ShapeDungeon.Services.Rooms
             return room.Id;
         }
 
+        // There's always going to be an IsActiveForEditRoom == true.
         public async Task<RoomDetailsDto> InitializeRoomAsync(RoomDirection roomDirection)
         {
             var roomDto = new RoomDetailsDto();
