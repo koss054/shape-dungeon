@@ -20,7 +20,7 @@ namespace ShapeDungeon.DTOs.Players
 
         public PlayerShape Shape { get; set; }
 
-        public static explicit operator PlayerDto(Player player)
+        public static implicit operator PlayerDto(Player player)
             => new()
             {
                 IsActive = player.IsActive,

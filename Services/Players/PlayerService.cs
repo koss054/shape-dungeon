@@ -58,7 +58,7 @@ namespace ShapeDungeon.Services.Players
 
             foreach (var player in players)
             {
-                var playerDto = (PlayerDto)player;
+                PlayerDto playerDto = player;
                 playersDto.Add(playerDto);
             }
 
@@ -71,7 +71,7 @@ namespace ShapeDungeon.Services.Players
             var playerDto = new PlayerDto();
 
             if (player != null)
-               playerDto = (PlayerDto)player;
+               playerDto = player;
 
             return playerDto;
         }
