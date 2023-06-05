@@ -2,8 +2,8 @@
 {
     public class RoomNavDto
     {
-        public int CoordX { get; init; }
-        public int CoordY { get; init; }
+        public int CoordX { get; set; }
+        public int CoordY { get; set; }
         public bool CanGoLeft { get; set; }
         public bool CanGoRight { get; set; }
         public bool CanGoUp { get; set; }

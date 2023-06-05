@@ -1,17 +1,16 @@
-﻿using Microsoft.EntityFrameworkCore;
-using ShapeDungeon.DTOs.Room;
-using ShapeDungeon.Interfaces.Repositories;
+﻿using ShapeDungeon.DTOs.Room;
 using ShapeDungeon.Interfaces.Services.Rooms;
+using ShapeDungeon.Repos;
 
 namespace ShapeDungeon.Services.Rooms
 {
     public class CheckRoomNeighborsService : ICheckRoomNeighborsService
     {
-        private readonly IDbContext _context;
+        private readonly IRoomRepository _roomRepository;
 
-        public CheckRoomNeighborsService(IDbContext context)
+        public CheckRoomNeighborsService(IRoomRepository roomRepository)
         {
-            _context = context;
+            _roomRepository = roomRepository;
         }
 
         public async Task<RoomNavDto?> SetDtoNeighborsAsync(int coordX, int coordY)
@@ -47,37 +46,28 @@ namespace ShapeDungeon.Services.Rooms
 
         private async Task<RoomNavDto?> InitializeCheckRoomAsync(int coordX, int coordY)
         {
-            var room = await _context.Rooms
-                .Where(x => x.CoordX == coordX && x.CoordY == coordY)
-                .Select(x => new RoomNavDto()
-                {
-                    CoordX = x.CoordX,
-                    CoordY = x.CoordY,
-                    CanGoLeft = x.CanGoLeft,
-                    CanGoRight = x.CanGoRight,
-                    CanGoUp = x.CanGoUp,
-                    CanGoDown = x.CanGoDown,
-                    HasLeftNeighbor = false,
-                    HasRightNeighbor = false,
-                    HasUpNeighbor = false,
-                    HasDownNeighbor = false,
-                })
-                .SingleOrDefaultAsync();
+            var room = await _roomRepository.GetByCoords(coordX, coordY);
+            var roomDto = new RoomNavDto();
+            if (room != null)
+            {
+                roomDto.CoordX = room.CoordX;
+                roomDto.CoordY = room.CoordY;
+                roomDto.CanGoLeft = room.CanGoLeft;
+                roomDto.CanGoRight = room.CanGoRight;
+                roomDto.CanGoUp = room.CanGoUp;
+                roomDto.CanGoDown = room.CanGoDown;
+                roomDto.HasLeftNeighbor = false;
+                roomDto.HasRightNeighbor = false;
+                roomDto.HasUpNeighbor = false;
+                roomDto.HasDownNeighbor = false;
+            }
 
-            return room;
+            return roomDto;
         }
 
         private async Task<bool> IsRoomWithCoordsValidAsync(int coordX, int coordY)
         {
-            var room = await _context.Rooms
-                .Where(x => x.CoordX == coordX && x.CoordY == coordY)
-                .Select(x => new RoomCoordsDto()
-                {
-                    CoordX = x.CoordX,
-                    CoordY = x.CoordY,
-                })
-                .SingleOrDefaultAsync();
-
+            var room = await _roomRepository.GetByCoords(coordX, coordY);
             return room != null;
         }
     }

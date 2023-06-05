@@ -39,7 +39,14 @@ namespace ShapeDungeon.Controllers
                 return RedirectToAction("Create");
             }
 
-            await _playerService.CreatePlayerAsync(player);
+            var isCreated = await _playerService.CreatePlayerAsync(player);
+
+            if (!isCreated)
+            {
+                TempData["duplicate"] = "Player with this name already exists! Try again.";
+                return View(player);
+            }
+
             return RedirectToAction("Active", "Home");
         }
     }

@@ -1,23 +1,30 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using ShapeDungeon.Data;
 using ShapeDungeon.DTOs.Player;
 using ShapeDungeon.Entities;
-using ShapeDungeon.Interfaces.Repositories;
 using ShapeDungeon.Interfaces.Services.Players;
+using ShapeDungeon.Repos;
 
 namespace ShapeDungeon.Services.Players
 {
-    public class PlayerService : IPlayerService, IDisposable
+    public class PlayerService : IPlayerService
     {
-        private readonly IDbContext _context;
+        private readonly IPlayerRepository _playerRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public PlayerService(IDbContext context)
+        public PlayerService( 
+            IPlayerRepository playerRepository, 
+            IUnitOfWork unitOfWork)
         {
-            _context = context;
+            _playerRepository = playerRepository;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<bool> CreatePlayerAsync(PlayerDto pDto)
         {
-            if (_context.Players.Any(x => x.Name == pDto.Name))
+            var doesNameExist = await _playerRepository.DoesNameExist(pDto.Name);
+
+            // If name exists a new player cannot be created.
+            if (doesNameExist)
                 return false;
 
             var player = new Player()
@@ -35,66 +42,64 @@ namespace ShapeDungeon.Services.Players
                 Shape = pDto.Shape
             };
 
-            await _context.Players.AddAsync(player);
-            await _context.SaveChangesAsync();
+            await _unitOfWork.Commit(() =>
+            {
+                _playerRepository.AddAsync(player);
+            });
 
-            return _context.Players.Any(x => x.Name == pDto.Name);
+            doesNameExist = await _playerRepository.DoesNameExist(pDto.Name);
+            return doesNameExist;
         }
 
         public async Task<IEnumerable<PlayerDto>> GetAllPlayersAsync()
-            => await _context.Players
-                .Select(x => new PlayerDto()
+        {
+            var players = await _playerRepository.GetAll();
+            var playersDto = new List<PlayerDto>();
+
+            foreach (var player in players)
+            {
+                var playerDto = new PlayerDto()
                 {
-                    IsActive = x.IsActive,
-                    Name = x.Name,
-                    Strength = x.Strength,
-                    Vigor = x.Vigor,
-                    Agility = x.Agility,
-                    Level = x.Level,
-                    CurrentExp = x.CurrentExp,
-                    ExpToNextLevel = x.ExpToNextLevel,
-                    CurrentSkillpoints = x.CurrentSkillpoints,
-                    CurrentScoutEnergy = x.CurrentScoutEnergy,
-                    Shape = x.Shape
-                }).ToListAsync();
+                    IsActive = player.IsActive,
+                    Name = player.Name,
+                    Strength = player.Strength,
+                    Vigor = player.Vigor,
+                    Agility = player.Agility,
+                    Level = player.Level,
+                    CurrentExp = player.CurrentExp,
+                    ExpToNextLevel = player.ExpToNextLevel,
+                    CurrentSkillpoints = player.CurrentSkillpoints,
+                    CurrentScoutEnergy = player.CurrentScoutEnergy,
+                    Shape = player.Shape,
+                };
+
+                playersDto.Add(playerDto);
+            }
+
+            return playersDto;
+        }
 
         public async Task<PlayerDto?> GetPlayerAsync(string name)
         {
-            var player = await _context.Players
-                .Where(x => x.Name == name)
-                .Select(x => new PlayerDto()
-                {
-                    IsActive = x.IsActive,
-                    Name = x.Name,
-                    Strength = x.Strength,
-                    Vigor = x.Vigor,
-                    Agility = x.Agility,
-                    Level = x.Level,
-                    CurrentExp = x.CurrentExp,
-                    ExpToNextLevel = x.ExpToNextLevel,
-                    CurrentSkillpoints = x.CurrentSkillpoints,
-                    CurrentScoutEnergy = x.CurrentScoutEnergy,
-                    Shape = x.Shape
-                }).FirstOrDefaultAsync();
+            var player = await _playerRepository.GetByName(name);
+            var playerDto = new PlayerDto();
 
-            return player;
-        }
+            if (player != null)
+            {
+               playerDto.IsActive = player.IsActive;
+               playerDto.Name = player.Name;
+               playerDto.Strength = player.Strength;
+               playerDto.Vigor = player.Vigor;
+               playerDto.Agility = player.Agility;
+               playerDto.Level = player.Level;
+               playerDto.CurrentExp = player.CurrentExp;
+               playerDto.ExpToNextLevel = player.ExpToNextLevel;
+               playerDto.CurrentSkillpoints = player.CurrentSkillpoints;
+               playerDto.CurrentScoutEnergy = player.CurrentScoutEnergy;
+               playerDto.Shape = player.Shape;
+            }
 
-        private bool disposed = false;
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!disposed)
-                if (disposing)
-                    _context.Dispose();
-
-            disposed = true;
-        }
-
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
+            return playerDto;
         }
     }
 }

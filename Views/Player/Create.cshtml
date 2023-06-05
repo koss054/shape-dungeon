@@ -75,3 +75,9 @@
         toastr.error("Player name can't be empty.");
     </script>
 }
+else if (@TempData["duplicate"] != null) 
+{
+    <script>
+        toastr.error("Player with this name already exists! Try again.");
+    </script>
+}

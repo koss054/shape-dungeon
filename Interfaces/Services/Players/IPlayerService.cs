@@ -7,7 +7,5 @@ namespace ShapeDungeon.Interfaces.Services.Players
         Task<bool> CreatePlayerAsync(PlayerDto pDto);
         Task<IEnumerable<PlayerDto>> GetAllPlayersAsync();
         Task<PlayerDto?> GetPlayerAsync(string name);
-
-        void Dispose();
     }
 }

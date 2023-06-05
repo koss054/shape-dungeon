@@ -2,6 +2,7 @@
 using ShapeDungeon.Interfaces.Repositories;
 using ShapeDungeon.Interfaces.Services.Players;
 using ShapeDungeon.Interfaces.Services.Rooms;
+using ShapeDungeon.Repos;
 using ShapeDungeon.Services.Players;
 using ShapeDungeon.Services.Rooms;
 
@@ -24,6 +25,11 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddScoped<IRoomTravelService, RoomTravelService>();
             services.AddScoped<IRoomActiveForEditService, RoomActiveForEditService>();
             services.AddScoped<ICheckRoomNeighborsService, CheckRoomNeighborsService>();
+
+            // Repos
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IRoomRepository, RoomRepository>();
+            services.AddScoped<IPlayerRepository, PlayerRepository>();
 
             return services;
         }

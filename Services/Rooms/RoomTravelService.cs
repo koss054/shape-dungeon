@@ -1,27 +1,29 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using ShapeDungeon.Data;
 using ShapeDungeon.Helpers.Enums;
-using ShapeDungeon.Interfaces.Repositories;
 using ShapeDungeon.Interfaces.Services.Rooms;
+using ShapeDungeon.Repos;
 
 namespace ShapeDungeon.Services.Rooms
 {
     public class RoomTravelService : IRoomTravelService
     {
-        private readonly IDbContext _context;
+        private readonly IRoomRepository _roomRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public RoomTravelService(IDbContext context)
+        public RoomTravelService( 
+            IRoomRepository roomRepository, 
+            IUnitOfWork unitOfWork)
         {
-            _context = context;
+            _roomRepository = roomRepository;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task RoomTravelAsync(RoomDirection direction, RoomTravelAction action)
         {
             var oldRoom = action switch
             {
-                RoomTravelAction.Move => await _context.Rooms
-                                        .SingleOrDefaultAsync(x => x.IsActiveForMove),
-                RoomTravelAction.Scout => await _context.Rooms
-                                        .SingleOrDefaultAsync(x => x.IsActiveForScout),
+                RoomTravelAction.Move => await _roomRepository.GetActiveForMove(),
+                RoomTravelAction.Scout => await _roomRepository.GetActiveForScout(),
                 _ => throw new ArgumentOutOfRangeException(nameof(action)),
             };
 
@@ -52,41 +54,39 @@ namespace ShapeDungeon.Services.Rooms
                 default: throw new ArgumentOutOfRangeException(nameof(direction));
             }
 
-            var newRoom = await _context.Rooms
-                .SingleOrDefaultAsync(x => x.CoordX == coordX && x.CoordY == coordY);
-
+            var newRoom = await _roomRepository.GetByCoords(coordX, coordY);
             if (newRoom != null)
             {
-                switch (action)
+                await _unitOfWork.Commit(() =>
                 {
-                    case RoomTravelAction.Move:
-                        oldRoom.IsActiveForMove = false;
-                        newRoom.IsActiveForMove = true;
-                        break;
-                    case RoomTravelAction.Scout:
-                        oldRoom.IsActiveForScout = false;
-                        newRoom.IsActiveForScout = true;
-                        break;
-                    default: throw new ArgumentOutOfRangeException(nameof(action));
-                }
-
-                await _context.SaveChangesAsync();
+                    switch (action)
+                    {
+                        case RoomTravelAction.Move:
+                            oldRoom.IsActiveForMove = false;
+                            newRoom.IsActiveForMove = true;
+                            break;
+                        case RoomTravelAction.Scout:
+                            oldRoom.IsActiveForScout = false;
+                            newRoom.IsActiveForScout = true;
+                            break;
+                        default: throw new ArgumentOutOfRangeException(nameof(action));
+                    }
+                });
             }
         }
 
         public async Task ResetScoutAsync()
         {
-            var activeForScoutRoom = await _context.Rooms
-                .SingleOrDefaultAsync(x => x.IsActiveForScout);
-
-            var activeForMoveRoom = await _context.Rooms
-                .SingleOrDefaultAsync(x => x.IsActiveForMove);
+            var activeForScoutRoom = await _roomRepository.GetActiveForScout();
+            var activeForMoveRoom = await _roomRepository.GetActiveForMove();
 
             if (activeForScoutRoom != null && activeForMoveRoom != null)
             {
-                activeForScoutRoom.IsActiveForScout = false;
-                activeForMoveRoom.IsActiveForScout = true;
-                await _context.SaveChangesAsync();
+                await _unitOfWork.Commit(() =>
+                {
+                    activeForScoutRoom.IsActiveForScout = false;
+                    activeForMoveRoom.IsActiveForScout = true;
+                });
             }
         }
     }

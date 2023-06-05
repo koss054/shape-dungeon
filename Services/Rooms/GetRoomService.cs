@@ -1,77 +1,82 @@
-﻿using Microsoft.EntityFrameworkCore;
-using ShapeDungeon.DTOs.Room;
-using ShapeDungeon.Interfaces.Repositories;
+﻿using ShapeDungeon.DTOs.Room;
 using ShapeDungeon.Interfaces.Services.Rooms;
+using ShapeDungeon.Repos;
 
 namespace ShapeDungeon.Services.Rooms
 {
     public class GetRoomService : IGetRoomService
     {
-        private readonly IDbContext _context;
+        private readonly IRoomRepository _roomRepository;
 
-        public GetRoomService(IDbContext context)
+        public GetRoomService(IRoomRepository roomRepository)
         {
-            _context = context;
+            _roomRepository = roomRepository;
         }
 
-        public async Task<RoomDto?> GetActiveForMoveAsync()
-            => await _context.Rooms
-                .Where(x => x.IsActiveForMove)
-                .Select(x => new RoomDto()
-                {
-                    IsActiveForMove = x.IsActiveForMove,
-                    IsActiveForScout = x.IsActiveForScout,
-                    CanGoLeft = x.CanGoLeft,
-                    CanGoRight = x.CanGoRight,
-                    CanGoUp = x.CanGoUp,
-                    CanGoDown = x.CanGoDown,
-                    IsStartRoom = x.IsStartRoom,
-                    IsSafeRoom = x.IsSafeRoom,
-                    IsEnemyRoom = x.IsEnemyRoom,
-                    IsEndRoom = x.IsEndRoom,
-                    CoordX = x.CoordX,
-                    CoordY = x.CoordY,
-                })
-                .SingleOrDefaultAsync();
+        public async Task<RoomDto> GetActiveForMoveAsync()
+        {
+            var room = await _roomRepository.GetActiveForMove();
+            var roomDto = new RoomDto()
+            {
+                IsActiveForMove = room.IsActiveForMove,
+                IsActiveForScout = room.IsActiveForScout,
+                CanGoLeft = room.CanGoLeft,
+                CanGoRight = room.CanGoRight,
+                CanGoUp = room.CanGoUp,
+                CanGoDown = room.CanGoDown,
+                IsStartRoom = room.IsStartRoom,
+                IsSafeRoom = room.IsSafeRoom,
+                IsEnemyRoom = room.IsEnemyRoom,
+                IsEndRoom = room.IsEndRoom,
+                CoordX = room.CoordX,
+                CoordY = room.CoordY,
+            };
 
-        public async Task<RoomDto?> GetActiveForScoutAsync()
-            => await _context.Rooms
-                .Where(x => x.IsActiveForScout)
-                .Select(x => new RoomDto()
-                {
-                    IsActiveForMove = x.IsActiveForMove,
-                    IsActiveForScout = x.IsActiveForScout,
-                    CanGoLeft = x.CanGoLeft,
-                    CanGoRight = x.CanGoRight,
-                    CanGoUp = x.CanGoUp,
-                    CanGoDown = x.CanGoDown,
-                    IsStartRoom = x.IsStartRoom,
-                    IsSafeRoom = x.IsSafeRoom,
-                    IsEnemyRoom = x.IsEnemyRoom,
-                    IsEndRoom = x.IsEndRoom,
-                    CoordX = x.CoordX,
-                    CoordY = x.CoordY,
-                })
-                .SingleOrDefaultAsync();
+            return roomDto;
+        }
 
-        public async Task<RoomDetailsDto?> GetActiveForEditAsync()
-            => await _context.Rooms
-                .Where(x => x.IsActiveForEdit)
-                .Select(x => new RoomDetailsDto()
-                {
-                    IsActiveForEdit = x.IsActiveForEdit,
-                    CanGoLeft = x.CanGoLeft,
-                    CanGoRight = x.CanGoRight,
-                    CanGoUp = x.CanGoUp,
-                    CanGoDown = x.CanGoDown,
-                    IsStartRoom = x.IsStartRoom,
-                    IsSafeRoom = x.IsSafeRoom,
-                    IsEnemyRoom = x.IsEnemyRoom,
-                    IsEndRoom = x.IsEndRoom,
-                    Enemy = null,
-                    CoordX = x.CoordX,
-                    CoordY = x.CoordY,
-                })
-                .SingleOrDefaultAsync();
+        public async Task<RoomDto> GetActiveForScoutAsync()
+        {
+            var room = await _roomRepository.GetActiveForScout();
+            var roomDto = new RoomDto()
+            {
+                IsActiveForMove = room.IsActiveForMove,
+                IsActiveForScout = room.IsActiveForScout,
+                CanGoLeft = room.CanGoLeft,
+                CanGoRight = room.CanGoRight,
+                CanGoUp = room.CanGoUp,
+                CanGoDown = room.CanGoDown,
+                IsStartRoom = room.IsStartRoom,
+                IsSafeRoom = room.IsSafeRoom,
+                IsEnemyRoom = room.IsEnemyRoom,
+                IsEndRoom = room.IsEndRoom,
+                CoordX = room.CoordX,
+                CoordY = room.CoordY,
+            };
+
+            return roomDto;
+        }
+
+        public async Task<RoomDetailsDto> GetActiveForEditAsync()
+        {
+            var room = await _roomRepository.GetActiveForEdit();
+            var roomDto = new RoomDetailsDto()
+            {
+                IsActiveForEdit = room.IsActiveForEdit,
+                CanGoLeft = room.CanGoLeft,
+                CanGoRight = room.CanGoRight,
+                CanGoUp = room.CanGoUp,
+                CanGoDown = room.CanGoDown,
+                IsStartRoom = room.IsStartRoom,
+                IsSafeRoom = room.IsSafeRoom,
+                IsEnemyRoom = room.IsEnemyRoom,
+                IsEndRoom = room.IsEndRoom,
+                Enemy = null,
+                CoordX = room.CoordX,
+                CoordY = room.CoordY,
+            };
+
+            return roomDto;
+        }
     }
 }
