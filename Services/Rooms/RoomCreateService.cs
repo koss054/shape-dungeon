@@ -1,19 +1,23 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using ShapeDungeon.Data;
 using ShapeDungeon.DTOs.Room;
 using ShapeDungeon.Entities;
 using ShapeDungeon.Helpers.Enums;
-using ShapeDungeon.Interfaces.Repositories;
 using ShapeDungeon.Interfaces.Services.Rooms;
+using ShapeDungeon.Repos;
 
 namespace ShapeDungeon.Services.Rooms
 {
     public class RoomCreateService : IRoomCreateService
     {
-        private readonly IDbContext _context;
+        private readonly IRoomRepository _roomRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public RoomCreateService(IDbContext context)
+        public RoomCreateService(
+            IRoomRepository roomRepository, 
+            IUnitOfWork unitOfWork)
         {
-            _context = context;
+            _roomRepository = roomRepository;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<Guid> CreateAsync(RoomDetailsDto roomDto)
@@ -41,17 +45,20 @@ namespace ShapeDungeon.Services.Rooms
                 room.CoordX = 0;
                 room.CoordY = 0;
             }
-                
-            await _context.Rooms.AddAsync(room);
-            await _context.SaveChangesAsync();
+
+            await _unitOfWork.Commit(() =>
+            {
+                _roomRepository.AddAsync(room);
+            });
+
             return room.Id;
         }
 
         public async Task<RoomDetailsDto> InitializeRoomAsync(RoomDirection roomDirection)
         {
             var roomDto = new RoomDetailsDto();
-            int coordX = await GetActiveForEditCoordX();
-            int coordY = await GetActiveForEditCoordY();
+            int coordX = await _roomRepository.GetActiveForEditCoordX();
+            int coordY = await _roomRepository.GetActiveForEditCoordY();
 
             switch (roomDirection)
             {
@@ -66,17 +73,5 @@ namespace ShapeDungeon.Services.Rooms
             roomDto.CoordY = coordY;
             return roomDto;
         }
-
-        private async Task<int> GetActiveForEditCoordX()
-            => await _context.Rooms
-                .Where(x => x.IsActiveForEdit)
-                .Select(x => x.CoordX)
-                .SingleOrDefaultAsync();
-
-        private async Task<int> GetActiveForEditCoordY()
-            => await _context.Rooms
-                .Where(x => x.IsActiveForEdit)
-                .Select(x => x.CoordY)
-                .SingleOrDefaultAsync();
     }
 }

@@ -42,7 +42,21 @@ namespace ShapeDungeon.Repos
         /// </summary>
         /// <returns>The room that is currently active in edit mode.</returns>
         Task<IRoom> GetActiveForEdit();
+
+        /// <summary>
+        /// Rooms are placed on a coordinate system done with integers.
+        /// </summary>
+        /// <returns>Coord X of the room that has IsActiveForEdit == true.</returns>
+        Task<int> GetActiveForEditCoordX();
+
+        /// <summary>
+        /// Rooms are placed on a coordinate system done with integers.
+        /// </summary>
+        /// <returns>Coord Y of the room that has IsActiveForEdit == true.</returns>
+        Task<int> GetActiveForEditCoordY();
         #endregion
+
+        void AddAsync(IRoom room);
 
         void Update(IRoom room);
     }

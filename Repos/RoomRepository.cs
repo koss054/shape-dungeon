@@ -53,7 +53,35 @@ namespace ShapeDungeon.Repos
         /// <returns>The room that is currently active in edit mode.</returns>
         public async Task<IRoom> GetActiveForEdit()
             => await this.Context.Rooms.SingleAsync(x => x.IsActiveForEdit);
+
+        /// <summary>
+        /// Rooms are placed on a coordinate system done with integers.
+        /// Only one room can have the property IsActiveForEdit set to true.
+        /// </summary>
+        /// <returns>Coord X of the room that has IsActiveForEdit == true.</returns>
+        public async Task<int> GetActiveForEditCoordX()
+            => await this.Context.Rooms
+                .Where(x => x.IsActiveForEdit)
+                .Select(x => x.CoordX)
+                .SingleOrDefaultAsync();
+
+        /// <summary>
+        /// Rooms are placed on a coordinate system done with integers.
+        /// Only one room can have the property IsActiveForEdit set to true.
+        /// </summary>
+        /// <returns>Coord Y of the room that has IsActiveForEdit == true.</returns>
+        public async Task<int> GetActiveForEditCoordY()
+            => await this.Context.Rooms
+                .Where(x => x.IsActiveForEdit)
+                .Select(x => x.CoordY)
+                .SingleOrDefaultAsync();
         #endregion
+
+        public async void AddAsync(IRoom room)
+        {
+            var roomToAdd = (Room)room;
+            await this.Context.Rooms.AddAsync(roomToAdd);
+        }
 
         public void Update(IRoom room)
         {
