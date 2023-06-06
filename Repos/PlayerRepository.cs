@@ -1,11 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ShapeDungeon.Entities;
-using ShapeDungeon.Interfaces.Entity;
 using ShapeDungeon.Interfaces.Repositories;
 
 namespace ShapeDungeon.Repos
 {
-    public class PlayerRepository : RepositoryBase<IPlayer>, IPlayerRepository
+    public class PlayerRepository : RepositoryBase<Player>, IPlayerRepository
     {
         public PlayerRepository(IDbContext context) : base(context)
         {
