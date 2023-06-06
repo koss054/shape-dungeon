@@ -1,5 +1,5 @@
 ﻿using ShapeDungeon.Data;
-using ShapeDungeon.DTOs.Player;
+using ShapeDungeon.DTOs.Players;
 using ShapeDungeon.Entities;
 using ShapeDungeon.Interfaces.Services.Players;
 using ShapeDungeon.Repos;
@@ -58,46 +58,20 @@ namespace ShapeDungeon.Services.Players
 
             foreach (var player in players)
             {
-                var playerDto = new PlayerDto()
-                {
-                    IsActive = player.IsActive,
-                    Name = player.Name,
-                    Strength = player.Strength,
-                    Vigor = player.Vigor,
-                    Agility = player.Agility,
-                    Level = player.Level,
-                    CurrentExp = player.CurrentExp,
-                    ExpToNextLevel = player.ExpToNextLevel,
-                    CurrentSkillpoints = player.CurrentSkillpoints,
-                    CurrentScoutEnergy = player.CurrentScoutEnergy,
-                    Shape = player.Shape,
-                };
-
+                PlayerDto playerDto = player;
                 playersDto.Add(playerDto);
             }
 
             return playersDto;
         }
 
-        public async Task<PlayerDto?> GetPlayerAsync(string name)
+        public async Task<PlayerDto> GetPlayerAsync(string name)
         {
             var player = await _playerRepository.GetByName(name);
             var playerDto = new PlayerDto();
 
             if (player != null)
-            {
-               playerDto.IsActive = player.IsActive;
-               playerDto.Name = player.Name;
-               playerDto.Strength = player.Strength;
-               playerDto.Vigor = player.Vigor;
-               playerDto.Agility = player.Agility;
-               playerDto.Level = player.Level;
-               playerDto.CurrentExp = player.CurrentExp;
-               playerDto.ExpToNextLevel = player.ExpToNextLevel;
-               playerDto.CurrentSkillpoints = player.CurrentSkillpoints;
-               playerDto.CurrentScoutEnergy = player.CurrentScoutEnergy;
-               playerDto.Shape = player.Shape;
-            }
+               playerDto = player;
 
             return playerDto;
         }

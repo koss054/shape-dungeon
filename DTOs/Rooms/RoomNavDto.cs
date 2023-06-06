@@ -1,4 +1,6 @@
-﻿namespace ShapeDungeon.DTOs.Room
+﻿using ShapeDungeon.Entities;
+
+namespace ShapeDungeon.DTOs.Rooms
 {
     public class RoomNavDto
     {
@@ -12,5 +14,16 @@
         public bool HasRightNeighbor { get; set; }
         public bool HasUpNeighbor { get; set; }
         public bool HasDownNeighbor { get; set; }
+
+        public static implicit operator RoomNavDto(Room room)
+            => new()
+            {
+                CoordX = room.CoordX,
+                CoordY = room.CoordY,
+                CanGoLeft = room.CanGoLeft,
+                CanGoRight = room.CanGoRight,
+                CanGoUp = room.CanGoUp,
+                CanGoDown = room.CanGoDown,
+            };
     }
 }

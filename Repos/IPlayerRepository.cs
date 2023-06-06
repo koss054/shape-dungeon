@@ -1,4 +1,4 @@
-﻿using ShapeDungeon.Interfaces.Entity;
+﻿using ShapeDungeon.Entities;
 
 namespace ShapeDungeon.Repos
 {
@@ -16,19 +16,19 @@ namespace ShapeDungeon.Repos
         /// There can be no active players.
         /// </summary>
         /// <returns>The active player or null.</returns>
-        Task<IPlayer?> GetActive();
+        Task<Player?> GetActive();
 
         /// <summary>
         /// All players have names.
         /// </summary>
         /// <returns>Player if one exists with given name, otherwise null.</returns>
-        Task<IPlayer?> GetByName(string name);
+        Task<Player?> GetByName(string name);
 
         /// <summary>
         /// Many players can be present and selected.
         /// </summary>
         /// <returns>List of all created players.</returns>
-        Task<IEnumerable<IPlayer>> GetAll();
+        Task<IEnumerable<Player>> GetAll();
 
         /// <summary>
         /// Used to check if a player name is present in the database.
@@ -37,6 +37,6 @@ namespace ShapeDungeon.Repos
         /// <returns>True if name is in the database, otherwise false.</returns>
         Task<bool> DoesNameExist(string name);
 
-        Task AddAsync(IPlayer player);
+        Task AddAsync(Player player);
     }
 }

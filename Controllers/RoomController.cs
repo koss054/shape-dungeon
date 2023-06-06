@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using ShapeDungeon.DTOs.Room;
+using ShapeDungeon.DTOs.Rooms;
 using ShapeDungeon.Helpers.Enums;
 using ShapeDungeon.Interfaces.Services.Rooms;
 

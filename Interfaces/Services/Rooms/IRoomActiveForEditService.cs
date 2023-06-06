@@ -1,6 +1,4 @@
-﻿using ShapeDungeon.DTOs.Room;
-
-namespace ShapeDungeon.Interfaces.Services.Rooms
+﻿namespace ShapeDungeon.Interfaces.Services.Rooms
 {
     public interface IRoomActiveForEditService
     {

@@ -1,4 +1,4 @@
-﻿using ShapeDungeon.DTOs.Room;
+﻿using ShapeDungeon.DTOs.Rooms;
 using ShapeDungeon.Interfaces.Services.Rooms;
 using ShapeDungeon.Repos;
 
@@ -50,12 +50,7 @@ namespace ShapeDungeon.Services.Rooms
             var roomDto = new RoomNavDto();
             if (room != null)
             {
-                roomDto.CoordX = room.CoordX;
-                roomDto.CoordY = room.CoordY;
-                roomDto.CanGoLeft = room.CanGoLeft;
-                roomDto.CanGoRight = room.CanGoRight;
-                roomDto.CanGoUp = room.CanGoUp;
-                roomDto.CanGoDown = room.CanGoDown;
+                roomDto = room;
                 roomDto.HasLeftNeighbor = false;
                 roomDto.HasRightNeighbor = false;
                 roomDto.HasUpNeighbor = false;
