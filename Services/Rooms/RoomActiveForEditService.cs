@@ -1,5 +1,5 @@
 ﻿using ShapeDungeon.Data;
-using ShapeDungeon.Interfaces.Entity;
+using ShapeDungeon.Entities;
 using ShapeDungeon.Interfaces.Services.Rooms;
 using ShapeDungeon.Repos;
 
@@ -40,7 +40,7 @@ namespace ShapeDungeon.Services.Rooms
             }
         }
 
-        private async Task ToggleActiveForEdit(IRoom oldRoom, IRoom newRoom)
+        private async Task ToggleActiveForEdit(Room oldRoom, Room newRoom)
         {
             oldRoom.IsActiveForEdit = false;
             newRoom.IsActiveForEdit = true;

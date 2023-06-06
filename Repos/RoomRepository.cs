@@ -1,11 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ShapeDungeon.Entities;
-using ShapeDungeon.Interfaces.Entity;
 using ShapeDungeon.Interfaces.Repositories;
 
 namespace ShapeDungeon.Repos
 {
-    public class RoomRepository : RepositoryBase<IRoom>, IRoomRepository
+    public class RoomRepository : RepositoryBase<Room>, IRoomRepository
     {
         public RoomRepository(IDbContext context) : base(context)
         {
@@ -16,7 +15,7 @@ namespace ShapeDungeon.Repos
         /// </summary>
         /// <param name="id">Guid for the room's id.</param>
         /// <returns>Room with matching id.</returns>
-        public async Task<IRoom?> GetById(Guid id)
+        public async Task<Room?> GetById(Guid id)
             => await this.Context.Rooms.FirstOrDefaultAsync(x => x.Id == id);
 
         /// <summary>
@@ -24,7 +23,7 @@ namespace ShapeDungeon.Repos
         /// <param name="coordX">CoordX of the Room.</param>
         /// <param name="coordY">CoordY of the ROom.</param>
         /// <returns>Room with matching coords or null.</returns>
-        public async Task<IRoom?> GetByCoords(int coordX, int coordY) 
+        public async Task<Room?> GetByCoords(int coordX, int coordY) 
             => await this.Context.Rooms.SingleOrDefaultAsync(x => x.CoordX == coordX && x.CoordY == coordY);
 
         /// <summary>
@@ -33,7 +32,7 @@ namespace ShapeDungeon.Repos
         /// SingleAsync used since only one room can have this property set to true at a time.
         /// </summary>
         /// <returns>The room in which the player currently is and can move from.</returns>
-        public async Task<IRoom> GetActiveForMove()
+        public async Task<Room> GetActiveForMove()
             => await this.Context.Rooms.SingleAsync(x => x.IsActiveForMove);
 
         /// <summary>
@@ -42,7 +41,7 @@ namespace ShapeDungeon.Repos
         /// SingleAsync used since only one room can have this property set to true at a time.
         /// </summary>
         /// <returns>The room in which the player currently is or is scouting from.</returns>
-        public async Task<IRoom> GetActiveForScout()
+        public async Task<Room> GetActiveForScout()
             => await this.Context.Rooms.SingleAsync(x => x.IsActiveForScout);
 
         /// <summary>
@@ -51,7 +50,7 @@ namespace ShapeDungeon.Repos
         /// SingleAsync used since only one room can have this property set to true at a time.
         /// </summary>
         /// <returns>The room that is currently active in edit mode.</returns>
-        public async Task<IRoom> GetActiveForEdit()
+        public async Task<Room> GetActiveForEdit()
             => await this.Context.Rooms.SingleAsync(x => x.IsActiveForEdit);
 
         /// <summary>
@@ -77,16 +76,10 @@ namespace ShapeDungeon.Repos
                 .SingleOrDefaultAsync();
         #endregion
 
-        public async Task AddAsync(IRoom room)
-        {
-            var roomToAdd = (Room)room;
-            await this.Context.Rooms.AddAsync(roomToAdd);
-        }
+        public async Task AddAsync(Room room)
+            => await this.Context.Rooms.AddAsync(room);
 
-        public void Update(IRoom room)
-        {
-            var updatedRoom = (Room)room;
-            this.Context.Rooms.Update(updatedRoom);
-        }
+        public void Update(Room room)
+            => this.Context.Rooms.Update(room);
     }
 }
