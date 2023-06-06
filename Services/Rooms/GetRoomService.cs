@@ -16,44 +16,14 @@ namespace ShapeDungeon.Services.Rooms
         public async Task<RoomDto> GetActiveForMoveAsync()
         {
             var room = await _roomRepository.GetActiveForMove();
-            var roomDto = new RoomDto()
-            {
-                IsActiveForMove = room.IsActiveForMove,
-                IsActiveForScout = room.IsActiveForScout,
-                CanGoLeft = room.CanGoLeft,
-                CanGoRight = room.CanGoRight,
-                CanGoUp = room.CanGoUp,
-                CanGoDown = room.CanGoDown,
-                IsStartRoom = room.IsStartRoom,
-                IsSafeRoom = room.IsSafeRoom,
-                IsEnemyRoom = room.IsEnemyRoom,
-                IsEndRoom = room.IsEndRoom,
-                CoordX = room.CoordX,
-                CoordY = room.CoordY,
-            };
-
+            RoomDto roomDto = room;
             return roomDto;
         }
 
         public async Task<RoomDto> GetActiveForScoutAsync()
         {
             var room = await _roomRepository.GetActiveForScout();
-            var roomDto = new RoomDto()
-            {
-                IsActiveForMove = room.IsActiveForMove,
-                IsActiveForScout = room.IsActiveForScout,
-                CanGoLeft = room.CanGoLeft,
-                CanGoRight = room.CanGoRight,
-                CanGoUp = room.CanGoUp,
-                CanGoDown = room.CanGoDown,
-                IsStartRoom = room.IsStartRoom,
-                IsSafeRoom = room.IsSafeRoom,
-                IsEnemyRoom = room.IsEnemyRoom,
-                IsEndRoom = room.IsEndRoom,
-                CoordX = room.CoordX,
-                CoordY = room.CoordY,
-            };
-
+            RoomDto roomDto = room; 
             return roomDto;
         }
 
