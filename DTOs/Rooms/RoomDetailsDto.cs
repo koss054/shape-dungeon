@@ -1,4 +1,6 @@
-﻿namespace ShapeDungeon.DTOs.Rooms
+﻿using ShapeDungeon.Entities;
+
+namespace ShapeDungeon.DTOs.Rooms
 {
     public class RoomDetailsDto
     {
@@ -15,5 +17,22 @@
 
         public int CoordX { get; set; }
         public int CoordY { get; set; }
+
+        public static implicit operator RoomDetailsDto(Room room)
+            => new()
+            {
+                IsActiveForEdit = room.IsActiveForEdit,
+                CanGoLeft = room.CanGoLeft,
+                CanGoRight = room.CanGoRight,
+                CanGoUp = room.CanGoUp,
+                CanGoDown = room.CanGoDown,
+                IsStartRoom = room.IsStartRoom,
+                IsEnemyRoom = room.IsEnemyRoom,
+                IsSafeRoom = room.IsSafeRoom,
+                IsEndRoom = room.IsEndRoom,
+                Enemy = null,
+                CoordX = room.CoordX,
+                CoordY = room.CoordY,
+            };
     }
 }

@@ -60,22 +60,7 @@ namespace ShapeDungeon.Services.Rooms
         public async Task<RoomDetailsDto> GetActiveForEditAsync()
         {
             var room = await _roomRepository.GetActiveForEdit();
-            var roomDto = new RoomDetailsDto()
-            {
-                IsActiveForEdit = room.IsActiveForEdit,
-                CanGoLeft = room.CanGoLeft,
-                CanGoRight = room.CanGoRight,
-                CanGoUp = room.CanGoUp,
-                CanGoDown = room.CanGoDown,
-                IsStartRoom = room.IsStartRoom,
-                IsSafeRoom = room.IsSafeRoom,
-                IsEnemyRoom = room.IsEnemyRoom,
-                IsEndRoom = room.IsEndRoom,
-                Enemy = null,
-                CoordX = room.CoordX,
-                CoordY = room.CoordY,
-            };
-
+            RoomDetailsDto roomDto = room;
             return roomDto;
         }
     }
