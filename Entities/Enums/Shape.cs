@@ -1,6 +1,6 @@
 ﻿namespace ShapeDungeon.Entities.Enums
 {
-    public enum PlayerShape
+    public enum Shape
     {
         Square = 0,
         Triangle = 1,

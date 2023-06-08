@@ -18,7 +18,7 @@ namespace ShapeDungeon.DTOs.Players
         public int CurrentSkillpoints { get; set; }
         public int CurrentScoutEnergy { get; set; }
 
-        public PlayerShape Shape { get; set; }
+        public Shape Shape { get; set; }
 
         public static implicit operator PlayerDto(Player player)
             => new()

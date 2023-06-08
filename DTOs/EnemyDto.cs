@@ -1,4 +1,6 @@
-﻿namespace ShapeDungeon.DTOs
+﻿using ShapeDungeon.Entities.Enums;
+
+namespace ShapeDungeon.DTOs
 {
     public class EnemyDto
     {
@@ -10,5 +12,6 @@
         public int Agility { get; set; }
         public int Level { get; set; }
         public int DroppedExp { get; set; }
+        public Shape Shape { get; set; }
     }
 }
