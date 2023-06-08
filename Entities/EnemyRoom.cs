@@ -15,5 +15,7 @@ namespace ShapeDungeon.Entities
 
         public Room Room { get; set; }
             = null!;
+
+        public bool IsEnemyDefeated { get; set; }
     }
 }
