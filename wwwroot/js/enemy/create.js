@@ -12,15 +12,15 @@ for (const radioBtn of radioBtns) {
     radioBtn.addEventListener("click", () => {
         switch (radioBtn.id) {
             case "square":
-                shape.setAttribute("style", "height:10rem;width:10rem;background-color:#cc0000");
+                shape.setAttribute("style", "height:10rem;width:10rem;background-color:red");
                 setEnemyAttributes("square");
                 break;
             case "triangle":
-                shape.setAttribute("style", "width:0;height:0;border-top: 5rem solid transparent;border-left: 10rem solid #cc0000;border-bottom: 5rem solid transparent");
+                shape.setAttribute("style", "width:0;height:0;border-top: 5rem solid transparent;border-left: 10rem solid red;border-bottom: 5rem solid transparent");
                 setEnemyAttributes("triangle");
                 break;
             case "circle":
-                shape.setAttribute("style", "height:10rem;width:10rem;background-color:#cc0000;border-radius:50%");
+                shape.setAttribute("style", "height:10rem;width:10rem;background-color:red;border-radius:50%");
                 setEnemyAttributes("circle");
                 break;
             default:
