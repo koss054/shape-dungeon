@@ -16,7 +16,7 @@ namespace ShapeDungeon.Controllers
         [HttpGet]
         public IActionResult Create()
         {
-            var model = new EnemyDto();
+            var model = new EnemyDto() { Level = 5};
             return View(model);
         }
 
