@@ -34,7 +34,7 @@
             <div class="form-group row align-items-center">
                 <label for="enemy-level" class="col-sm-3 col-form-label">Enemy Level:</label>
                 <div class="col-2">
-                    <input type="text" class="form-control" asp-for="@Model.Level" placeholder="5" />
+                    <input type="text" class="form-control-plaintext" readonly id="level" asp-for="@Model.Level" placeholder="5" />
                 </div>
                 <span class="col-7" style="font-size:0.85rem;color:gray;font-style:italic">(Enemy level is appended to the name, e.g. Squary Lvl.5)</span>
             </div>

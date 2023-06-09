@@ -16,7 +16,8 @@ namespace ShapeDungeon.Controllers
         [HttpGet]
         public IActionResult Create()
         {
-            var model = new EnemyDto() { Level = 5};
+            // Level = 8 because the selected on page load square shape stats add up to this number.
+            var model = new EnemyDto() { Level = 8 };
             return View(model);
         }
 
