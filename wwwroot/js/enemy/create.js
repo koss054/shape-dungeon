@@ -72,5 +72,4 @@ function updateEnemyLevel() {
     const currAgility = Number(agilityEl.value);
 
     levelEl.value = currStrength + currVigor + currAgility;
-    console.log(levelEl.value);
 }
