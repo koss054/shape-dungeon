@@ -1,4 +1,4 @@
-﻿using ShapeDungeon.DTOs;
+﻿using ShapeDungeon.DTOs.Enemies;
 
 namespace ShapeDungeon.Interfaces.Services.Enemies
 {
