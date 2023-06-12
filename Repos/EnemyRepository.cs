@@ -1,4 +1,5 @@
-﻿using ShapeDungeon.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using ShapeDungeon.Entities;
 using ShapeDungeon.Interfaces.Repositories;
 
 namespace ShapeDungeon.Repos
@@ -11,5 +12,11 @@ namespace ShapeDungeon.Repos
 
         public async Task AddAsync(Enemy enemy)
             => await this.Context.Enemies.AddAsync(enemy);
+
+        public async Task<IEnumerable<Enemy>> GetRangeAsync(int minLevel, int maxLevel)
+            => await this.Context.Enemies
+                .Where(x => x.Level >= minLevel && x.Level <= maxLevel)
+                .OrderBy(x => x.Level)
+                .ToListAsync();
     }
 }

@@ -12,7 +12,7 @@ namespace ShapeDungeon.Services.Enemies
         private readonly IUnitOfWork _unitOfWork;
 
         public EnemyService(
-            IEnemyRepository enemyRepository, 
+            IEnemyRepository enemyRepository,
             IUnitOfWork unitOfWork)
         {
             _enemyRepository = enemyRepository;
@@ -37,6 +37,20 @@ namespace ShapeDungeon.Services.Enemies
             {
                 _enemyRepository.AddAsync(enemy);
             });
+        }
+
+        public async Task<IEnumerable<EnemyRangeDto>> GetRangeAsync(int minLevel, int maxLevel)
+        {
+            var enemies = await _enemyRepository.GetRangeAsync(minLevel, maxLevel);
+            var enemyDtos = new List<EnemyRangeDto>();
+
+            foreach (var enemy in enemies)
+            {
+                EnemyRangeDto enemyDto = enemy;
+                enemyDtos.Add(enemyDto);
+            }
+
+            return enemyDtos;
         }
     }
 }
