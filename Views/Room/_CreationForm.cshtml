@@ -1,16 +1,16 @@
 ﻿@using ShapeDungeon.DTOs.Rooms
-@model RoomDetailsDto
+@model RoomCreateDto
 
 <form asp-action="Create" method="post" class="col-sm-6">
     <p class="text-center">Which directions can you go to from this room?</p>
     <div class="btn-group" role="group" aria-label="Choose Directions:" style="width:100%">
-        <input type="radio" class="btn-check" name="CanGoLeft" id="left-dir" asp-for="@Model.CanGoLeft" value="true">
+        <input type="radio" class="btn-check" name="CanGoLeft" id="left-dir" asp-for="@Model.Details.CanGoLeft" value="true">
         <label class="btn btn-outline-success" for="left-dir">Left</label>
-        <input type="radio" class="btn-check" name="CanGoRight" id="right-dir" asp-for="@Model.CanGoRight" value="true">
+        <input type="radio" class="btn-check" name="CanGoRight" id="right-dir" asp-for="@Model.Details.CanGoRight" value="true">
         <label class="btn btn-outline-success" for="right-dir">Right</label>
-        <input type="radio" class="btn-check" name="CanGoUp" id="up-dir" asp-for="@Model.CanGoUp" value="true">
+        <input type="radio" class="btn-check" name="CanGoUp" id="up-dir" asp-for="@Model.Details.CanGoUp" value="true">
         <label class="btn btn-outline-success" for="up-dir">Up</label>
-        <input type="radio" class="btn-check" name="CanGoDown" id="down-dir" asp-for="@Model.CanGoDown" value="true">
+        <input type="radio" class="btn-check" name="CanGoDown" id="down-dir" asp-for="@Model.Details.CanGoDown" value="true">
         <label class="btn btn-outline-success" for="down-dir">Down</label>
     </div>
 
@@ -21,22 +21,22 @@
         @*IsStartRoom radio btn isn't enabled currently since only one room can have this option.
         The room that has this option will be automatically created when a scenario is made.
         Button is kept visible for clarity on rooms with blue bg color (and bcs atm I'm not sure how to remove it without breaking the script :D).*@
-        <input type="radio" class="btn-check" name="IsStartRoom" id="start-room-option" asp-for="@Model.IsStartRoom" value="true" disabled>
+        <input type="radio" class="btn-check" name="IsStartRoom" id="start-room-option" asp-for="@Model.Details.IsStartRoom" value="true" disabled>
         <label class="btn btn-outline-primary" for="start-room-option" id="start-label">Start Room</label>
-        <input type="radio" class="btn-check" name="IsSafeRoom" id="safe-room-option" asp-for="@Model.IsSafeRoom" value="true">
+        <input type="radio" class="btn-check" name="IsSafeRoom" id="safe-room-option" asp-for="@Model.Details.IsSafeRoom" value="true">
         <label class="btn btn-outline-success" for="safe-room-option" id="safe-label">Safe Room</label>
-        <input type="radio" class="btn-check" name="IsEnemyRoom" id="enemy-room-option" asp-for="@Model.IsEnemyRoom" value="true">
+        <input type="radio" class="btn-check" name="IsEnemyRoom" id="enemy-room-option" asp-for="@Model.Details.IsEnemyRoom" value="true">
         <label class="btn btn-outline-danger" for="enemy-room-option" id="enemy-label">Enemy Room</label>
-        <input type="radio" class="btn-check" name="IsEndRoom" id="end-room-option" asp-for="@Model.IsEndRoom" value="true">
+        <input type="radio" class="btn-check" name="IsEndRoom" id="end-room-option" asp-for="@Model.Details.IsEndRoom" value="true">
         <label class="btn btn-outline-info" for="end-room-option" id="end-label">End Room</label>
     </div>
 
     <hr class="border-3 border-top border-success">
 
-    <input type="hidden" name="CoordX" asp-for="@Model.CoordX" value="@Model.CoordX" />
-    <input type="hidden" name="CoordY" asp-for="@Model.CoordY" value="@Model.CoordY" />
+    <input type="hidden" name="CoordX" asp-for="@Model.Details.CoordX" value="@Model.Details.CoordX" />
+    <input type="hidden" name="CoordY" asp-for="@Model.Details.CoordY" value="@Model.Details.CoordY" />
 
-    <partial name="_EnemyForm" />
+    <partial name="_EnemyForm"/>
 
     <div class="form-group row mx-auto" style="width:90%">
         <button class="btn btn-outline-success text-center" id="create-room-btn" type="submit">Create</button>
