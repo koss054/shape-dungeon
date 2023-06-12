@@ -36,35 +36,7 @@
     <input type="hidden" name="CoordX" asp-for="@Model.CoordX" value="@Model.CoordX" />
     <input type="hidden" name="CoordY" asp-for="@Model.CoordY" value="@Model.CoordY" />
 
-    <div id="enemy-form" style="display:none">
-        <p class="text-center mb-1">Which enemy is in the room?</p>
-        <p class="text-center mb-1" style="font-size:0.85rem;color:gray">Enemy level range:</p>
-
-        <div class="form-group row text-center d-flex justify-content-center align-items-center mb-3" style="font-size:0.90rem">
-            <label for="min-level" class="col-sm-1 col-form-label" style="font-size:0.85rem">Min:</label>
-            <div class="col-sm-1">
-                <input type="text" class="form-control-plaintext plaintext-input" id="min-level" value="0">
-            </div>
-
-            <label for="max-level" class="col-sm-1 col-form-label" style="font-size:0.85rem">Max:</label>
-            <div class="col-sm-1">
-                <input type="text" class="form-control-plaintext plaintext-input" id="max-level" value="100">
-            </div>
-
-            <div class="col-sm-3">
-                <a class="btn btn-outline-warning text-center" style="font-size:0.65rem" id="update-enemy-range">Update Dropdown</a>
-            </div>
-        </div>
-
-        <select class="form-select" style="width:65%;margin:auto" aria-label="Enemy Select">
-            <option value="0">Enemy</option>
-            <option value="1">One</option>
-            <option value="2">Two</option>
-            <option value="3">Three</option>
-        </select>
-
-        <hr class="border-3 border-top border-success">
-    </div>
+    <partial name="_EnemyForm" />
 
     <div class="form-group row mx-auto" style="width:90%">
         <button class="btn btn-outline-success text-center" id="create-room-btn" type="submit">Create</button>
