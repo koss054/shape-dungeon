@@ -1,8 +1,10 @@
 ﻿using ShapeDungeon.Data;
 using ShapeDungeon.Interfaces.Repositories;
+using ShapeDungeon.Interfaces.Services.Enemies;
 using ShapeDungeon.Interfaces.Services.Players;
 using ShapeDungeon.Interfaces.Services.Rooms;
 using ShapeDungeon.Repos;
+using ShapeDungeon.Services.Enemies;
 using ShapeDungeon.Services.Players;
 using ShapeDungeon.Services.Rooms;
 
@@ -19,6 +21,9 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddScoped<IPlayerService, PlayerService>();
             services.AddScoped<IPlayerScoutService, PlayerScoutService>();
 
+            // Enemy
+            services.AddScoped<IEnemyService, EnemyService>();
+
             // Room
             services.AddScoped<IGetRoomService, GetRoomService>();
             services.AddScoped<IRoomCreateService, RoomCreateService>();
@@ -29,6 +34,7 @@ namespace Microsoft.Extensions.DependencyInjection
             // Repos
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IRoomRepository, RoomRepository>();
+            services.AddScoped<IEnemyRepository, EnemyRepository>();
             services.AddScoped<IPlayerRepository, PlayerRepository>();
 
             return services;

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ShapeDungeon.Data;
 
@@ -11,9 +12,10 @@ using ShapeDungeon.Data;
 namespace ShapeDungeon.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230608110626_UpdateEnemyEntity")]
+    partial class UpdateEnemyEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -44,9 +46,6 @@ namespace ShapeDungeon.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Shape")
-                        .HasColumnType("int");
-
                     b.Property<int>("Strength")
                         .HasColumnType("int");
 
@@ -56,24 +55,6 @@ namespace ShapeDungeon.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Enemies");
-                });
-
-            modelBuilder.Entity("ShapeDungeon.Entities.EnemyRoom", b =>
-                {
-                    b.Property<Guid>("EnemyId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("RoomId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<bool>("IsEnemyDefeated")
-                        .HasColumnType("bit");
-
-                    b.HasKey("EnemyId", "RoomId");
-
-                    b.HasIndex("RoomId");
-
-                    b.ToTable("EnemiesRooms");
                 });
 
             modelBuilder.Entity("ShapeDungeon.Entities.Item", b =>
@@ -205,25 +186,6 @@ namespace ShapeDungeon.Migrations
                     b.HasIndex("EnemyId");
 
                     b.ToTable("Rooms");
-                });
-
-            modelBuilder.Entity("ShapeDungeon.Entities.EnemyRoom", b =>
-                {
-                    b.HasOne("ShapeDungeon.Entities.Enemy", "Enemy")
-                        .WithMany()
-                        .HasForeignKey("EnemyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ShapeDungeon.Entities.Room", "Room")
-                        .WithMany()
-                        .HasForeignKey("RoomId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Enemy");
-
-                    b.Navigation("Room");
                 });
 
             modelBuilder.Entity("ShapeDungeon.Entities.Room", b =>

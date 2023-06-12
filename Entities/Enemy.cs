@@ -1,5 +1,5 @@
-﻿using ShapeDungeon.Interfaces.Entity;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using ShapeDungeon.Entities.Enums;
+using ShapeDungeon.Interfaces.Entity;
 
 namespace ShapeDungeon.Entities
 {
@@ -19,5 +19,9 @@ namespace ShapeDungeon.Entities
         public int Level { get; set; }
 
         public int DroppedExp { get; set; }
+
+        public int CurrentHp { get; set; }
+
+        public Shape Shape { get; set; }
     }
 }

@@ -15,6 +15,8 @@ const endRadioBtn = document.getElementById("end-room-option");
 const roomEl = document.getElementById("room");
 const roomCreateBtn = document.getElementById("create-room-btn");
 
+const enemyForm = document.getElementById("enemy-form");
+
 const roomDirectionBtnArr = [leftRadioBtn, rightRadioBtn, upRadioBtn, downRadioBtn];
 const roomTypeBtnArr = [startRadioBtn, safeRadioBtn, enemyRadioBtn, endRadioBtn];
 
@@ -69,10 +71,10 @@ function toggleRadioHighlight(direction) {
 function toggleRoomOptionBackground() {
     const currRoomOption = this.id;
     switch (currRoomOption) {
-        case "start-label": roomEl.style.background = "#2a9fd669"; break;
-        case "safe-label": roomEl.style.background = "#77b30069"; break;
-        case "enemy-label": roomEl.style.background = "#cc000069"; break;
-        case "end-label": roomEl.style.background = "#9933cc69"; break;
+        case "start-label": roomEl.style.background = "#2a9fd669"; hideEnemyForm(); break;
+        case "safe-label": roomEl.style.background = "#77b30069"; hideEnemyForm(); break;
+        case "enemy-label": roomEl.style.background = "#cc000069"; displayEnemyForm(); break;
+        case "end-label": roomEl.style.background = "#9933cc69"; hideEnemyForm(); break;
         default: console.log("bruh, room option error..."); break;
     }
 
@@ -132,8 +134,16 @@ function updateRoomOnLoad() {
 
     if (startRadioBtn.checked) roomEl.style.background = "#2a9fd669";
     else if (safeRadioBtn.checked) roomEl.style.background = "#77b30069";
-    else if (enemyRadioBtn.checked) roomEl.style.background = "#cc000069";
     else if (endRadioBtn.checked) roomEl.style.background = "#9933cc69";
+    else if (enemyRadioBtn.checked) roomEl.style.background = "#cc000069";
+}
+
+function displayEnemyForm() {
+    enemyForm.style.display = "block";
+}
+
+function hideEnemyForm() {
+    enemyForm.style.display = "none";
 }
 
 function disableCreationBtns() {

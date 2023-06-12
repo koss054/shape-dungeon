@@ -28,6 +28,6 @@ namespace ShapeDungeon.Entities
 
         public int CurrentScoutEnergy { get; set; }
 
-        public PlayerShape Shape { get; set; }
+        public Shape Shape { get; set; }
     }
 }
