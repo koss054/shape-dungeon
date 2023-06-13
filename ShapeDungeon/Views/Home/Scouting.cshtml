@@ -1,0 +1,48 @@
+﻿@using ShapeDungeon.DTOs
+@model GameDto
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <div class="row align-middle">
+        <table style="height:75vh">
+            <tbody>
+                <tr>
+                    <partial name="_PlayerOutline" for="Player" />
+                    <partial name="_RoomWithNav" for="Room" />
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<partial name="_RoomStyle" for="Room">
+
+@if (@TempData["no-energy"] != null)
+{
+    <a 
+        type="button"
+        id="return-btn"
+        class="btn btn-danger position-absolute"
+        style="font-size:12px;right:0.85rem;top:5.5rem;opacity:0;transition: opacity 0.5s;visibility:hidden;"
+        asp-controller="Home"
+        asp-action="Active">
+        Return to Active Room
+    </a>
+    
+    @*TODO: Move script to script file*@
+    <script>
+        const btn = document.getElementById("return-btn");
+        toastr.error("No scouting energy... return to active room!");
+        btn.style.visibility = "visible";
+        btn.style.opacity = 0.6;
+        
+        setTimeout(() => 
+            { 
+                btn.style.transition = "opacity 1s, visibility 1s";
+                btn.style.opacity = 0;
+                btn.style.visibility = "hidden"; }, 5100);
+    </script>
+}
