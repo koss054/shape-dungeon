@@ -6,12 +6,17 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<AppDbContext>(options => 
-    options.UseSqlServer(connectionString));
+    options.UseSqlite(connectionString));
 
 builder.Services.AddApplicationServices();
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
+
+// Apply DB migration.
+await using var scope = app.Services.CreateAsyncScope();
+using var db = scope.ServiceProvider.GetService<AppDbContext>();
+await db!.Database.MigrateAsync();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
