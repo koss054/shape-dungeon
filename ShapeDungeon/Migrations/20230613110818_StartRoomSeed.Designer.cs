@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ShapeDungeon.Data;
 
@@ -10,9 +11,10 @@ using ShapeDungeon.Data;
 namespace ShapeDungeon.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230613110818_StartRoomSeed")]
+    partial class StartRoomSeed
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.16");
@@ -145,23 +147,6 @@ namespace ShapeDungeon.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Players");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("3de35703-1fef-4070-d75d-08db4beac0a7"),
-                            Agility = 1,
-                            CurrentExp = 0,
-                            CurrentScoutEnergy = 1,
-                            CurrentSkillpoints = 0,
-                            ExpToNextLevel = 100,
-                            IsActive = true,
-                            Level = 0,
-                            Name = "Squary Lvl.8",
-                            Shape = 0,
-                            Strength = 2,
-                            Vigor = 5
-                        });
                 });
 
             modelBuilder.Entity("ShapeDungeon.Entities.Room", b =>
