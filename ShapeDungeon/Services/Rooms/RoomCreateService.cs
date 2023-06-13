@@ -2,6 +2,7 @@
 using ShapeDungeon.DTOs.Rooms;
 using ShapeDungeon.Entities;
 using ShapeDungeon.Helpers.Enums;
+using ShapeDungeon.Interfaces.Entity;
 using ShapeDungeon.Interfaces.Services.Rooms;
 using ShapeDungeon.Repos;
 
@@ -20,7 +21,7 @@ namespace ShapeDungeon.Services.Rooms
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<Guid> CreateAsync(RoomDetailsDto roomDto)
+        public async Task<IRoom> CreateAsync(RoomDetailsDto roomDto)
         {
             Room room = new()
             {
@@ -51,7 +52,7 @@ namespace ShapeDungeon.Services.Rooms
                 _roomRepository.AddAsync(room);
             });
 
-            return room.Id;
+            return room;
         }
 
         // There's always going to be an IsActiveForEditRoom == true.

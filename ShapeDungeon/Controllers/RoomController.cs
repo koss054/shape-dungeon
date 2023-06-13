@@ -36,8 +36,8 @@ namespace ShapeDungeon.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(RoomDetailsDto roomDto)
         {
-            var newRoomId = await _roomCreateService.CreateAsync(roomDto);
-            await _roomActiveForEditService.ApplyActiveForEditAsync(newRoomId);
+            var newRoom = await _roomCreateService.CreateAsync(roomDto);
+            await _roomActiveForEditService.ApplyActiveForEditAsync(newRoom.Id);
             return RedirectToAction("Create");
         }
 
