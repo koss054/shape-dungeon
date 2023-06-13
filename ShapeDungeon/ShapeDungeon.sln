@@ -5,7 +5,10 @@ VisualStudioVersion = 17.0.33130.402
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShapeDungeon", "ShapeDungeon.csproj", "{5CEE4804-903A-4729-854F-915BA4B39908}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShapeDungeon.Tests", "..\ShapeDungeon.Tests\ShapeDungeon.Tests.csproj", "{617B917B-3574-491B-82A0-09131E443ED9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShapeDungeon.Tests", "..\ShapeDungeon.Tests\ShapeDungeon.Tests.csproj", "{617B917B-3574-491B-82A0-09131E443ED9}"
+	ProjectSection(ProjectDependencies) = postProject
+		{5CEE4804-903A-4729-854F-915BA4B39908} = {5CEE4804-903A-4729-854F-915BA4B39908}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
