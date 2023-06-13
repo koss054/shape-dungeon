@@ -37,6 +37,9 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddScoped<IEnemyRepository, EnemyRepository>();
             services.AddScoped<IPlayerRepository, PlayerRepository>();
 
+            // Cookies
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
             return services;
         }
     }

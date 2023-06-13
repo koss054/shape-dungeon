@@ -1,0 +1,50 @@
+﻿@using ShapeDungeon.DTOs.Rooms
+@model RoomCreateDto
+
+<div id="enemy-form" style="display:none">
+    @if (Model.EnemyRange.Count() > 0)
+    {
+
+        <p class="text-center mb-1">Which enemy is in the room?</p>
+        <p class="text-center mb-1" style="font-size:0.85rem;color:gray">Enemy level range:</p>
+
+        <div class="form-group row text-center d-flex justify-content-center align-items-center mb-3" style="font-size:0.90rem">
+            <label for="min-level" class="col-sm-1 col-form-label" style="font-size:0.85rem">Min:</label>
+            <div class="col-sm-1">
+                <input type="text" class="form-control-plaintext plaintext-input" id="min-level" value="0">
+            </div>
+
+            <label for="max-level" class="col-sm-1 col-form-label" style="font-size:0.85rem">Max:</label>
+            <div class="col-sm-1">
+                <input type="text" class="form-control-plaintext plaintext-input" id="max-level" value="100">
+            </div>
+
+            <div class="col-sm-3">
+                <a class="btn btn-outline-warning text-center" style="font-size:0.65rem" id="update-enemy-range"
+                onclick="window.location.reload()">
+                    Update Dropdown
+                </a>
+            </div>
+        </div>
+
+        <select class="form-select" style="width:65%;margin:auto" aria-label="Enemy Select">
+            @foreach (var enemy in Model.EnemyRange)
+            {
+                <option value="@enemy.Id">@enemy.Name</option>
+            }
+        </select>
+
+    }
+    else
+    {
+        <h5 class="text-center" style="color:lightgray">
+            No Enemies with Provided Level Range... 
+            <a asp-controller="Enemy" asp-action="Create" style="color:rgb(204 0 0)">
+                Yet!
+            </a>
+        </h5>
+    }
+    <hr class="border-3 border-top border-success">
+</div>
+
+<script src=~/js/enemy/range.js></script>
