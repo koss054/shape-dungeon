@@ -33,7 +33,7 @@ namespace ShapeDungeon.Controllers
 
         public async Task<IActionResult> Active()
         {
-            await _roomTravelService.ResetScoutAsync(); // Doing this if player changes the URL manually.
+            await _roomTravelService.IsScoutResetAsync(); // Doing this if player changes the URL manually.
             await _playerScoutService.UpdateActiveScoutEnergyAsync(PlayerScoutAction.Refill);
 
             var player = await _playerService.GetPlayerAsync("Squary Lvl.8");

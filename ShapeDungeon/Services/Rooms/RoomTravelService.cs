@@ -75,7 +75,7 @@ namespace ShapeDungeon.Services.Rooms
             }
         }
 
-        public async Task<bool> ResetScoutAsync()
+        public async Task<bool> IsScoutResetAsync()
         {
             var activeForScoutRoom = await _roomRepository.GetActiveForScout();
             var activeForMoveRoom = await _roomRepository.GetActiveForMove();

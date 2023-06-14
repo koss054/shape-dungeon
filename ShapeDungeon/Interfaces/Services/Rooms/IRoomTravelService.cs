@@ -5,6 +5,6 @@ namespace ShapeDungeon.Interfaces.Services.Rooms
     public interface IRoomTravelService
     {
         Task RoomTravelAsync(RoomDirection direction, RoomTravelAction action);
-        Task<bool> ResetScoutAsync();
+        Task<bool> IsScoutResetAsync();
     }
 }
