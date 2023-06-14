@@ -1,6 +1,6 @@
 ﻿using ShapeDungeon.Entities.Enums;
 
-namespace ShapeDungeon.DTOs
+namespace ShapeDungeon.DTOs.Enemies
 {
     public class EnemyDto
     {

@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using ShapeDungeon.DTOs;
+using ShapeDungeon.DTOs.Enemies;
 using ShapeDungeon.Interfaces.Services.Enemies;
 
 namespace ShapeDungeon.Controllers
