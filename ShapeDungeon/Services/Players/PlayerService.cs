@@ -45,9 +45,9 @@ namespace ShapeDungeon.Services.Players
             await _unitOfWork.Commit(() =>
             {
                 _playerRepository.AddAsync(player);
-                doesNameExist = true;
             });
 
+            doesNameExist = true;
             return doesNameExist;
         }
 
