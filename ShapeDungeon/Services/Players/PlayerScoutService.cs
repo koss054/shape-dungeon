@@ -44,7 +44,7 @@ namespace ShapeDungeon.Services.Players
                 currActivePlayer.CurrentScoutEnergy = currScoutEnergy;
             });
 
-            return currActivePlayer.CurrentScoutEnergy;
+            return currScoutEnergy;
         }
     }
 }
