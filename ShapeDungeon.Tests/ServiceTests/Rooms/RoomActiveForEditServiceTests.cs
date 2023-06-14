@@ -2,9 +2,7 @@
 using Moq;
 using NUnit.Framework;
 using ShapeDungeon.Data;
-using ShapeDungeon.DTOs.Rooms;
 using ShapeDungeon.Entities;
-using ShapeDungeon.Helpers.Enums;
 using ShapeDungeon.Interfaces.Services.Rooms;
 using ShapeDungeon.Repos;
 using ShapeDungeon.Services.Rooms;
