@@ -8,7 +8,7 @@ using ShapeDungeon.Repos;
 using ShapeDungeon.Services.Rooms;
 using System.Threading.Tasks;
 
-namespace ShapeDungeon.Tests.ServiceTests
+namespace ShapeDungeon.Tests.ServiceTests.Rooms
 {
     internal class CheckRoomNeighborsServiceTests
     {

@@ -11,7 +11,7 @@ using ShapeDungeon.Services.Rooms;
 using System;
 using System.Threading.Tasks;
 
-namespace ShapeDungeon.Tests.ServiceTests
+namespace ShapeDungeon.Tests.ServiceTests.Rooms
 {
     internal class RoomCreateServiceTests
     {
