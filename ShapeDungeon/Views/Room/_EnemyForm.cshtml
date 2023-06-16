@@ -4,7 +4,7 @@
 <div id="enemy-form" style="display:none">
     @if (Model.EnemyRange.Count() > 0)
     {
-        <p class="text-center mb-1">Which enemy is in the room?</p>
+        <p class="text-center mb-1">Which enemy is in the room? <span style="font-style:italic;font-size:0.6rem">(letter after name is for shape)</span></p>
     }
     else
     {
@@ -39,10 +39,10 @@
 
     @if (Model.EnemyRange.Count() > 0)
     {
-        <select class="form-select" style="width:65%;margin:auto" aria-label="Enemy Select">
+        <select class="form-select" style="width:65%;margin:auto" aria-label="Enemy Select" id="enemy-select">
             @foreach (var enemy in Model.EnemyRange)
             {
-                <option value="@enemy.Id">@enemy.Name</option>
+                <option value="@enemy.Id">@enemy.Name @enemy.Shape.ToString()[0]</option>
             }
         </select>
     }
