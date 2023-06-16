@@ -1,4 +1,5 @@
 ﻿using ShapeDungeon.Entities;
+using ShapeDungeon.Entities.Enums;
 
 namespace ShapeDungeon.DTOs.Enemies
 {
@@ -11,12 +12,15 @@ namespace ShapeDungeon.DTOs.Enemies
 
         public int Level { get; init; }
 
+        public Shape Shape { get; init; }
+
         public static implicit operator EnemyRangeDto(Enemy enemy)
             => new()
             {
                 Id = enemy.Id,
                 Name = enemy.Name,
                 Level = enemy.Level,
+                Shape = enemy.Shape,
             };
     }
 }
