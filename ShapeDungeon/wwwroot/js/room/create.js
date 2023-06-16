@@ -16,6 +16,10 @@ const roomEl = document.getElementById("room");
 const roomCreateBtn = document.getElementById("create-room-btn");
 
 const enemyForm = document.getElementById("enemy-form");
+const enemyLevel = document.getElementById("enemy-level");
+const enemySelect = document.getElementById("enemy-select");
+const enemyShape = document.getElementById("selected-enemy-shape");
+const enemyLevelNum = document.getElementById("enemy-level-number");
 
 const roomDirectionBtnArr = [leftRadioBtn, rightRadioBtn, upRadioBtn, downRadioBtn];
 const roomTypeBtnArr = [startRadioBtn, safeRadioBtn, enemyRadioBtn, endRadioBtn];
@@ -71,10 +75,10 @@ function toggleRadioHighlight(direction) {
 function toggleRoomOptionBackground() {
     const currRoomOption = this.id;
     switch (currRoomOption) {
-        case "start-label": roomEl.style.background = "#2a9fd669"; hideEnemyForm(); break;
-        case "safe-label": roomEl.style.background = "#77b30069"; hideEnemyForm(); break;
-        case "enemy-label": roomEl.style.background = "#cc000069"; displayEnemyForm(); break;
-        case "end-label": roomEl.style.background = "#9933cc69"; hideEnemyForm(); break;
+        case "start-label": roomEl.style.background = "#2a9fd669"; hideEnemyForm(); hideEnemyShape(); break;
+        case "safe-label": roomEl.style.background = "#77b30069"; hideEnemyForm(); hideEnemyShape(); break;
+        case "enemy-label": roomEl.style.background = "#cc000069"; displayEnemyForm(); enemyRoomSelected(); break;
+        case "end-label": roomEl.style.background = "#9933cc69"; hideEnemyForm(); hideEnemyShape(); break;
         default: console.log("bruh, room option error..."); break;
     }
 
@@ -188,4 +192,39 @@ function disableRadioBtnOnDirectionalCreate() {
     else if (rightRadioBtn.checked) disableRightRadioBtn();
     else if (upRadioBtn.checked) disableUpRadioBtn();
     else if (downRadioBtn.checked) disableBottomRadioBtn();
+}
+
+function enemyRoomSelected() {
+    enemyShape.style.display = "block";
+    enemyLevel.style.display = "block";
+    enemySelect.addEventListener("change", updateShape);
+
+    let currentShape, shapeLetter, level;
+    updateShape();
+
+    function updateShape() {
+        currentShape = enemySelect.options[enemySelect.selectedIndex].text;
+        shapeLetter = currentShape.charAt(currentShape.length - 1);
+        level = currentShape.split("Lvl.")[1].split(" ")[0];
+
+        enemyLevelNum.innerText = level;
+
+        switch (shapeLetter) {
+            case "S":
+                enemyShape.setAttribute("style", "height:10rem;width:10rem;background-color:red");
+                break;
+            case "T":
+                enemyShape.setAttribute("style", "width:0;height:0;border-top: 5rem solid transparent;border-left: 10rem solid red;border-bottom: 5rem solid transparent");
+                break;
+            case "C":
+                enemyShape.setAttribute("style", "height:10rem;width:10rem;background-color:red;border-radius:50%");
+                break;
+            default: console.log("bruuuh, enemy shape doesn't exist... how?? lol");
+        }
+    }
+}
+
+function hideEnemyShape() {
+    enemyShape.style.display = "none";
+    enemyLevel.style.display = "none";
 }
