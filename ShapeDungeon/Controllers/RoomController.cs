@@ -3,6 +3,7 @@ using ShapeDungeon.DTOs.Rooms;
 using ShapeDungeon.Helpers.Enums;
 using ShapeDungeon.Interfaces.Services.Enemies;
 using ShapeDungeon.Interfaces.Services.Rooms;
+using ShapeDungeon.Interfaces.Services.RoomsEnemies;
 
 namespace ShapeDungeon.Controllers
 {
@@ -14,14 +15,16 @@ namespace ShapeDungeon.Controllers
         private readonly IRoomActiveForEditService _roomActiveForEditService;
         private readonly ICheckRoomNeighborsService _checkRoomNeighborsService;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IEnemiesRoomsService _enemiesRoomsService;
 
         public RoomController(
             IGetRoomService getRoomService,
             IRoomCreateService roomCreateService,
             IRoomActiveForEditService roomActiveForEditService,
             ICheckRoomNeighborsService checkRoomNeighborsService,
-            IEnemyService enemyService, 
-            IHttpContextAccessor httpContextAccessor)
+            IEnemyService enemyService,
+            IHttpContextAccessor httpContextAccessor, 
+            IEnemiesRoomsService enemiesRoomsService)
         {
             _getRoomService = getRoomService;
             _roomCreateService = roomCreateService;
@@ -29,6 +32,7 @@ namespace ShapeDungeon.Controllers
             _checkRoomNeighborsService = checkRoomNeighborsService;
             _enemyService = enemyService;
             _httpContextAccessor = httpContextAccessor;
+            _enemiesRoomsService = enemiesRoomsService;
         }
 
         [HttpGet]
