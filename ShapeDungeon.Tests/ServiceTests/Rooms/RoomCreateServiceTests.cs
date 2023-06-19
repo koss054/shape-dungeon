@@ -46,7 +46,6 @@ namespace ShapeDungeon.Tests.ServiceTests.Rooms
                 IsSafeRoom = false,
                 IsEnemyRoom = false,
                 IsEndRoom = false,
-                Enemy = null,
             };
 
             RoomDetailsDto roomDto = expectedRoom;
@@ -79,7 +78,6 @@ namespace ShapeDungeon.Tests.ServiceTests.Rooms
                 IsSafeRoom = false,
                 IsEnemyRoom = false,
                 IsEndRoom = false,
-                Enemy = null,
                 CoordX = expectedCoordX,
                 CoordY = expectedCoordY,
             };

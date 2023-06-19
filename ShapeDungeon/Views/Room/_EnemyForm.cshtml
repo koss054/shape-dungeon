@@ -39,7 +39,7 @@
 
     @if (Model.EnemyRange.Count() > 0)
     {
-        <select class="form-select" style="width:65%;margin:auto" aria-label="Enemy Select" id="enemy-select">
+        <select class="form-select" style="width:65%;margin:auto" aria-label="Enemy Select" id="enemy-select" asp-for="@Model.EnemyId">
             @foreach (var enemy in Model.EnemyRange)
             {
                 <option value="@enemy.Id">@enemy.Name @enemy.Shape.ToString()[0]</option>

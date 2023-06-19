@@ -33,7 +33,6 @@ namespace ShapeDungeon.Data
                     IsEnemyRoom = false,
                     IsSafeRoom = false,
                     IsEndRoom = false,
-                    Enemy = null,
                     CoordX = 0,
                     CoordY = 0,
                 });

@@ -15,7 +15,6 @@ namespace ShapeDungeon.Interfaces.Entity
         bool IsEnemyRoom { get; }
         bool IsSafeRoom { get; }
         bool IsEndRoom { get; }
-        Enemy? Enemy { get; }
 
         int CoordX { get; }
         int CoordY { get; }

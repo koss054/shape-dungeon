@@ -14,7 +14,7 @@ namespace ShapeDungeon.DTOs.Rooms
         public bool IsEnemyRoom { get; init; }
         public bool IsSafeRoom { get; init; }
         public bool IsEndRoom { get; init; }
-        public EnemyDto? Enemy { get; init; }
+        public Guid EnemyId { get; init; }
 
         public int CoordX { get; set; }
         public int CoordY { get; set; }
@@ -31,7 +31,6 @@ namespace ShapeDungeon.DTOs.Rooms
                 IsEnemyRoom = room.IsEnemyRoom,
                 IsSafeRoom = room.IsSafeRoom,
                 IsEndRoom = room.IsEndRoom,
-                Enemy = null,
                 CoordX = room.CoordX,
                 CoordY = room.CoordY,
             };

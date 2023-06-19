@@ -52,5 +52,12 @@ namespace ShapeDungeon.Services.Enemies
 
             return enemyDtos;
         }
+
+        public async Task<Enemy?> GetById(Guid enemyId)
+        {
+            var enemy = await _enemyRepository.GetById(enemyId);
+            return enemy;
+
+        }
     }
 }

@@ -21,7 +21,7 @@ namespace ShapeDungeon.Services.Rooms
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<IRoom> CreateAsync(RoomDetailsDto roomDto)
+        public async Task<Room> CreateAsync(RoomDetailsDto roomDto)
         {
             Room room = new()
             {
@@ -36,7 +36,6 @@ namespace ShapeDungeon.Services.Rooms
                 IsSafeRoom = roomDto.IsSafeRoom,
                 IsEnemyRoom = roomDto.IsEnemyRoom,
                 IsEndRoom = roomDto.IsEndRoom,
-                Enemy = null,
                 CoordX = roomDto.CoordX,
                 CoordY = roomDto.CoordY,
             };

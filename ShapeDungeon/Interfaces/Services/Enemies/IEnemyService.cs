@@ -1,4 +1,5 @@
 ﻿using ShapeDungeon.DTOs.Enemies;
+using ShapeDungeon.Entities;
 
 namespace ShapeDungeon.Interfaces.Services.Enemies
 {
@@ -6,5 +7,6 @@ namespace ShapeDungeon.Interfaces.Services.Enemies
     {
         Task CreateAsync(EnemyDto eDto);
         Task<IEnumerable<EnemyRangeDto>> GetRangeAsync(int minLevel, int maxLevel);
+        Task<Enemy?> GetById(Guid enemyId);
     }
 }

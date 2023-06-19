@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using ShapeDungeon.DTOs.Enemies;
 using ShapeDungeon.DTOs.Rooms;
+using ShapeDungeon.Entities;
 using ShapeDungeon.Helpers.Enums;
 using ShapeDungeon.Interfaces.Services.Enemies;
 using ShapeDungeon.Interfaces.Services.Rooms;
@@ -48,6 +50,15 @@ namespace ShapeDungeon.Controllers
         public async Task<IActionResult> Create(RoomDetailsDto roomDto)
         {
             var newRoom = await _roomCreateService.CreateAsync(roomDto);
+
+            if (newRoom.IsEnemyRoom)
+            {
+                var enemy = await _enemyService.GetById(roomDto.EnemyId);
+
+                if (enemy != null)
+                    await _enemiesRoomsService.AddEnemyToRoom(newRoom, enemy);
+            }
+
             await _roomActiveForEditService.ApplyActiveForEditAsync(newRoom.Id);
             return RedirectToAction("Create");
         }

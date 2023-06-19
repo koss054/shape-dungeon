@@ -18,5 +18,9 @@ namespace ShapeDungeon.Repos
                 .Where(x => x.Level >= minLevel && x.Level <= maxLevel)
                 .OrderBy(x => x.Level)
                 .ToListAsync();
+
+        public async Task<Enemy?> GetById(Guid enemyId)
+            => await this.Context.Enemies
+                .FirstOrDefaultAsync(x => x.Id == enemyId);
     }
 }

@@ -28,8 +28,6 @@ namespace ShapeDungeon.Entities
 
         public bool IsEndRoom { get; init; }
 
-        public Enemy? Enemy { get; init; }
-
         public int CoordX { get; set; }
         public int CoordY { get; set; }
     }
