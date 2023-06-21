@@ -1,4 +1,5 @@
 ﻿@using ShapeDungeon.DTOs.Rooms
+@using ShapeDungeon.Entities.Enums
 @model RoomCreateDto
 
 @{
@@ -12,7 +13,7 @@
     </div>
     <div class="row align-items-center" style="height:80%">
         <form asp-action="Create" method="post" class="col-sm-6">
-            <partial name="_CreationForm" for="Details" />
+            <partial name="_CreationForm" />
         </form>
 
         <partial name="_RoomView" for="Nav" />
@@ -25,5 +26,30 @@
 {
     <script>
         disableCreationBtns();
+    </script>
+}
+
+@if (Model.Details.IsEnemyRoom) {
+    @if (Model.Enemy.Shape == Shape.Square)
+    {
+        <script>
+            displayEnemySquare(@Model.Enemy.Level);
+        </script>
+    }
+    else if (Model.Enemy.Shape == Shape.Triangle)
+    {
+        <script>
+            displayEnemyTriangle(@Model.Enemy.Level);
+        </script>
+    }
+    else if (Model.Enemy.Shape == Shape.Circle)
+    {
+        <script>
+            displayEnemyCricle(@Model.Enemy.Level);
+        </script>
+    }
+
+    <script>
+        enableEnemyShapeDisplay();
     </script>
 }

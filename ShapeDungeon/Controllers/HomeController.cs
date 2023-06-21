@@ -10,6 +10,7 @@ namespace ShapeDungeon.Controllers
     {
         private readonly IPlayerService _playerService;
         private readonly IGetRoomService _getRoomService;
+        private readonly IRoomEnemyService _roomEnemyService;
         private readonly IRoomTravelService _roomTravelService;
         private readonly IPlayerScoutService _playerScoutService;
         private readonly ICheckRoomNeighborsService _checkRoomNeighborsService;
@@ -17,12 +18,14 @@ namespace ShapeDungeon.Controllers
         public HomeController(
             IPlayerService playerService,
             IGetRoomService getRoomService,
+            IRoomEnemyService roomEnemyService,
             IRoomTravelService roomTravelService,
             IPlayerScoutService playerScoutService,
             ICheckRoomNeighborsService checkRoomNeighborsService)
         {
             _playerService = playerService;
             _getRoomService = getRoomService;
+            _roomEnemyService = roomEnemyService;
             _roomTravelService = roomTravelService;
             _playerScoutService = playerScoutService;
             _checkRoomNeighborsService = checkRoomNeighborsService;
@@ -52,6 +55,13 @@ namespace ShapeDungeon.Controllers
             }
 
             room = _checkRoomNeighborsService.SetHasNeighborsProperties(room, roomNav!);
+
+            if (room.IsEnemyRoom)
+            {
+                var roomId = await _getRoomService.GetActiveForMoveId();
+                room.Enemy = await _roomEnemyService.GetEnemy(roomId);
+            }
+
             var game = new GameDto() { Player = player!, Room = room! };
             return View(game);
         }
@@ -77,6 +87,13 @@ namespace ShapeDungeon.Controllers
             }
 
             room = _checkRoomNeighborsService.SetHasNeighborsProperties(room, roomNav!);
+
+            if (room.IsEnemyRoom)
+            {
+                var roomId = await _getRoomService.GetActiveForScoutId();
+                room.Enemy = await _roomEnemyService.GetEnemy(roomId);
+            }
+
             var game = new GameDto() { Player = player!, Room = room! };
             return View(game);
         }

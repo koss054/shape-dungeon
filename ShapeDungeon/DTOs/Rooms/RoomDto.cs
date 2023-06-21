@@ -1,4 +1,5 @@
-﻿using ShapeDungeon.Entities;
+﻿using ShapeDungeon.DTOs.Enemies;
+using ShapeDungeon.Entities;
 
 namespace ShapeDungeon.DTOs.Rooms
 {
@@ -14,7 +15,7 @@ namespace ShapeDungeon.DTOs.Rooms
         public bool IsEnemyRoom { get; init; }
         public bool IsSafeRoom { get; init; }
         public bool IsEndRoom { get; init; }
-        public EnemyDto? Enemy { get; init; }
+        public EnemyDto? Enemy { get; set; }
 
         public int CoordX { get; init; }
         public int CoordY { get; init; }
