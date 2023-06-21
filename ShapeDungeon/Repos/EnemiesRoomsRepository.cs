@@ -1,4 +1,5 @@
-﻿using ShapeDungeon.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using ShapeDungeon.Entities;
 using ShapeDungeon.Interfaces.Repositories;
 
 namespace ShapeDungeon.Repos
@@ -17,5 +18,20 @@ namespace ShapeDungeon.Repos
                 Enemy = enemy,
                 EnemyId = enemy.Id,
             });
+
+        public async Task<Enemy> GetEnemyByRoomId(Guid roomId)
+        {
+            var enemyRoom = await this.Context.EnemiesRooms
+                .FirstOrDefaultAsync(x => x.RoomId == roomId);
+
+            // Gotta do some error exception work after I finish implementing enemy stuff.
+            if (enemyRoom == null)
+                return new Enemy();
+
+            var enemy = await this.Context.Enemies
+                .FirstOrDefaultAsync(x => x.Id == enemyRoom.EnemyId);
+
+            return enemy ?? new Enemy();
+        }
     }
 }
