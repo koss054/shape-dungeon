@@ -39,5 +39,11 @@ namespace ShapeDungeon.Services.Rooms
             var room = await _roomRepository.GetActiveForMove();
             return room.Id;
         }
+
+        public async Task<Guid> GetActiveForScoutId()
+        {
+            var room = await _roomRepository.GetActiveForScout();
+            return room.Id;
+        }
     }
 }

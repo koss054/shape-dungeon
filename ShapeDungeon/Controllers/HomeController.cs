@@ -87,6 +87,13 @@ namespace ShapeDungeon.Controllers
             }
 
             room = _checkRoomNeighborsService.SetHasNeighborsProperties(room, roomNav!);
+
+            if (room.IsEnemyRoom)
+            {
+                var roomId = await _getRoomService.GetActiveForScoutId();
+                room.Enemy = await _roomEnemyService.GetEnemy(roomId);
+            }
+
             var game = new GameDto() { Player = player!, Room = room! };
             return View(game);
         }
