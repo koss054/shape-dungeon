@@ -9,5 +9,6 @@ namespace ShapeDungeon.Interfaces.Services.Rooms
         Task<RoomDetailsDto> GetActiveForEditAsync();
         Task<Guid> GetActiveForMoveId();
         Task<Guid> GetActiveForScoutId();
+        Task<Guid> GetActiveForEditId();
     }
 }

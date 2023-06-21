@@ -13,28 +13,31 @@ namespace ShapeDungeon.Controllers
     {
         private readonly IEnemyService _enemyService;
         private readonly IGetRoomService _getRoomService;
+        private readonly IRoomEnemyService _roomEnemyService;
         private readonly IRoomCreateService _roomCreateService;
-        private readonly IRoomActiveForEditService _roomActiveForEditService;
-        private readonly ICheckRoomNeighborsService _checkRoomNeighborsService;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IEnemiesRoomsService _enemiesRoomsService;
+        private readonly IRoomActiveForEditService _roomActiveForEditService;
+        private readonly ICheckRoomNeighborsService _checkRoomNeighborsService;
 
         public RoomController(
-            IGetRoomService getRoomService,
-            IRoomCreateService roomCreateService,
-            IRoomActiveForEditService roomActiveForEditService,
-            ICheckRoomNeighborsService checkRoomNeighborsService,
-            IEnemyService enemyService,
+            IEnemyService enemyService, 
+            IGetRoomService getRoomService, 
+            IRoomEnemyService roomEnemyService, 
+            IRoomCreateService roomCreateService, 
             IHttpContextAccessor httpContextAccessor, 
-            IEnemiesRoomsService enemiesRoomsService)
+            IEnemiesRoomsService enemiesRoomsService, 
+            IRoomActiveForEditService roomActiveForEditService, 
+            ICheckRoomNeighborsService checkRoomNeighborsService)
         {
-            _getRoomService = getRoomService;
-            _roomCreateService = roomCreateService;
-            _roomActiveForEditService = roomActiveForEditService;
-            _checkRoomNeighborsService = checkRoomNeighborsService;
             _enemyService = enemyService;
+            _getRoomService = getRoomService;
+            _roomEnemyService = roomEnemyService;
+            _roomCreateService = roomCreateService;
             _httpContextAccessor = httpContextAccessor;
             _enemiesRoomsService = enemiesRoomsService;
+            _roomActiveForEditService = roomActiveForEditService;
+            _checkRoomNeighborsService = checkRoomNeighborsService;
         }
 
         [HttpGet]
@@ -43,6 +46,13 @@ namespace ShapeDungeon.Controllers
             var roomDetails = await _getRoomService.GetActiveForEditAsync();
             var roomNav = await _checkRoomNeighborsService.SetDtoNeighborsAsync(roomDetails!.CoordX, roomDetails!.CoordY);
             var room = new RoomCreateDto() { Details = roomDetails, Nav = roomNav };
+
+            if (roomDetails.IsEnemyRoom)
+            {
+                var roomId = await _getRoomService.GetActiveForEditId();
+                room.Enemy = await _roomEnemyService.GetEnemy(roomId);
+            }
+
             return View(room);
         }
 

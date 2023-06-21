@@ -45,5 +45,11 @@ namespace ShapeDungeon.Services.Rooms
             var room = await _roomRepository.GetActiveForScout();
             return room.Id;
         }
+
+        public async Task<Guid> GetActiveForEditId()
+        {
+            var room = await _roomRepository.GetActiveForEdit();
+            return room.Id;
+        }
     }
 }

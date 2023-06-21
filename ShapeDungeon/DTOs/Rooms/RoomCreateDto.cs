@@ -15,5 +15,6 @@ namespace ShapeDungeon.DTOs.Rooms
         public int MinLevel { get; set; }
         public int MaxLevel { get; set; }
         public Guid EnemyId { get; set; }
+        public EnemyDto? Enemy { get; set; }
     }
 }

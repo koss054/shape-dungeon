@@ -224,6 +224,26 @@ function enemyRoomSelected() {
     }
 }
 
+function enableEnemyShapeDisplay() {
+    enemyShape.style.display = "block";
+    enemyLevel.style.display = "block";
+}
+
+function displayEnemySquare(level) {
+    enemyShape.setAttribute("style", "height:10rem;width:10rem;background-color:red");
+    enemyLevelNum.innerText = level;
+}
+
+function displayEnemyTriangle(level) {
+    enemyShape.setAttribute("style", "width:0;height:0;border-top: 5rem solid transparent;border-left: 10rem solid red;border-bottom: 5rem solid transparent");
+    enemyLevelNum.innerText = level;
+}
+
+function displayEnemyCricle(level) {
+    enemyShape.setAttribute("style", "height:10rem;width:10rem;background-color:red;border-radius:50%");
+    enemyLevelNum.innerText = level;
+}
+
 function hideEnemyShape() {
     enemyShape.style.display = "none";
     enemyLevel.style.display = "none";

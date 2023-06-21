@@ -1,4 +1,5 @@
 ﻿@using ShapeDungeon.DTOs.Rooms
+@using ShapeDungeon.Entities.Enums
 @model RoomCreateDto
 
 @{
@@ -25,5 +26,30 @@
 {
     <script>
         disableCreationBtns();
+    </script>
+}
+
+@if (Model.Details.IsEnemyRoom) {
+    @if (Model.Enemy.Shape == Shape.Square)
+    {
+        <script>
+            displayEnemySquare(@Model.Enemy.Level);
+        </script>
+    }
+    else if (Model.Enemy.Shape == Shape.Triangle)
+    {
+        <script>
+            displayEnemyTriangle(@Model.Enemy.Level);
+        </script>
+    }
+    else if (Model.Enemy.Shape == Shape.Circle)
+    {
+        <script>
+            displayEnemyCricle(@Model.Enemy.Level);
+        </script>
+    }
+
+    <script>
+        enableEnemyShapeDisplay();
     </script>
 }
