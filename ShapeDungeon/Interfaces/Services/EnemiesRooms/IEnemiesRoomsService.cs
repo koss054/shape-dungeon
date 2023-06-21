@@ -1,6 +1,6 @@
 ﻿using ShapeDungeon.Entities;
 
-namespace ShapeDungeon.Interfaces.Services.RoomsEnemies
+namespace ShapeDungeon.Interfaces.Services.EnemiesRooms
 {
     public interface IEnemiesRoomsService
     {

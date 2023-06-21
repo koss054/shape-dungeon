@@ -1,6 +1,6 @@
 ﻿using ShapeDungeon.Data;
 using ShapeDungeon.Entities;
-using ShapeDungeon.Interfaces.Services.RoomsEnemies;
+using ShapeDungeon.Interfaces.Services.EnemiesRooms;
 using ShapeDungeon.Repos;
 
 namespace ShapeDungeon.Services.RoomsEnemies

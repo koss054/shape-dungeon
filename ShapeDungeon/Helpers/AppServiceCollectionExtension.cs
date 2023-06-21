@@ -1,9 +1,9 @@
 ﻿using ShapeDungeon.Data;
 using ShapeDungeon.Interfaces.Repositories;
 using ShapeDungeon.Interfaces.Services.Enemies;
+using ShapeDungeon.Interfaces.Services.EnemiesRooms;
 using ShapeDungeon.Interfaces.Services.Players;
 using ShapeDungeon.Interfaces.Services.Rooms;
-using ShapeDungeon.Interfaces.Services.RoomsEnemies;
 using ShapeDungeon.Repos;
 using ShapeDungeon.Services.Enemies;
 using ShapeDungeon.Services.Players;
@@ -28,6 +28,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
             // Room
             services.AddScoped<IGetRoomService, GetRoomService>();
+            services.AddScoped<IRoomEnemyService, RoomEnemyService>();
             services.AddScoped<IRoomCreateService, RoomCreateService>();
             services.AddScoped<IRoomTravelService, RoomTravelService>();
             services.AddScoped<IRoomActiveForEditService, RoomActiveForEditService>();

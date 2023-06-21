@@ -5,7 +5,7 @@ using ShapeDungeon.Entities;
 using ShapeDungeon.Helpers.Enums;
 using ShapeDungeon.Interfaces.Services.Enemies;
 using ShapeDungeon.Interfaces.Services.Rooms;
-using ShapeDungeon.Interfaces.Services.RoomsEnemies;
+using ShapeDungeon.Interfaces.Services.EnemiesRooms;
 
 namespace ShapeDungeon.Controllers
 {
