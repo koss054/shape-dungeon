@@ -209,6 +209,8 @@ function enemyRoomSelected() {
 
         enemyLevelNum.innerText = level;
 
+        // TODO: Reduce code in this file, in order to import updateShape function and use it here
+        // Unable to use type="module", since the Create.cshtml file stops recognizing functions when used in <script></script>.
         switch (shapeLetter) {
             case "S":
                 enemyShape.setAttribute("style", "height:10rem;width:10rem;background-color:red");
@@ -224,6 +226,7 @@ function enemyRoomSelected() {
     }
 }
 
+// Functions used in Create.cshtml that become unrecognizable.
 function enableEnemyShapeDisplay() {
     enemyShape.style.display = "block";
     enemyLevel.style.display = "block";
