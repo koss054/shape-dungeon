@@ -23,7 +23,7 @@
                             asp-action="Go"
                             asp-route-coordX="@Model.CoordX"
                             asp-route-coordY="@(Model.CoordY + 1)">
-                            Go ⇧
+                            Go
                         </a>
                     }
                     else
@@ -34,7 +34,7 @@
                             asp-controller="Room"
                             asp-action="Directional"
                             asp-route-direction="@RoomDirection.Top">
-                            Create ⇧
+                            Create
                         </a>
                     }
                 </div>
@@ -54,7 +54,7 @@
                             asp-action="Go"
                             asp-route-coordX="@Model.CoordX"
                             asp-route-coordY="@(Model.CoordY - 1)">
-                            Go ⇩
+                            Go
                         </a>
                     }
                     else
@@ -65,7 +65,7 @@
                             asp-controller="Room"
                             asp-action="Directional"
                             asp-route-direction="@RoomDirection.Bottom">
-                            Create ⇩
+                            Create
                         </a>
                     }
                 </div>
@@ -85,7 +85,7 @@
                             asp-action="Go"
                             asp-route-coordX="@(Model.CoordX - 1)"
                             asp-route-coordY="@Model.CoordY">
-                            Go ⇦
+                            Go
                         </a>
                     }
                     else
@@ -96,7 +96,7 @@
                             asp-controller="Room"
                             asp-action="Directional"
                             asp-route-direction="@RoomDirection.Left">
-                            ⇦ Create
+                            Create
                         </a>
                     }
                 </div>
@@ -116,7 +116,7 @@
                             asp-action="Go"
                             asp-route-coordX="@(Model.CoordX + 1)"
                             asp-route-coordY="@Model.CoordY">
-                            Go ⇨
+                            Go
                         </a>
                     }
                     else
@@ -127,7 +127,7 @@
                             asp-controller="Room"
                             asp-action="Directional"
                             asp-route-direction="@RoomDirection.Right">
-                            Create ⇨
+                            Create
                         </a>
                     }
                 </div>
