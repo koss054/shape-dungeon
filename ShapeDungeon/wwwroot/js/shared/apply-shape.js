@@ -8,14 +8,17 @@ const type = {
 }
 
 export function updateShape(shapeElement, shapeType, shapeColor) {
+    const nodeName = shapeElement.nodeName;
     let shapeStyle = type[shapeType];
 
-    if (shapeElement === undefined)
+    if (shapeElement === undefined || nodeName === undefined) {
         window.alert("Check the code, g, incorrect shape element passed to function.");
+        return;
+    }
 
     if (shapeStyle === undefined) {
         shapeStyle = type["missing"];
-        shapeElement.innerText = "Unrecognized shape!";
+        shapeElement.innerText = "Unrecognized shape type!";
     } else {
         shapeElement.innerText = "";
     }
