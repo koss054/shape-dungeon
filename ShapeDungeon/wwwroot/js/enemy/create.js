@@ -1,4 +1,7 @@
-﻿const radioBtns = document.getElementsByName("shape");
+﻿import { updateShape } from "../shared/apply-shape.js";
+import { enemyColor } from "../shared/colors.js";
+
+const radioBtns = document.getElementsByName("shape");
 const shape = document.getElementById("selected-shape");
 const strengthEl = document.getElementById("strength");
 const vigorEl = document.getElementById("vigor");
@@ -15,24 +18,8 @@ agilityEl.addEventListener("change", updateEnemyLevel);
 
 for (const radioBtn of radioBtns) {
     radioBtn.addEventListener("click", () => {
-        switch (radioBtn.id) {
-            case "square":
-                shape.setAttribute("style", "height:10rem;width:10rem;background-color:red");
-                setEnemyAttributes("square");
-                break;
-            case "triangle":
-                shape.setAttribute("style", "width:0;height:0;border-top: 5rem solid transparent;border-left: 10rem solid red;border-bottom: 5rem solid transparent");
-                setEnemyAttributes("triangle");
-                break;
-            case "circle":
-                shape.setAttribute("style", "height:10rem;width:10rem;background-color:red;border-radius:50%");
-                setEnemyAttributes("circle");
-                break;
-            default:
-                console.log("bruh, there's an error...");
-                break;
-        }
-
+        updateShape(shape, radioBtn.Id, enemyColor);
+        setEnemyAttributes(radioBtn.id);
         updateEnemyLevel();
     })
 }
