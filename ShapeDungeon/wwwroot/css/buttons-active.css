@@ -3,12 +3,20 @@
     position: absolute;
 }
 
+.void {
+    width: 10rem !important;
+}
+
 .up-dir-btn-move {
     transform: translate(-100%, -150%);
 }
 
 .up-dir-btn-scout {
     transform: translate(5%, -150%);
+}
+
+.up-dir-btn.void {
+    transform: translate(-50%, -150%);
 }
 
 .down-dir-btn {
@@ -22,6 +30,10 @@
 
 .down-dir-btn.scout {
     transform: translate(-5%, -150%);
+}
+
+.down-dir-btn.void {
+    transform: translate(50%, -150%);
 }
 
 .left-dir-btn {
@@ -38,6 +50,10 @@
     transform: translate(75%, -205%);
 }
 
+.left-dir-btn.void {
+    transform: translate(0%, -315%);
+}
+
 .right-dir-btn {
     rotate: 90deg;
     right: 0%;
@@ -50,4 +66,8 @@
 
 .right-dir-btn.scout {
     transform: translate(-75%, -205%);
+}
+
+.right-dir-btn.void {
+    transform: translate(0%, -315%);
 }
