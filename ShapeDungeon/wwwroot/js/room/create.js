@@ -183,6 +183,7 @@ function disableBottomRadioBtn() {
 function defaultRoomTypeChecked() {
     roomCreateBtn.setAttribute("disabled", "disabled");
     for (const btn of roomTypeBtnArr) {
+        if (btn.id == "enemy-room-option" && areNoEnemiesInRange()) continue;
         btn.addEventListener("click", function () { roomCreateBtn.removeAttribute("disabled") });
     }
 }
@@ -195,6 +196,12 @@ function disableRadioBtnOnDirectionalCreate() {
 }
 
 function enemyRoomSelected() {
+    if (areNoEnemiesInRange()) {
+        roomCreateBtn.setAttribute("disabled", "disabled");
+        return;
+    }
+
+    roomCreateBtn.removeAttribute("disabled")
     enemyShape.style.display = "block";
     enemyLevel.style.display = "block";
     enemySelect.addEventListener("change", updateShape);
@@ -250,4 +257,9 @@ function displayEnemyCricle(level) {
 function hideEnemyShape() {
     enemyShape.style.display = "none";
     enemyLevel.style.display = "none";
+}
+
+function areNoEnemiesInRange() {
+    const noEnemiesInRangeEl = document.getElementById("no-enemy-notification");
+    return noEnemiesInRangeEl !== null;
 }
