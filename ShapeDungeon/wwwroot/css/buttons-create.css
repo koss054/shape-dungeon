@@ -1,0 +1,29 @@
+﻿.fixed-dir-btn {
+    width: 7rem !important;
+    position: absolute;
+}
+
+.up-dir-btn {
+    transform: translate(-50%, -150%);
+    left: 50%;
+}
+
+.down-dir-btn {
+    transform: translate(50%, -150%);
+    rotate: 180deg;
+    bottom: 0%;
+    left: 50%;
+}
+
+.left-dir-btn {
+    transform: translate(15%, -250%);
+    rotate: -90deg;
+    top: 50%;
+}
+
+.right-dir-btn {
+    transform: translate(-15%, -250%);
+    rotate: 90deg;
+    right: 0%;
+    top: 50%;
+}

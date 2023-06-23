@@ -2,6 +2,7 @@
 @using ShapeDungeon.Helpers.Enums
 @model RoomNavDto
 
+<link rel="stylesheet" href="~/css/buttons-create.css" />
 <div class="col-sm-6 position-relative">
     <div id="room"
          class="position-absolute top-50 start-50 translate-middle"
@@ -11,29 +12,29 @@
              @if (Model.CanGoUp)
             {
                 <div id="move-up"
-                     class="position-absolute translate-middle-y"
-                     style="width:100%;top:-2.5rem;left:7.5rem">
+                     class="position-relative translate-middle-y"
+                     style="width:100%">
                     @if (Model.HasUpNeighbor)
                     {
                         <a 
                             type="button"
-                            class="btn btn-outline-dark"
+                            class="btn btn-outline-dark fixed-dir-btn up-dir-btn"
                             asp-controller="Room"
                             asp-action="Go"
                             asp-route-coordX="@Model.CoordX"
                             asp-route-coordY="@(Model.CoordY + 1)">
-                            Go ⇧
+                            Go
                         </a>
                     }
                     else
                     {
                         <a 
                             type="button"
-                            class="btn btn-outline-primary"
+                            class="btn btn-outline-primary fixed-dir-btn up-dir-btn"
                             asp-controller="Room"
                             asp-action="Directional"
                             asp-route-direction="@RoomDirection.Top">
-                            Create ⇧
+                            Create
                         </a>
                     }
                 </div>
@@ -42,29 +43,29 @@
             @if (Model.CanGoDown)
             {
                 <div id="move-down"
-                     class="position-absolute translate-middle-y"
-                     style="width:100%;bottom:-4.75rem;left:7.5rem">
+                     class="position-absolute"
+                     style="width:100%;height:100%">
                     @if (Model.HasDownNeighbor)
                     {
                         <a 
                             type="button"
-                            class="btn btn-outline-dark"
+                            class="btn btn-outline-dark fixed-dir-btn down-dir-btn"
                             asp-controller="Room"
                             asp-action="Go"
                             asp-route-coordX="@Model.CoordX"
                             asp-route-coordY="@(Model.CoordY - 1)">
-                            Go ⇩
+                            Go
                         </a>
                     }
                     else
                     {
                         <a 
                             type="button"
-                            class="btn btn-outline-primary"
+                            class="btn btn-outline-primary fixed-dir-btn down-dir-btn"
                             asp-controller="Room"
                             asp-action="Directional"
                             asp-route-direction="@RoomDirection.Bottom">
-                            Create ⇩
+                            Create
                         </a>
                     }
                 </div>
@@ -73,29 +74,29 @@
             @if (Model.CanGoLeft)
             {
                 <div id="move-left"
-                     class="position-absolute top-50 translate-middle"
-                     style="width:40%;left:-3.25rem;">
+                     class="position-absolute"
+                     style="width:100%;height:100%;">
                     @if (Model.HasLeftNeighbor)
                     {
                         <a 
                             type="button"
-                            class="btn btn-outline-dark"
+                            class="btn btn-outline-dark fixed-dir-btn left-dir-btn"
                             asp-controller="Room"
                             asp-action="Go"
                             asp-route-coordX="@(Model.CoordX - 1)"
                             asp-route-coordY="@Model.CoordY">
-                            Go ⇦
+                            Go
                         </a>
                     }
                     else
                     {
                         <a 
                             type="button"
-                            class="btn btn-outline-primary"
+                            class="btn btn-outline-primary fixed-dir-btn left-dir-btn"
                             asp-controller="Room"
                             asp-action="Directional"
                             asp-route-direction="@RoomDirection.Left">
-                            ⇦ Create
+                            Create
                         </a>
                     }
                 </div>
@@ -104,29 +105,29 @@
             @if (Model.CanGoRight)
             {
                 <div id="move-right"
-                     class="position-absolute top-50 translate-middle-y"
-                     style="width:40%;right:-9.5rem">
+                     class="position-absolute"
+                     style="width:100%;height:100%;">
                     @if (Model.HasRightNeighbor)
                     {
                         <a 
                             type="button"
-                            class="btn btn-outline-dark"
+                            class="btn btn-outline-dark fixed-dir-btn right-dir-btn"
                             asp-controller="Room"
                             asp-action="Go"
                             asp-route-coordX="@(Model.CoordX + 1)"
                             asp-route-coordY="@Model.CoordY">
-                            Go ⇨
+                            Go
                         </a>
                     }
                     else
                     {
                         <a 
                             type="button"
-                            class="btn btn-outline-primary"
+                            class="btn btn-outline-primary fixed-dir-btn right-dir-btn"
                             asp-controller="Room"
                             asp-action="Directional"
                             asp-route-direction="@RoomDirection.Right">
-                            Create ⇨
+                            Create
                         </a>
                     }
                 </div>

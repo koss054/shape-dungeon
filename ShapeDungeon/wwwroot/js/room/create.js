@@ -183,6 +183,7 @@ function disableBottomRadioBtn() {
 function defaultRoomTypeChecked() {
     roomCreateBtn.setAttribute("disabled", "disabled");
     for (const btn of roomTypeBtnArr) {
+        if (btn.id == "enemy-room-option" && areNoEnemiesInRange()) continue;
         btn.addEventListener("click", function () { roomCreateBtn.removeAttribute("disabled") });
     }
 }
@@ -195,6 +196,12 @@ function disableRadioBtnOnDirectionalCreate() {
 }
 
 function enemyRoomSelected() {
+    if (areNoEnemiesInRange()) {
+        roomCreateBtn.setAttribute("disabled", "disabled");
+        return;
+    }
+
+    roomCreateBtn.removeAttribute("disabled")
     enemyShape.style.display = "block";
     enemyLevel.style.display = "block";
     enemySelect.addEventListener("change", updateShape);
@@ -209,6 +216,8 @@ function enemyRoomSelected() {
 
         enemyLevelNum.innerText = level;
 
+        // TODO: Reduce code in this file, in order to import updateShape function and use it here
+        // Unable to use type="module", since the Create.cshtml file stops recognizing functions when used in <script></script>.
         switch (shapeLetter) {
             case "S":
                 enemyShape.setAttribute("style", "height:10rem;width:10rem;background-color:red");
@@ -224,6 +233,7 @@ function enemyRoomSelected() {
     }
 }
 
+// Functions used in Create.cshtml that become unrecognizable.
 function enableEnemyShapeDisplay() {
     enemyShape.style.display = "block";
     enemyLevel.style.display = "block";
@@ -247,4 +257,9 @@ function displayEnemyCricle(level) {
 function hideEnemyShape() {
     enemyShape.style.display = "none";
     enemyLevel.style.display = "none";
+}
+
+function areNoEnemiesInRange() {
+    const noEnemiesInRangeEl = document.getElementById("no-enemy-notification");
+    return noEnemiesInRangeEl !== null;
 }
