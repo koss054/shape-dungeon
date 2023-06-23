@@ -12,7 +12,19 @@
         <div id="move-up"
              class="position-absolute"
              style="width:100%;">
-            @if (Model.HasUpNeighbor)
+            @if (Model.CanGoUp && !Model.HasUpNeighbor)
+            {
+                <a class="btn btn-outline-danger disabled fixed-dir-btn up-dir-btn void">
+                    Void!
+                </a>
+            }
+            else if (Model.IsUpDeadEnd)
+            {
+                <a class="btn btn-outline-warning disabled fixed-dir-btn up-dir-btn void">
+                    Dead End!
+                </a>
+            }
+            else if (Model.HasUpNeighbor)
             {
                 @if (Model.IsActiveForMove)
                 {
@@ -39,16 +51,24 @@
                 }
                 
             }
-            else if (Model.CanGoUp)
-            {
-                <button type="button" class="btn btn-outline-danger fixed-dir-btn up-dir-btn void" disabled>Void!</button>
-            }
         </div>
 
         <div id="move-down"
              class="position-absolute"
              style="width:100%;height:100%;">
-            @if (Model.HasDownNeighbor)
+            @if (Model.CanGoDown && !Model.HasDownNeighbor)
+            {
+                <a class="btn btn-outline-danger disabled fixed-dir-btn down-dir-btn void">
+                    Void!
+                </a>
+            }
+            else if (Model.IsDownDeadEnd)
+            {
+                <a class="btn btn-outline-warning disabled fixed-dir-btn down-dir-btn void">
+                    Dead End!
+                </a>
+            }
+            else if (Model.HasDownNeighbor)
             {
                 @if (Model.IsActiveForMove)
                 {
@@ -74,16 +94,24 @@
                     </a> 
                 }
             }
-            else if (Model.CanGoDown)
-            {
-                <button type="button" class="btn btn-outline-danger fixed-dir-btn down-dir-btn void" disabled>Void!</button>
-            }
         </div>
 
         <div id="move-left"
              class="position-absolute"
              style="width:100%;height:100%;">
-            @if (Model.HasLeftNeighbor)
+            @if (Model.CanGoLeft && !Model.HasLeftNeighbor)
+            {
+                <a class="btn btn-outline-danger disabled fixed-dir-btn left-dir-btn void">
+                    Void!
+                </a>
+            }
+            else if (Model.IsLeftDeadEnd)
+            {
+                <a class="btn btn-outline-warning disabled fixed-dir-btn left-dir-btn void">
+                    Dead End!
+                </a>
+            }
+            else if (Model.HasLeftNeighbor)
             {
                 @if (Model.IsActiveForMove)
                 {
@@ -109,16 +137,22 @@
                     </a> 
                 }
             }
-            else if (Model.CanGoLeft)
-            {
-                <button type="button" class="btn btn-outline-danger fixed-dir-btn left-dir-btn void" disabled>Void!</button>
-            }
         </div>
 
         <div id="move-right"
              class="position-absolute"
              style="width:100%;height:100%;">
-            @if (Model.HasRightNeighbor)
+            @if (Model.CanGoRight && !Model.HasRightNeighbor)
+            {
+                <button type="button" class="btn btn-outline-danger fixed-dir-btn right-dir-btn void" disabled>Void!</button>
+            }
+            else if (Model.IsRightDeadEnd)
+            {
+                <a class="btn btn-outline-warning disabled fixed-dir-btn right-dir-btn void">
+                    Dead End!
+                </a>
+            }
+            else if (Model.HasRightNeighbor)
             {
                 @if (Model.IsActiveForMove)
                 {
@@ -143,10 +177,6 @@
                         Scout
                     </a> 
                 }
-            }
-            else if (Model.CanGoRight)
-            {
-                <button type="button" class="btn btn-outline-danger fixed-dir-btn right-dir-btn void" disabled>Void!</button>
             }
         </div>
 
