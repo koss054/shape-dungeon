@@ -1,4 +1,5 @@
 ﻿using ShapeDungeon.Entities;
+using ShapeDungeon.Helpers.Enums;
 
 namespace ShapeDungeon.Repos
 {
@@ -58,5 +59,15 @@ namespace ShapeDungeon.Repos
         Task AddAsync(Room room);
 
         void Update(Room room);
+
+        /// <summary>
+        /// Checks if the player can enter a room with provided coords from provided direction.
+        /// </summary>
+        /// <param name="coordX">The X coordinate of the room that is being checked.</param>
+        /// <param name="coordY">The Y coordinate of the room that is being checked.</param>
+        /// <param name="direction">The direction from which the player will be entering the checked room.</param>
+        /// <returns>True, if there's no dead end. False, if it's a dead end.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">If incorrect direction enum is provided exception is thrown.</exception>
+        Task<bool> CanEnterRoomFromDirection(int coordX, int coordY, RoomDirection direction);
     }
 }

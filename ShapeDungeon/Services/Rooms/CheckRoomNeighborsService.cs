@@ -23,25 +23,29 @@ namespace ShapeDungeon.Services.Rooms
                 if (currRoom.CanGoLeft)
                 {
                     currRoom.HasLeftNeighbor = await IsRoomWithCoordsValidAsync(coordX - 1, coordY);
-                    currRoom.IsLeftDeadEnd = !(await CanEnterRoomWithCoordsFromDirection(coordX - 1, coordY, RoomDirection.Left));
+                    currRoom.IsLeftDeadEnd = !(await _roomRepository
+                        .CanEnterRoomFromDirection(coordX - 1, coordY, RoomDirection.Left));
                 }
 
                 if (currRoom.CanGoRight)
                 {
                     currRoom.HasRightNeighbor = await IsRoomWithCoordsValidAsync(coordX + 1, coordY);
-                    currRoom.IsRightDeadEnd = !(await CanEnterRoomWithCoordsFromDirection(coordX + 1, coordY, RoomDirection.Right));
+                    currRoom.IsRightDeadEnd = !(await _roomRepository
+                        .CanEnterRoomFromDirection(coordX + 1, coordY, RoomDirection.Right));
                 }
 
                 if (currRoom.CanGoUp)
                 {
                     currRoom.HasUpNeighbor = await IsRoomWithCoordsValidAsync(coordX, coordY + 1);
-                    currRoom.IsUpDeadEnd = !(await CanEnterRoomWithCoordsFromDirection(coordX, coordY + 1, RoomDirection.Top));
+                    currRoom.IsUpDeadEnd = !(await _roomRepository
+                        .CanEnterRoomFromDirection(coordX, coordY + 1, RoomDirection.Top));
                 }
 
                 if (currRoom.CanGoDown)
                 {
                     currRoom.HasDownNeighbor = await IsRoomWithCoordsValidAsync(coordX, coordY - 1);
-                    currRoom.IsDownDeadEnd = !(await CanEnterRoomWithCoordsFromDirection(coordX, coordY - 1, RoomDirection.Bottom));
+                    currRoom.IsDownDeadEnd = !(await _roomRepository
+                        .CanEnterRoomFromDirection(coordX, coordY - 1, RoomDirection.Bottom));
                 }
             }
 
@@ -81,26 +85,6 @@ namespace ShapeDungeon.Services.Rooms
         {
             var room = await _roomRepository.GetByCoords(coordX, coordY);
             return room != null;
-        }
-
-        private async Task<bool> CanEnterRoomWithCoordsFromDirection(int coordX, int coordY, RoomDirection direction)
-        {
-            var room = await _roomRepository.GetByCoords(coordX, coordY);
-            var canGo = false;
-
-            if (room != null)
-            {
-                switch (direction)
-                {
-                    case RoomDirection.Left: canGo = room.CanGoRight; break;
-                    case RoomDirection.Right: canGo = room.CanGoLeft;  break;
-                    case RoomDirection.Top: canGo = room.CanGoDown;  break;
-                    case RoomDirection.Bottom: canGo = room.CanGoUp; break;
-                    default: throw new ArgumentOutOfRangeException(nameof(direction));
-                }
-            }
-
-            return canGo;
         }
     }
 }
