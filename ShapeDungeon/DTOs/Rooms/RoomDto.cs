@@ -24,6 +24,10 @@ namespace ShapeDungeon.DTOs.Rooms
         public bool HasRightNeighbor { get; set; }
         public bool HasUpNeighbor { get; set; }
         public bool HasDownNeighbor { get; set; }
+        public bool IsLeftDeadEnd { get; set; }
+        public bool IsRightDeadEnd { get; set; }
+        public bool IsUpDeadEnd { get; set; }
+        public bool IsDownDeadEnd { get; set; }
 
         public static implicit operator RoomDto(Room room)
             => new()

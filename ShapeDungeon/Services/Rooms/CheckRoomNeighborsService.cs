@@ -1,4 +1,5 @@
 ﻿using ShapeDungeon.DTOs.Rooms;
+using ShapeDungeon.Helpers.Enums;
 using ShapeDungeon.Interfaces.Services.Rooms;
 using ShapeDungeon.Repos;
 
@@ -20,16 +21,32 @@ namespace ShapeDungeon.Services.Rooms
             if (currRoom != null)
             {
                 if (currRoom.CanGoLeft)
+                {
                     currRoom.HasLeftNeighbor = await IsRoomWithCoordsValidAsync(coordX - 1, coordY);
+                    currRoom.IsLeftDeadEnd = !(await _roomRepository
+                        .CanEnterRoomFromDirection(coordX - 1, coordY, RoomDirection.Left));
+                }
 
                 if (currRoom.CanGoRight)
+                {
                     currRoom.HasRightNeighbor = await IsRoomWithCoordsValidAsync(coordX + 1, coordY);
+                    currRoom.IsRightDeadEnd = !(await _roomRepository
+                        .CanEnterRoomFromDirection(coordX + 1, coordY, RoomDirection.Right));
+                }
 
                 if (currRoom.CanGoUp)
+                {
                     currRoom.HasUpNeighbor = await IsRoomWithCoordsValidAsync(coordX, coordY + 1);
+                    currRoom.IsUpDeadEnd = !(await _roomRepository
+                        .CanEnterRoomFromDirection(coordX, coordY + 1, RoomDirection.Top));
+                }
 
                 if (currRoom.CanGoDown)
+                {
                     currRoom.HasDownNeighbor = await IsRoomWithCoordsValidAsync(coordX, coordY - 1);
+                    currRoom.IsDownDeadEnd = !(await _roomRepository
+                        .CanEnterRoomFromDirection(coordX, coordY - 1, RoomDirection.Bottom));
+                }
             }
 
             return currRoom;
@@ -41,6 +58,10 @@ namespace ShapeDungeon.Services.Rooms
             room.HasRightNeighbor = roomNav.HasRightNeighbor;
             room.HasUpNeighbor = roomNav.HasUpNeighbor;
             room.HasDownNeighbor = roomNav.HasDownNeighbor;
+            room.IsLeftDeadEnd = roomNav.IsLeftDeadEnd;
+            room.IsRightDeadEnd = roomNav.IsRightDeadEnd;
+            room.IsUpDeadEnd = roomNav.IsUpDeadEnd;
+            room.IsDownDeadEnd = roomNav.IsDownDeadEnd;
             return room;
         }
 

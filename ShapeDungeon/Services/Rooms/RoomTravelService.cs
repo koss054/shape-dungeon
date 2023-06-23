@@ -36,20 +36,20 @@ namespace ShapeDungeon.Services.Rooms
             switch (direction)
             {
                 case RoomDirection.Left: 
-                    if (oldRoom.CanGoLeft)
-                        coordX--;  
+                    var isLeftDeadEnd = !(await _roomRepository.CanEnterRoomFromDirection(coordX - 1, coordY, RoomDirection.Left));
+                    if (oldRoom.CanGoLeft && !isLeftDeadEnd) coordX--;
                     break;
-                case RoomDirection.Right: 
-                    if (oldRoom.CanGoRight)
-                        coordX++;  
+                case RoomDirection.Right:
+                    var isRightDeadEnd = !(await _roomRepository.CanEnterRoomFromDirection(coordX + 1, coordY, RoomDirection.Right));
+                    if (oldRoom.CanGoRight && !isRightDeadEnd) coordX++;  
                     break;
                 case RoomDirection.Top: 
-                    if (oldRoom.CanGoUp)
-                        coordY++; 
+                    var isUpDeadEnd = !(await _roomRepository.CanEnterRoomFromDirection(coordX, coordY + 1, RoomDirection.Top));
+                    if (oldRoom.CanGoUp && !isUpDeadEnd) coordY++; 
                     break;
                 case RoomDirection.Bottom: 
-                    if (oldRoom.CanGoDown)
-                        coordY--;  
+                    var isDownDeadEnd = !(await _roomRepository.CanEnterRoomFromDirection(coordX, coordY - 1, RoomDirection.Bottom));
+                    if (oldRoom.CanGoDown && !isDownDeadEnd) coordY--;  
                     break;
                 default: throw new ArgumentOutOfRangeException(nameof(direction));
             }

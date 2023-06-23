@@ -23,7 +23,7 @@
 }
 
 .left-dir-btn.void, .left-dir-btn.scout {
-    transform: translate(0%, -315%);
+    transform: translate(8%, -315%);
 }
 
 .right-dir-btn {
@@ -33,5 +33,5 @@
 }
 
 .right-dir-btn.void, .right-dir-btn.scout {
-    transform: translate(0%, -315%);
+    transform: translate(-8%, -315%);
 }

@@ -51,7 +51,7 @@
 }
 
 .left-dir-btn.void {
-    transform: translate(0%, -315%);
+    transform: translate(8%, -315%);
 }
 
 .right-dir-btn {
@@ -69,5 +69,5 @@
 }
 
 .right-dir-btn.void {
-    transform: translate(0%, -315%);
+    transform: translate(-8%, -315%);
 }
