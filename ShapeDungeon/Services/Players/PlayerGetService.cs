@@ -37,5 +37,8 @@ namespace ShapeDungeon.Services.Players
 
             return playerDto;
         }
+
+        public async Task<PlayerDto> GetActivePlayer()
+            => await _playerRepository.GetActive();
     }
 }

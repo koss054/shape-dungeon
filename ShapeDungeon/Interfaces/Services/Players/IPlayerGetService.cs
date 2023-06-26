@@ -6,5 +6,6 @@ namespace ShapeDungeon.Interfaces.Services.Players
     {
         Task<IEnumerable<PlayerDto>> GetAllPlayersAsync();
         Task<PlayerDto> GetPlayerAsync(string name);
+        Task<PlayerDto> GetActivePlayer();
     }
 }

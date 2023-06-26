@@ -18,16 +18,6 @@ namespace ShapeDungeon.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index()
-        {
-            var playerList = await _playerGetService.GetAllPlayersAsync();
-            if (playerList.Count() == 0)
-                return RedirectToAction("Create");
-
-            return View(playerList);
-        }
-
-        [HttpGet]
         public IActionResult Create()
         {
             var model = new PlayerDto();
@@ -52,6 +42,13 @@ namespace ShapeDungeon.Controllers
             }
 
             return RedirectToAction("Active", "Home");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Current()
+        {
+            var activePlayer = await _playerGetService.GetActivePlayer();
+            return View(activePlayer);
         }
     }
 }
