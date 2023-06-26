@@ -77,6 +77,12 @@ namespace ShapeDungeon.Controllers
         public async Task<IActionResult> Directional(RoomDirection direction)
         {
             var roomDetails = await _roomCreateService.InitializeRoomAsync(direction);
+            if (await _roomCreateService.AreCoordsInUse(roomDetails.CoordX, roomDetails.CoordY))
+            {
+                TempData["error"] = "bruh, there's already a room with these coords";
+                return RedirectToAction("Create");
+            }
+
             var enemyRange = await _enemyService.GetRangeAsync(GetLevel("min"), GetLevel("max"));
             var room = new RoomCreateDto() { Details = roomDetails, EnemyRange = enemyRange };
             return View(room);
