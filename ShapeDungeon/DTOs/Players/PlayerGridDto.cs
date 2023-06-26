@@ -6,6 +6,7 @@ namespace ShapeDungeon.DTOs.Players
     public class PlayerGridDto
     {
         public Guid Id { get; init; }
+        public bool IsActive { get; init; }
         public string Name { get; init; }
             = null!;
         public int Level { get; init; }
@@ -18,6 +19,7 @@ namespace ShapeDungeon.DTOs.Players
             => new()
             {
                 Id = player.Id,
+                IsActive = player.IsActive,
                 Name = player.Name,
                 Level = player.Level,
                 Strength = player.Strength,
