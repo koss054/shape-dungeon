@@ -50,5 +50,12 @@ namespace ShapeDungeon.Controllers
             var activePlayer = await _playerGetService.GetActivePlayer();
             return View(activePlayer);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Select()
+        {
+            var playerList = await _playerGetService.GetAllPlayersAsync();
+            return View(playerList);
+        }
     }
 }
