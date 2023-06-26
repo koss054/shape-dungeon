@@ -4,6 +4,12 @@
     gap: 0.5rem;
 }
 
+#f-switch-info {
+    font-style: italic;
+    font-size: 0.6rem;
+    color: dimgray;
+}
+
 .stat-text {
     margin-right: 1rem;
 }
