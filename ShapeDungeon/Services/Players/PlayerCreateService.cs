@@ -34,7 +34,7 @@ namespace ShapeDungeon.Services.Players
                 Strength = pDto.Strength,
                 Vigor = pDto.Vigor,
                 Agility = pDto.Agility,
-                Level = 1,
+                Level = pDto.Strength + pDto.Vigor + pDto.Agility,
                 CurrentExp = 0,
                 ExpToNextLevel = 100,
                 CurrentSkillpoints = 0,
