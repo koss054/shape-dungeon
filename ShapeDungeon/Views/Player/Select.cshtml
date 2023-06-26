@@ -1,0 +1,47 @@
+﻿@using ShapeDungeon.DTOs.Players
+@using ShapeDungeon.Entities.Enums
+@model IEnumerable<PlayerGridDto>
+
+@{
+    ViewBag.Title = "Select Player";
+}
+
+<link rel="stylesheet" href="~/css/player/grid.css" />
+<h2 style="text-align:center;margin-bottom:2rem">@ViewBag.Title</h2>
+<div class="selection-grid">
+    @foreach (var player in Model)
+    {
+        <div class="player-card">
+            @if (player.IsActive)
+            {
+                <h4>@player.Name</h4>
+            }
+            else
+            {
+                <h6 style="color:#a8a8a8">@player.Name</h6>
+            }
+
+            @switch (player.Shape)
+            {
+                case Shape.Square:
+                    <div id="@player.Id"
+                        style="height:10rem;width:10rem;background-color:limegreen">
+                    </div>
+                    break;
+                case Shape.Triangle:
+                    <div id="@player.Id"
+                        style="width:0;height:0;border-top: 5rem solid transparent;border-left: 10rem solid limegreen;border-bottom: 5rem solid transparent">
+                    </div>
+                    break;
+                case Shape.Circle:
+                default:
+                    <div id="@player.Id"
+                        style="height:10rem;width:10rem;background-color:limegreen;border-radius:50%">
+                    </div>
+                    break;
+            }
+
+            <h4>Lvl.@player.Level</h4>
+        </div>
+    }
+</div>
