@@ -29,8 +29,15 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Active">Go to Active Room</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Player" asp-action="Create">Create Player</a>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle bttr-dropdown" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                                Player
+                            </a>
+                            <div class="dropdown-menu" style="">
+                                <a class="dropdown-item" asp-controller="Player" asp-action="Current">Current Player</a>
+                                <a class="dropdown-item" asp-controller="Player" asp-action="Select">Select Player</a>
+                                <a class="dropdown-item" asp-controller="Player" asp-action="Create">Create Player</a>
+                            </div>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Room" asp-action="Create">Create Room</a>
