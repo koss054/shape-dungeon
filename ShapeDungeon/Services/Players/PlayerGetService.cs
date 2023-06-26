@@ -13,14 +13,14 @@ namespace ShapeDungeon.Services.Players
             _playerRepository = playerRepository;
         }
 
-        public async Task<IEnumerable<PlayerDto>> GetAllPlayersAsync()
+        public async Task<IEnumerable<PlayerGridDto>> GetAllPlayersAsync()
         {
             var players = await _playerRepository.GetAll();
-            var playersDto = new List<PlayerDto>();
+            var playersDto = new List<PlayerGridDto>();
 
             foreach (var player in players)
             {
-                PlayerDto playerDto = player;
+                PlayerGridDto playerDto = player;
                 playersDto.Add(playerDto);
             }
 

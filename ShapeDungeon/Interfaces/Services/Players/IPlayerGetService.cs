@@ -4,7 +4,7 @@ namespace ShapeDungeon.Interfaces.Services.Players
 {
     public interface IPlayerGetService
     {
-        Task<IEnumerable<PlayerDto>> GetAllPlayersAsync();
+        Task<IEnumerable<PlayerGridDto>> GetAllPlayersAsync();
         Task<PlayerDto> GetPlayerAsync(string name);
         Task<PlayerDto> GetActivePlayer();
     }
