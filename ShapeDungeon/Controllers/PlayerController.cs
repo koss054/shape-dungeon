@@ -6,17 +6,21 @@ namespace ShapeDungeon.Controllers
 {
     public class PlayerController : Controller
     {
-        private readonly IPlayerService _playerService;
+        private readonly IPlayerCreateService _playerCreateService;
+        private readonly IPlayerGetService _playerGetService;
 
-        public PlayerController(IPlayerService playerService)
+        public PlayerController(
+            IPlayerCreateService playerCreateService, 
+            IPlayerGetService playerGetService)
         {
-            _playerService = playerService;
+            _playerCreateService = playerCreateService;
+            _playerGetService = playerGetService;
         }
 
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var playerList = await _playerService.GetAllPlayersAsync();
+            var playerList = await _playerGetService.GetAllPlayersAsync();
             if (playerList.Count() == 0)
                 return RedirectToAction("Create");
 
@@ -39,7 +43,7 @@ namespace ShapeDungeon.Controllers
                 return RedirectToAction("Create");
             }
 
-            var isCreated = await _playerService.CreatePlayerAsync(player);
+            var isCreated = await _playerCreateService.CreatePlayerAsync(player);
 
             if (!isCreated)
             {
