@@ -8,5 +8,6 @@ namespace ShapeDungeon.Interfaces.Services.Rooms
     {
         Task<Room> CreateAsync(RoomDetailsDto roomDto);
         Task<RoomDetailsDto> InitializeRoomAsync(RoomDirection roomDirection);
+        Task<bool> AreCoordsInUse(int coordX, int coordY);
     }
 }

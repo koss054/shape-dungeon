@@ -20,6 +20,13 @@
     </div>
 </div>
 
+@if (@TempData["error"] != null)
+{
+    <script>
+        toastr.error("Bruh, you updated the URL manually, didn't you'? :D");
+    </script>
+}
+
 <script src=~/js/room/create.js></script>
 
 @if (Model.Details.IsActiveForEdit)

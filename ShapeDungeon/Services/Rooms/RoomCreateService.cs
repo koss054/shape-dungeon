@@ -2,7 +2,6 @@
 using ShapeDungeon.DTOs.Rooms;
 using ShapeDungeon.Entities;
 using ShapeDungeon.Helpers.Enums;
-using ShapeDungeon.Interfaces.Entity;
 using ShapeDungeon.Interfaces.Services.Rooms;
 using ShapeDungeon.Repos;
 
@@ -74,5 +73,8 @@ namespace ShapeDungeon.Services.Rooms
             roomDto.CoordY = coordY;
             return roomDto;
         }
+
+        public async Task<bool> AreCoordsInUse(int coordX, int coordY)
+            => await _roomRepository.GetByCoords(coordX, coordY) != null;
     }
 }
