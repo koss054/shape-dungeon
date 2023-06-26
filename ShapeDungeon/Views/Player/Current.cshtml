@@ -1,0 +1,106 @@
+﻿@using ShapeDungeon.DTOs.Players
+@model PlayerDto
+
+@{
+    ViewBag.Title = "Current Player";
+}
+
+<link rel="stylesheet" href="~/css/buttons-small.css" />
+<link rel="stylesheet" href="~/css/player-stats.css" />
+
+<div id="stat-confirmation" class="hidden" style="position:absolute">
+    <div id="confirmation-window">
+        <h3>Are you sure you want to increase <span id="stat-name">STAT</span> by 1?</h3>
+        <a id="strength-yes-btn" class="btn btn-outline-success stat-btn hidden"
+        asp-controller="Player" asp-action="Bruhy Strength">
+            Yes
+        </a>
+        <a id="vigor-yes-btn" class="btn btn-outline-success stat-btn hidden"
+        asp-controller="Player" asp-action="Bruhy Vigor">
+            Yes
+        </a>
+        <a id="agility-yes-btn" class="btn btn-outline-success stat-btn hidden"
+        asp-controller="Player" asp-action="Bruhy Agility">
+            Yes
+        </a>
+        <a id="no-btn" class="btn btn-outline-danger stat-btn">No</a>
+    </div>
+</div>
+
+<div class="container" style="width:100vw;height:75vh">
+    <div class="row text-center mt-4" style="height:10%">
+        <h2>@ViewBag.Title</h2>
+        <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" id="fast-level-up-switch">
+            <label class="form-check-label" for="fast-level-up-switch">Fast Stat Upgrade</label>
+        </div>
+    </div>
+    <div class="row align-items-center" style="height:80%">
+        <div class="col-sm-6">
+            <div class="form-group row">
+                <input type="text" id="player-name" class="form-control text-center" style="background:white!important"
+                asp-for="@Model.Name" disabled />
+            </div>
+
+            <hr class="border-3 border-top border-success">
+
+            <div class="btn-group" role="group" aria-label="@Model.Name's Shape:" style="width:100%">
+                <input type="radio" class="btn-check" id="player-shape" checked>
+                <label class="btn btn-outline-success" style="cursor:default" for="square">@Model.Shape</label>
+            </div>
+
+            <hr class="border-3 border-top border-success">
+
+            <div id="bar-text">
+                <span class="small-bar-text">(Current Exp)</span>
+                <span class="bar-heading">Current Skillpoints: @Model.CurrentSkillpoints</span>
+                <span class="small-bar-text">(Exp to Next Level)</span>
+            </div>
+            <div class="progress position-relative" style="width:100%">
+                <div class="progress-bar bg-success" role="progressbar" id="level-bar"
+                     aria-valuenow="@Model.CurrentExp" aria-valuemin="0" aria-valuemax="@Model.ExpToNextLevel">
+                </div>
+                <span class="position-absolute" id="curr-xp" style="right:95%;color:lightgray">@Model.CurrentExp</span>
+                <span class="position-absolute" id="required-xp" style="left:95%;color:white">@Model.ExpToNextLevel</span>
+            </div>
+
+            <hr class="border-3 border-top border-success">
+
+            <div style="display:flex;justify-content:space-between;align-items:center">
+                <label class="stat-text" for="strength">Strength:</label>
+                <div>
+                    <input type="text" readonly class="form-control-plaintext stat-number" id="strength" asp-for="@Model.Strength" value="2">
+                </div>
+                <a id="strength-plus" class="btn btn-outline-success btn-small stat-btn">+</a>
+
+                <label class="stat-text" for="vigor">Vigor:</label>
+                <div>
+                    <input type="text" readonly class="form-control-plaintext stat-number" id="vigor" asp-for="@Model.Vigor" value="5">
+                </div>
+                <a id="vigor-plus" class="btn btn-outline-success btn-small stat-btn">+</a>
+
+                <label class="stat-text" for="agility">Agility:</label>
+                <div>
+                    <input type="text" readonly class="form-control-plaintext stat-number" id="agility" asp-for="@Model.Agility" value="1">
+                </div>
+                <a id="agility-plus" class="btn btn-outline-success btn-small stat-btn">+</a>
+            </div>
+        </div>
+
+        <div class="col-sm-5 position-relative">
+            <div id="selected-shape"
+                 style="height:10rem;width:10rem;background-color:limegreen"
+                 class="position-absolute top-50 start-50 translate-middle">
+            </div>
+        </div>
+    </div>
+</div>
+
+@*TODO: Turn scripts into bundle files.*@
+<script src="~/js/player/level-bar.js"></script>
+<script src="~/js/player/toggle-skillpoint-btns.js"></script>
+<script src="~/js/player/level-up-skill.js" type="module"></script>
+<script>
+    updateBar(@Model.CurrentExp, @Model.ExpToNextLevel);
+    toggleSkillpointBtns(@Model.CurrentSkillpoints);
+</script>
