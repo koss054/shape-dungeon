@@ -8,13 +8,16 @@ namespace ShapeDungeon.Controllers
     {
         private readonly IPlayerCreateService _playerCreateService;
         private readonly IPlayerGetService _playerGetService;
+        private readonly IPlayerSelectService _playerSelectService;
 
         public PlayerController(
-            IPlayerCreateService playerCreateService, 
-            IPlayerGetService playerGetService)
+            IPlayerCreateService playerCreateService,
+            IPlayerGetService playerGetService, 
+            IPlayerSelectService playerSelectService)
         {
             _playerCreateService = playerCreateService;
             _playerGetService = playerGetService;
+            _playerSelectService = playerSelectService;
         }
 
         [HttpGet]
@@ -56,6 +59,13 @@ namespace ShapeDungeon.Controllers
         {
             var playerList = await _playerGetService.GetAllPlayersAsync();
             return View(playerList);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Switch(Guid newId)
+        {
+            await _playerSelectService.UpdateActivePlayer(newId);
+            return RedirectToAction("Select");
         }
     }
 }

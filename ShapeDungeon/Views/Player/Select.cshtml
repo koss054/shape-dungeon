@@ -21,7 +21,9 @@
             }
             else
             {
-                <a class="inactive-name">@player.Name</a>
+                <a class="inactive-name" asp-controller="Player" asp-action="Switch" asp-route-newId="@player.Id">
+                    @player.Name
+                </a>
             }
 
             @switch (player.Shape)
