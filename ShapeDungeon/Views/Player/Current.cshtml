@@ -1,4 +1,5 @@
 ﻿@using ShapeDungeon.DTOs.Players
+@using ShapeDungeon.Entities.Enums
 @model PlayerDto
 
 @{
@@ -91,10 +92,18 @@
         </div>
 
         <div class="col-sm-5 position-relative">
-            <div id="selected-shape"
-                 style="height:10rem;width:10rem;background-color:limegreen"
-                 class="position-absolute top-50 start-50 translate-middle">
-            </div>
+            @if (Model.Shape == Shape.Square)
+            {
+                <partial name="_ShapeSquarePlayer" />
+            }
+            else if (Model.Shape == Shape.Triangle)
+            {
+                <partial name="_ShapeTrianglePlayer" />
+            }
+            else if (Model.Shape == Shape.Circle)
+            {
+                <partial name="_ShapeCirclePlayer" />
+            }
         </div>
     </div>
 </div>
