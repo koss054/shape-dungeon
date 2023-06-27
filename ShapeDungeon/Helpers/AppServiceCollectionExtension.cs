@@ -23,6 +23,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddScoped<IPlayerCreateService, PlayerCreateService>();
             services.AddScoped<IPlayerGetService, PlayerGetService>();
             services.AddScoped<IPlayerScoutService, PlayerScoutService>();
+            services.AddScoped<IPlayerSelectService, PlayerSelectService>();
 
             // Enemy
             services.AddScoped<IEnemyService, EnemyService>();
