@@ -21,6 +21,16 @@
     margin-bottom: 0.5rem;
 }
 
+.active-name {
+    word-wrap: break-word;
+    text-align: center;
+    width: 100%;
+}
+
+.active-name.small {
+    font-size: 1.25rem;
+}
+
 .inactive-name {
     transition: font-size 0.5s;
     word-wrap: break-word;

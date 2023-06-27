@@ -17,7 +17,14 @@
         <div class="player-card">
             @if (player.IsActive)
             {
-                <h4>@player.Name</h4>
+                if (player.Name.Length > 16)
+                {
+                    <h4 class="active-name small">@player.Name</h4>
+                }
+                else
+                {
+                    <h4 class="active-name">@player.Name</h4>
+                }
             }
             else
             {
