@@ -17,14 +17,24 @@
     width: 25%;
 }
 
-.player-card h6 {
+.player-card div {
+    margin-bottom: 0.5rem;
+}
+
+.inactive-name {
+    transition: font-size 0.5s;
     word-wrap: break-word;
+    text-decoration: none;
     text-align: center;
+    font-size: 1rem;
+    cursor: pointer;
+    color: #a8a8a8;
     width: 100%;
 }
 
-.player-card div {
-    margin-bottom: 0.5rem;
+.inactive-name:hover {
+    font-size: 1.25rem;
+    color: #d1d1d1;
 }
 
 .selection-grid::-webkit-scrollbar {

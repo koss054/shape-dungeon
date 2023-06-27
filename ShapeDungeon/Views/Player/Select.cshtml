@@ -7,7 +7,10 @@
 }
 
 <link rel="stylesheet" href="~/css/player/grid.css" />
-<h2 style="text-align:center;margin-bottom:2rem">@ViewBag.Title</h2>
+<h2 style="text-align:center;margin-bottom:0">@ViewBag.Title</h2>
+<p style="text-align:center;margin-bottom:2rem;font-style:italic;font-size:0.65rem;">
+    (by clicking on a name)
+</p>
 <div class="selection-grid">
     @foreach (var player in Model)
     {
@@ -18,7 +21,7 @@
             }
             else
             {
-                <h6 style="color:#a8a8a8">@player.Name</h6>
+                <a class="inactive-name">@player.Name</a>
             }
 
             @switch (player.Shape)
@@ -41,7 +44,14 @@
                     break;
             }
 
-            <h4>Lvl.@player.Level</h4>
+            @if (player.IsActive)
+            {
+                <h4>Lvl.@player.Level</h4>
+            }
+            else
+            {
+                <h6 style="color:#a8a8a8">Lvl.@player.Level</h6>
+            }
         </div>
     }
 </div>
