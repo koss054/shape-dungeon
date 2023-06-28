@@ -18,11 +18,8 @@ namespace ShapeDungeon.Services.Players
             var players = await _playerRepository.GetAll();
             var playersDto = new List<PlayerGridDto>();
 
-            foreach (var player in players)
-            {
-                PlayerGridDto playerDto = player;
-                playersDto.Add(playerDto);
-            }
+            foreach (var player in players) 
+                playersDto.Add(player);
 
             return playersDto;
         }
