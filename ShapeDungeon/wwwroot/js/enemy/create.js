@@ -18,7 +18,7 @@ agilityEl.addEventListener("change", updateEnemyLevel);
 
 for (const radioBtn of radioBtns) {
     radioBtn.addEventListener("click", () => {
-        updateShape(shape, radioBtn.Id, enemyColor);
+        updateShape(shape, radioBtn.id, enemyColor);
         setEnemyAttributes(radioBtn.id);
         updateEnemyLevel();
     })
