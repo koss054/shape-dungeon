@@ -25,6 +25,12 @@ namespace ShapeDungeon.Repos
         Task<Player?> GetByName(string name);
 
         /// <summary>
+        /// </summary>
+        /// <param name="id">Id of the player that we want to return.</param>
+        /// <returns>Player with matching id or null.</returns>
+        Task<Player?> GetById(Guid id);
+
+        /// <summary>
         /// Many players can be present and selected.
         /// </summary>
         /// <returns>List of all created players.</returns>

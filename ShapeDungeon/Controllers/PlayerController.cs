@@ -1,26 +1,27 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ShapeDungeon.DTOs.Players;
+using ShapeDungeon.Helpers.Enums;
 using ShapeDungeon.Interfaces.Services.Players;
 
 namespace ShapeDungeon.Controllers
 {
     public class PlayerController : Controller
     {
-        private readonly IPlayerService _playerService;
+        private readonly IPlayerCreateService _playerCreateService;
+        private readonly IPlayerGetService _playerGetService;
+        private readonly IPlayerSelectService _playerSelectService;
+        private readonly IPlayerUpdateService _playerUpdateService;
 
-        public PlayerController(IPlayerService playerService)
+        public PlayerController(
+            IPlayerCreateService playerCreateService,
+            IPlayerGetService playerGetService,
+            IPlayerSelectService playerSelectService, 
+            IPlayerUpdateService playerUpdateService)
         {
-            _playerService = playerService;
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> Index()
-        {
-            var playerList = await _playerService.GetAllPlayersAsync();
-            if (playerList.Count() == 0)
-                return RedirectToAction("Create");
-
-            return View(playerList);
+            _playerCreateService = playerCreateService;
+            _playerGetService = playerGetService;
+            _playerSelectService = playerSelectService;
+            _playerUpdateService = playerUpdateService;
         }
 
         [HttpGet]
@@ -39,7 +40,7 @@ namespace ShapeDungeon.Controllers
                 return RedirectToAction("Create");
             }
 
-            var isCreated = await _playerService.CreatePlayerAsync(player);
+            var isCreated = await _playerCreateService.CreatePlayerAsync(player);
 
             if (!isCreated)
             {
@@ -48,6 +49,34 @@ namespace ShapeDungeon.Controllers
             }
 
             return RedirectToAction("Active", "Home");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Current()
+        {
+            var activePlayer = await _playerGetService.GetActivePlayer();
+            return View(activePlayer);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Select()
+        {
+            var playerList = await _playerGetService.GetAllPlayersAsync();
+            return View(playerList);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Switch(Guid newId)
+        {
+            await _playerSelectService.UpdateActivePlayer(newId);
+            return RedirectToAction("Select");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Increase(CharacterStat statToIncrease)
+        {
+            await _playerUpdateService.IncreaseStat(statToIncrease);
+            return RedirectToAction("Current");
         }
     }
 }

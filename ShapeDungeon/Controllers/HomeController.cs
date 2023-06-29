@@ -8,25 +8,25 @@ namespace ShapeDungeon.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly IPlayerService _playerService;
         private readonly IGetRoomService _getRoomService;
         private readonly IRoomEnemyService _roomEnemyService;
         private readonly IRoomTravelService _roomTravelService;
+        private readonly IPlayerGetService _playerGetService;
         private readonly IPlayerScoutService _playerScoutService;
         private readonly ICheckRoomNeighborsService _checkRoomNeighborsService;
 
         public HomeController(
-            IPlayerService playerService,
             IGetRoomService getRoomService,
             IRoomEnemyService roomEnemyService,
             IRoomTravelService roomTravelService,
+            IPlayerGetService playerGetService,
             IPlayerScoutService playerScoutService,
             ICheckRoomNeighborsService checkRoomNeighborsService)
         {
-            _playerService = playerService;
             _getRoomService = getRoomService;
             _roomEnemyService = roomEnemyService;
             _roomTravelService = roomTravelService;
+            _playerGetService = playerGetService;
             _playerScoutService = playerScoutService;
             _checkRoomNeighborsService = checkRoomNeighborsService;
         }
@@ -39,7 +39,7 @@ namespace ShapeDungeon.Controllers
             await _roomTravelService.IsScoutResetAsync(); // Doing this if player changes the URL manually.
             await _playerScoutService.UpdateActiveScoutEnergyAsync(PlayerScoutAction.Refill);
 
-            var player = await _playerService.GetPlayerAsync("Squary Lvl.8");
+            var player = await _playerGetService.GetActivePlayer();
             if (player == null)
             {
             }
@@ -69,7 +69,7 @@ namespace ShapeDungeon.Controllers
         [HttpGet]
         public async Task<IActionResult> Scouting()
         {
-            var player = await _playerService.GetPlayerAsync("Squary Lvl.8");
+            var player = await _playerGetService.GetActivePlayer();
             if (player == null)
             {
             }

@@ -37,6 +37,13 @@ namespace ShapeDungeon.Repos
             => await this.Context.Players.FirstOrDefaultAsync(x => x.Name == name);
 
         /// <summary>
+        /// </summary>
+        /// <param name="id">Id of the player that we want to return.</param>
+        /// <returns>Player with matching id or null.</returns>
+        public async Task<Player?> GetById(Guid id)
+            => await this.Context.Players.FirstOrDefaultAsync(x => x.Id == id);
+
+        /// <summary>
         /// Many players can be present and selected.
         /// </summary>
         /// <returns>List of all created players.</returns>

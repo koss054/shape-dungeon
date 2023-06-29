@@ -2,10 +2,8 @@
 
 namespace ShapeDungeon.Interfaces.Services.Players
 {
-    public interface IPlayerService
+    public interface IPlayerCreateService
     {
         Task<bool> CreatePlayerAsync(PlayerDto pDto);
-        Task<IEnumerable<PlayerDto>> GetAllPlayersAsync();
-        Task<PlayerDto> GetPlayerAsync(string name);
     }
 }

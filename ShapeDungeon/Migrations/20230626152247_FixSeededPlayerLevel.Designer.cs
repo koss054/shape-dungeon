@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ShapeDungeon.Data;
 
@@ -10,9 +11,10 @@ using ShapeDungeon.Data;
 namespace ShapeDungeon.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230626152247_FixSeededPlayerLevel")]
+    partial class FixSeededPlayerLevel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.16");
@@ -157,7 +159,7 @@ namespace ShapeDungeon.Migrations
                             ExpToNextLevel = 100,
                             IsActive = true,
                             Level = 8,
-                            Name = "Squary",
+                            Name = "Squary Lvl.8",
                             Shape = 0,
                             Strength = 2,
                             Vigor = 5
