@@ -45,10 +45,7 @@ namespace ShapeDungeon.Services.Enemies
             var enemyDtos = new List<EnemyRangeDto>();
 
             foreach (var enemy in enemies)
-            {
-                EnemyRangeDto enemyDto = enemy;
-                enemyDtos.Add(enemyDto);
-            }
+                enemyDtos.Add(enemy);
 
             return enemyDtos;
         }

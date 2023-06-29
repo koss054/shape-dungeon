@@ -1,4 +1,6 @@
-﻿const minLevelEl = document.getElementById("min-level");
+﻿import { getCookie } from "../shared/cookie-get.js";
+
+const minLevelEl = document.getElementById("min-level");
 const maxLevelEl = document.getElementById("max-level");
 
 minLevelEl.addEventListener("change", updateCookies);
@@ -19,24 +21,4 @@ maxLevelEl.value = getCookie("max");
 function updateCookies() {
     document.cookie = `min=${minLevelEl.value}`;
     document.cookie = `max=${maxLevelEl.value}`;
-}
-
-function getCookie(cookieName) {
-    let name = cookieName + "=";
-    let decodedCookie = decodeURIComponent(document.cookie);
-    let cookies = decodedCookie.split(';');
-
-    for (let i = 0; i < cookies.length; i++) {
-        let c = cookies[i];
-
-        while (c.charAt(0) == ' ') {
-            c = c.substring(1);
-        }
-
-        if (c.indexOf(name) == 0) {
-            return c.substring(name.length, c.length);
-        }
-    }
-
-    return "";
 }

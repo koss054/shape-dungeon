@@ -6,12 +6,12 @@ using ShapeDungeon.Repos;
 
 namespace ShapeDungeon.Services.Players
 {
-    public class PlayerService : IPlayerService
+    public class PlayerCreateService : IPlayerCreateService
     {
         private readonly IPlayerRepository _playerRepository;
         private readonly IUnitOfWork _unitOfWork;
 
-        public PlayerService( 
+        public PlayerCreateService( 
             IPlayerRepository playerRepository, 
             IUnitOfWork unitOfWork)
         {
@@ -34,7 +34,7 @@ namespace ShapeDungeon.Services.Players
                 Strength = pDto.Strength,
                 Vigor = pDto.Vigor,
                 Agility = pDto.Agility,
-                Level = 1,
+                Level = pDto.Strength + pDto.Vigor + pDto.Agility,
                 CurrentExp = 0,
                 ExpToNextLevel = 100,
                 CurrentSkillpoints = 0,
@@ -49,31 +49,6 @@ namespace ShapeDungeon.Services.Players
 
             doesNameExist = true;
             return doesNameExist;
-        }
-
-        public async Task<IEnumerable<PlayerDto>> GetAllPlayersAsync()
-        {
-            var players = await _playerRepository.GetAll();
-            var playersDto = new List<PlayerDto>();
-
-            foreach (var player in players)
-            {
-                PlayerDto playerDto = player;
-                playersDto.Add(playerDto);
-            }
-
-            return playersDto;
-        }
-
-        public async Task<PlayerDto> GetPlayerAsync(string name)
-        {
-            var player = await _playerRepository.GetByName(name);
-            var playerDto = new PlayerDto();
-
-            if (player != null)
-               playerDto = player;
-
-            return playerDto;
         }
     }
 }

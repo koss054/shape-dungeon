@@ -1,0 +1,79 @@
+﻿.selection-grid {
+    justify-content: center;
+    flex-direction: row;
+    align-items: center;
+    overflow-y: scroll;
+    flex-wrap: wrap;
+    display: flex;
+    height: 60vh;
+    width: 80vw;
+}
+
+.player-card {
+    flex-direction: column;
+    margin-bottom: 2rem;
+    align-items: center;
+    display: flex;
+    width: 25%;
+}
+
+.player-card div {
+    margin-bottom: 0.5rem;
+}
+
+.active-name {
+    word-wrap: break-word;
+    text-align: center;
+    width: 100%;
+}
+
+.active-name.small {
+    font-size: 1.25rem;
+}
+
+.inactive-name {
+    transition: font-size 0.5s;
+    word-wrap: break-word;
+    text-decoration: none;
+    text-align: center;
+    font-size: 1rem;
+    cursor: pointer;
+    color: #a8a8a8;
+    width: 100%;
+}
+
+.inactive-name:hover {
+    font-size: 1.25rem;
+    color: #d1d1d1;
+}
+
+.selection-grid::-webkit-scrollbar {
+    width: 6px;
+    width: 6px;
+}
+
+.selection-grid::-webkit-scrollbar-track {
+    border-radius: 4px;
+    background-color: #ABB2B3;
+}
+
+.selection-grid::-webkit-scrollbar-track:hover {
+    background-color: #929898;
+}
+
+.selection-grid::-webkit-scrollbar-track:active {
+    background-color: #989E9F;
+}
+
+.selection-grid::-webkit-scrollbar-thumb {
+    border-radius: 5px;
+    background-color: #249924;
+}
+
+.selection-grid::-webkit-scrollbar-thumb:hover {
+    background-color: #229022;
+}
+
+.selection-grid::-webkit-scrollbar-thumb:active {
+    background-color: #218E21;
+}

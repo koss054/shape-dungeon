@@ -1,0 +1,66 @@
+﻿@using ShapeDungeon.DTOs.Players
+@using ShapeDungeon.Entities.Enums
+@model IEnumerable<PlayerGridDto>
+
+@{
+    ViewBag.Title = "Select Player";
+}
+
+<link rel="stylesheet" href="~/css/player/grid.css" />
+<h2 style="text-align:center;margin-bottom:0">@ViewBag.Title</h2>
+<p style="text-align:center;margin-bottom:2rem;font-style:italic;font-size:0.65rem;">
+    (by clicking on a name)
+</p>
+<div class="selection-grid">
+    @foreach (var player in Model)
+    {
+        <div class="player-card">
+            @if (player.IsActive)
+            {
+                if (player.Name.Length > 16)
+                {
+                    <h4 class="active-name small">@player.Name</h4>
+                }
+                else
+                {
+                    <h4 class="active-name">@player.Name</h4>
+                }
+            }
+            else
+            {
+                <a class="inactive-name" asp-controller="Player" asp-action="Switch" asp-route-newId="@player.Id">
+                    @player.Name
+                </a>
+            }
+
+            @switch (player.Shape)
+            {
+                case Shape.Square:
+                    <div id="@player.Id"
+                        style="height:10rem;width:10rem;background-color:limegreen">
+                    </div>
+                    break;
+                case Shape.Triangle:
+                    <div id="@player.Id"
+                        style="width:0;height:0;border-top: 5rem solid transparent;border-left: 10rem solid limegreen;border-bottom: 5rem solid transparent">
+                    </div>
+                    break;
+                case Shape.Circle:
+                default:
+                    <div id="@player.Id"
+                        style="height:10rem;width:10rem;background-color:limegreen;border-radius:50%">
+                    </div>
+                    break;
+            }
+
+            @if (player.IsActive)
+            {
+                <h4>Lvl.@player.Level</h4>
+            }
+            else
+            {
+                <h6 style="color:#a8a8a8">Lvl.@player.Level</h6>
+            }
+        </div>
+    }
+</div>
