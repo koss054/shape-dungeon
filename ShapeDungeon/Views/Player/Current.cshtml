@@ -1,5 +1,6 @@
 ﻿@using ShapeDungeon.DTOs.Players
 @using ShapeDungeon.Entities.Enums
+@using ShapeDungeon.Helpers.Enums
 @model PlayerDto
 
 @{
@@ -13,15 +14,15 @@
     <div id="confirmation-window">
         <h3>Are you sure you want to increase <span id="stat-name">STAT</span> by 1?</h3>
         <a id="strength-yes-btn" class="btn btn-outline-success stat-btn hidden"
-        asp-controller="Player" asp-action="Bruhy Strength">
+        asp-controller="Player" asp-action="Increase" asp-route-statToIncrease="@CharacterStat.Strength">
             Yes
         </a>
         <a id="vigor-yes-btn" class="btn btn-outline-success stat-btn hidden"
-        asp-controller="Player" asp-action="Bruhy Vigor">
+        asp-controller="Player" asp-action="Increase" asp-route-statToIncrease="@CharacterStat.Vigor">
             Yes
         </a>
         <a id="agility-yes-btn" class="btn btn-outline-success stat-btn hidden"
-        asp-controller="Player" asp-action="Bruhy Agility">
+        asp-controller="Player" asp-action="Increase" asp-route-statToIncrease="@CharacterStat.Agility">
             Yes
         </a>
         <a id="no-btn" class="btn btn-outline-danger stat-btn">No</a>
@@ -73,19 +74,19 @@
             <div style="display:flex;justify-content:space-between;align-items:center">
                 <label class="stat-text" for="strength">Strength:</label>
                 <div>
-                    <input type="text" readonly class="form-control-plaintext stat-number" id="strength" asp-for="@Model.Strength" value="2">
+                    <input type="text" readonly class="form-control-plaintext stat-number" id="strength" asp-for="@Model.Strength" value="@Model.Strength">
                 </div>
                 <a id="strength-plus" class="btn btn-outline-success btn-small stat-btn">+</a>
 
                 <label class="stat-text" for="vigor">Vigor:</label>
                 <div>
-                    <input type="text" readonly class="form-control-plaintext stat-number" id="vigor" asp-for="@Model.Vigor" value="5">
+                    <input type="text" readonly class="form-control-plaintext stat-number" id="vigor" asp-for="@Model.Vigor" value="@Model.Vigor">
                 </div>
                 <a id="vigor-plus" class="btn btn-outline-success btn-small stat-btn">+</a>
 
                 <label class="stat-text" for="agility">Agility:</label>
                 <div>
-                    <input type="text" readonly class="form-control-plaintext stat-number" id="agility" asp-for="@Model.Agility" value="1">
+                    <input type="text" readonly class="form-control-plaintext stat-number" id="agility" asp-for="@Model.Agility" value="@Model.Agility">
                 </div>
                 <a id="agility-plus" class="btn btn-outline-success btn-small stat-btn">+</a>
             </div>

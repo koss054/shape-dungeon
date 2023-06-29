@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ShapeDungeon.DTOs.Players;
+using ShapeDungeon.Helpers.Enums;
 using ShapeDungeon.Interfaces.Services.Players;
 
 namespace ShapeDungeon.Controllers
@@ -9,15 +10,18 @@ namespace ShapeDungeon.Controllers
         private readonly IPlayerCreateService _playerCreateService;
         private readonly IPlayerGetService _playerGetService;
         private readonly IPlayerSelectService _playerSelectService;
+        private readonly IPlayerUpdateService _playerUpdateService;
 
         public PlayerController(
             IPlayerCreateService playerCreateService,
-            IPlayerGetService playerGetService, 
-            IPlayerSelectService playerSelectService)
+            IPlayerGetService playerGetService,
+            IPlayerSelectService playerSelectService, 
+            IPlayerUpdateService playerUpdateService)
         {
             _playerCreateService = playerCreateService;
             _playerGetService = playerGetService;
             _playerSelectService = playerSelectService;
+            _playerUpdateService = playerUpdateService;
         }
 
         [HttpGet]
@@ -66,6 +70,13 @@ namespace ShapeDungeon.Controllers
         {
             await _playerSelectService.UpdateActivePlayer(newId);
             return RedirectToAction("Select");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Increase(CharacterStat statToIncrease)
+        {
+            await _playerUpdateService.IncreaseStat(statToIncrease);
+            return RedirectToAction("Current");
         }
     }
 }
