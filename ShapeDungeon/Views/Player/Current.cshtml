@@ -49,9 +49,11 @@
 
             <hr class="border-3 border-top border-success">
 
-            <div class="btn-group" role="group" aria-label="@Model.Name's Shape:" style="width:100%">
+            <div class="btn-group" role="group" aria-label="@Model.Name Extra Info:" style="width:100%">
                 <input type="radio" class="btn-check" id="player-shape" checked>
-                <label class="btn btn-outline-success" style="cursor:default" for="square">@Model.Shape</label>
+                <label class="btn btn-outline-success" style="cursor:default" for="shape">@Model.Shape</label>
+                <input type="radio" class="btn-check" id="player-level">
+                <label class="btn btn-outline-info" style="cursor:default" for="level">Lvl.@Model.Level</label>
             </div>
 
             <hr class="border-3 border-top border-success">
