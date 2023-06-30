@@ -6,5 +6,6 @@ namespace ShapeDungeon.Repos
     {
         Task AddAsync(Room room, Enemy enemy);
         Task<Enemy> GetEnemyByRoomId(Guid roomId);
+        Task<bool> IsRoomEnemyDefeated(Guid roomId);
     }
 }

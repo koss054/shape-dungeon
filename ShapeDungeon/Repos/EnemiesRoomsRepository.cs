@@ -34,5 +34,16 @@ namespace ShapeDungeon.Repos
 
             return enemy ?? new Enemy();
         }
+
+        public async Task<bool> IsRoomEnemyDefeated(Guid roomId)
+        {
+            var enemyRoom = await this.Context.EnemiesRooms
+                .FirstOrDefaultAsync(x => x.RoomId == roomId);
+
+            if (enemyRoom == null)
+                throw new ArgumentNullException(nameof(enemyRoom));
+
+            return enemyRoom.IsEnemyDefeated;
+        }
     }
 }

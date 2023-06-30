@@ -22,5 +22,9 @@ namespace ShapeDungeon.Repos
         public async Task<Enemy?> GetById(Guid enemyId)
             => await this.Context.Enemies
                 .FirstOrDefaultAsync(x => x.Id == enemyId);
+
+        public async Task<Enemy?> GetActiveForCombat()
+            => await this.Context.Enemies
+                .SingleOrDefaultAsync(x => x.IsActiveForCombat);
     }
 }
