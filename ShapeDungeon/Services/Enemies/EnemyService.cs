@@ -23,6 +23,7 @@ namespace ShapeDungeon.Services.Enemies
         {
             var enemy = new Enemy()
             {
+                IsActiveForCombat = false,
                 Name = $"{eDto.Name} Lvl.{eDto.Level}",
                 Strength = eDto.Strength,
                 Vigor = eDto.Vigor,

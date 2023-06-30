@@ -17,6 +17,7 @@ namespace ShapeDungeon.Repos
                 RoomId = room.Id,
                 Enemy = enemy,
                 EnemyId = enemy.Id,
+                IsEnemyDefeated = false,
             });
 
         public async Task<Enemy> GetEnemyByRoomId(Guid roomId)
