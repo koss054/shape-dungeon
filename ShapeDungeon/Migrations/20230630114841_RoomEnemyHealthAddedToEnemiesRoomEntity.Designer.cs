@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ShapeDungeon.Data;
 
@@ -10,9 +11,10 @@ using ShapeDungeon.Data;
 namespace ShapeDungeon.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230630114841_RoomEnemyHealthAddedToEnemiesRoomEntity")]
+    partial class RoomEnemyHealthAddedToEnemiesRoomEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.16");
@@ -30,9 +32,6 @@ namespace ShapeDungeon.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("DroppedExp")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<bool>("IsActiveForCombat")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("Level")
@@ -65,6 +64,9 @@ namespace ShapeDungeon.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<bool>("IsEnemyDefeated")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("RoomEnemyHealth")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("EnemyId", "RoomId");
