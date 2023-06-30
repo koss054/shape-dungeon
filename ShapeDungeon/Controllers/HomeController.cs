@@ -117,5 +117,11 @@ namespace ShapeDungeon.Controllers
 
             return RedirectToAction("Scouting");
         }
+
+        [HttpGet]
+        public IActionResult Error()
+        {
+            return View();
+        }
     }
 }

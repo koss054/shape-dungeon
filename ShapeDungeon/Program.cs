@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using ShapeDungeon.Data;
+using ShapeDungeon.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,6 +33,9 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
+
+app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
+app.UseExceptionHandler("/Home/Error/500");
 
 app.MapControllerRoute(
     name: "default",
