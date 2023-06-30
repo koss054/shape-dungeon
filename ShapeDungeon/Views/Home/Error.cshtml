@@ -1,0 +1,17 @@
+﻿@{
+    ViewBag.Title = "Internal Server Error";
+}
+
+<div class="text-center position-absolute"
+     style="top:50%;left:50%;transform:translate(-50%, -50%)">
+    <h2>@ViewBag.Title</h2>
+    <h5 class="text-muted mb-0">Bruh moment...</h5>
+    <p class="text-muted"
+       style="font-style:italic;font-size:0.75rem">
+        (if button below returns you here, main page is affected by the error)
+    </p>
+    <a class="btn btn-outline-danger mt-1"
+       asp-controller="Home" asp-action="Index">
+        Go to Main Page
+    </a>
+</div>

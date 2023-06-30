@@ -35,6 +35,7 @@ app.UseRouting();
 app.UseAuthorization();
 
 app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
+app.UseExceptionHandler("/Home/Error/500");
 
 app.MapControllerRoute(
     name: "default",
