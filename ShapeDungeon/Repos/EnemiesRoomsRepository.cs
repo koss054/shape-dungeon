@@ -35,15 +35,31 @@ namespace ShapeDungeon.Repos
             return enemy ?? new Enemy();
         }
 
-        public async Task<bool> IsRoomEnemyDefeated(Guid roomId)
+        public async Task<Guid> GetEnemyIdByRoomId(Guid roomId)
         {
             var enemyRoom = await this.Context.EnemiesRooms
                 .FirstOrDefaultAsync(x => x.RoomId == roomId);
 
             if (enemyRoom == null)
-                throw new ArgumentNullException(nameof(enemyRoom));
+                throw new ArgumentNullException();
 
-            return enemyRoom.IsEnemyDefeated;
+            return enemyRoom.EnemyId;
+        }
+
+        /// <summary>
+        /// Checks if the enemy in the searched room has been defeated.
+        /// </summary>
+        /// <param name="roomId">Id of the room in which the enemy status is being checked.</param>
+        /// <returns>
+        /// If enemy room exists, the value of the IsEnemyDefeated property.
+        /// If enemy room doesn't exist, true (dude's been evaporated from existance, lol).
+        /// </returns>
+        public async Task<bool> IsRoomEnemyDefeated(Guid roomId)
+        {
+            var enemyRoom = await this.Context.EnemiesRooms
+                .FirstOrDefaultAsync(x => x.RoomId == roomId);
+
+            return enemyRoom != null ? enemyRoom.IsEnemyDefeated : true;
         }
     }
 }
