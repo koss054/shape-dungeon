@@ -3,7 +3,7 @@ using ShapeDungeon.Entities;
 using ShapeDungeon.Interfaces.Services.EnemiesRooms;
 using ShapeDungeon.Repos;
 
-namespace ShapeDungeon.Services.RoomsEnemies
+namespace ShapeDungeon.Services.EnemiesRooms
 {
     public class EnemiesRoomsService : IEnemiesRoomsService
     {
@@ -11,7 +11,7 @@ namespace ShapeDungeon.Services.RoomsEnemies
         private readonly IUnitOfWork _unitOfWork;
 
         public EnemiesRoomsService(
-            IEnemiesRoomsRepository enemiesRoomsRepository, 
+            IEnemiesRoomsRepository enemiesRoomsRepository,
             IUnitOfWork unitOfWork)
         {
             _enemiesRoomsRepository = enemiesRoomsRepository;

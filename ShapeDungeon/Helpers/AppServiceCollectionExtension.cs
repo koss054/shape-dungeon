@@ -7,9 +7,9 @@ using ShapeDungeon.Interfaces.Services.Rooms;
 using ShapeDungeon.Middlewares;
 using ShapeDungeon.Repos;
 using ShapeDungeon.Services.Enemies;
+using ShapeDungeon.Services.EnemiesRooms;
 using ShapeDungeon.Services.Players;
 using ShapeDungeon.Services.Rooms;
-using ShapeDungeon.Services.RoomsEnemies;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
