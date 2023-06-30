@@ -1,0 +1,19 @@
+﻿@using ShapeDungeon.DTOs;
+@model CombatDto;
+
+@{
+    ViewBag.Title = "Shape Combat";
+}
+
+<div class="position-absolute"
+     style="top:50%;left:50%;transform:translate(-50%, -50%)">
+    <div>
+        <h2>@Model.Player.Name</h2>
+        <h3>@Model.Player.Shape</h3>
+    </div>
+
+    <div>
+        <h2>@Model.Enemy.Name</h2>
+        <h3>@Model.Enemy.Shape</h3>
+    </div>
+</div>
