@@ -6,13 +6,6 @@ namespace ShapeDungeon.Middlewares
 {
     public class GlobalExceptionHandlingMiddleware : IMiddleware
     {
-        private readonly ILogger _logger;
-
-        public GlobalExceptionHandlingMiddleware(ILogger logger)
-        {
-            _logger = logger;
-        }
-
         public async Task InvokeAsync(HttpContext context, RequestDelegate next)
         {
             try
@@ -21,8 +14,6 @@ namespace ShapeDungeon.Middlewares
             }
             catch (Exception e)
             {
-                _logger.LogError(e, e.Message);
-
                 context.Response.StatusCode =
                     (int)HttpStatusCode.InternalServerError;
 
