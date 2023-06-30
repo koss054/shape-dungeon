@@ -4,6 +4,7 @@ using ShapeDungeon.Interfaces.Services.Enemies;
 using ShapeDungeon.Interfaces.Services.EnemiesRooms;
 using ShapeDungeon.Interfaces.Services.Players;
 using ShapeDungeon.Interfaces.Services.Rooms;
+using ShapeDungeon.Middlewares;
 using ShapeDungeon.Repos;
 using ShapeDungeon.Services.Enemies;
 using ShapeDungeon.Services.Players;
@@ -49,6 +50,9 @@ namespace Microsoft.Extensions.DependencyInjection
 
             // Cookies
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
+            // Custom Middleware
+            services.AddTransient<GlobalExceptionHandlingMiddleware>();
 
             return services;
         }
