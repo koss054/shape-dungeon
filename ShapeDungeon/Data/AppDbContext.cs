@@ -61,5 +61,6 @@ namespace ShapeDungeon.Data
         public DbSet<Player> Players { get; set; }
         public DbSet<Room> Rooms { get; set; }
         public DbSet<EnemyRoom> EnemiesRooms { get; set; }
+        public DbSet<Combat> Combats { get; set; }
     }
 }
