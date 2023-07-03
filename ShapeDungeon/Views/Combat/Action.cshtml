@@ -6,14 +6,36 @@
 }
 
 <div class="position-absolute"
-     style="top:50%;left:50%;transform:translate(-50%, -50%)">
+     style="top:50%;left:25%;transform:translate(0%, -50%)">
     <div>
         <h2>@Model.Player.Name</h2>
         <h3>@Model.Player.Shape</h3>
+        <h4 id="player-strength">@Model.Player.Strength</h4>
     </div>
+    <a class="btn btn-outline-danger" id="attack-btn">Attack</a>
+</div>
 
+<div class="position-absolute"
+     style="top:50%;right:25%;transform:translate(0%, -50%)">
     <div>
         <h2>@Model.Enemy.Name</h2>
         <h3>@Model.Enemy.Shape</h3>
+        <h4 id="enemy-hp">@Model.Enemy.CurrentHp</h4>
     </div>
 </div>
+
+<script>
+    const attackBtn = document.getElementById("attack-btn");
+    const enemyHpEl = document.getElementById("enemy-hp");
+    const playerStrengthEl = document.getElementById("player-strength");
+
+    attackBtn.addEventListener("click", attackEnemy);
+
+    function attackEnemy() {
+        let enemyHp = Number(enemyHpEl.innerText);
+        let playerAtk = Number(playerStrengthEl.innerText);
+
+        enemyHp -= playerAtk;
+        enemyHpEl.innerText = enemyHp;
+    }
+</script>
