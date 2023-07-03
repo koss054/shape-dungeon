@@ -42,13 +42,17 @@ namespace ShapeDungeon.Controllers
 
         public async Task<IActionResult> Active()
         {
-            await _roomTravelService.IsScoutResetAsync(); // Doing this if player changes the URL manually.
-            await _playerScoutService.UpdateActiveScoutEnergyAsync(PlayerScoutAction.Refill);
-
             var player = await _playerGetService.GetActivePlayer();
             if (player == null)
             {
             }
+
+            if (player!.IsInCombat)
+                return RedirectToAction("Action", "Combat");
+
+            await _roomTravelService.IsScoutResetAsync(); // Doing this if player changes the URL manually.
+            await _playerScoutService.UpdateActiveScoutEnergyAsync(PlayerScoutAction.Refill);
+
 
             var room = await _getRoomService.GetActiveForMoveAsync();
             if (room == null)
@@ -80,6 +84,9 @@ namespace ShapeDungeon.Controllers
             {
             }
 
+            if (player!.IsInCombat)
+                return RedirectToAction("Action", "Combat");
+
             var room = await _getRoomService.GetActiveForScoutAsync();
             if (room == null)
             {
@@ -107,6 +114,10 @@ namespace ShapeDungeon.Controllers
         [HttpGet]
         public async Task<IActionResult> Move(RoomDirection direction)
         {
+            var activePlayer = await _playerGetService.GetActivePlayer();
+            if (activePlayer.IsInCombat) 
+                return RedirectToAction("Action", "Combat");
+
             await _roomTravelService.RoomTravelAsync(direction, RoomTravelAction.Move);
 
             if (await _roomConditionService.IsCurrentRoomActiveEnemyRoom())
@@ -122,6 +133,10 @@ namespace ShapeDungeon.Controllers
         [HttpGet]
         public async Task<IActionResult> Scout(RoomDirection direction)
         {
+            var activePlayer = await _playerGetService.GetActivePlayer();
+            if (activePlayer.IsInCombat)
+                return RedirectToAction("Action", "Combat");
+
             var energyLeft = await _playerScoutService.UpdateActiveScoutEnergyAsync(PlayerScoutAction.Reduce);
 
             if (energyLeft != -1)
