@@ -39,6 +39,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddScoped<IRoomTravelService, RoomTravelService>();
             services.AddScoped<IRoomActiveForEditService, RoomActiveForEditService>();
             services.AddScoped<ICheckRoomNeighborsService, CheckRoomNeighborsService>();
+            services.AddScoped<IRoomConditionService, RoomConditionService>();
 
             // Enemy Room mapping entity
             services.AddScoped<IEnemiesRoomsService, EnemiesRoomsService>();
