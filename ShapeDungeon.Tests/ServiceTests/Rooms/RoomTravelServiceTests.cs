@@ -14,16 +14,25 @@ namespace ShapeDungeon.Tests.ServiceTests.Rooms
 {
     internal class RoomTravelServiceTests
     {
-        private Mock<IRoomRepository> _repoMock;
+        private Mock<IEnemiesRoomsRepository> _mappingRepoMock;
+        private Mock<IEnemyRepository> _enemyRepoMock;
+        private Mock<IRoomRepository> _roomRepoMock;
         private Mock<IUnitOfWork> _unitOfWorkMock;
         private IRoomTravelService _service;
 
         [SetUp]
         public void Test_Initialize()
         {
-            _repoMock = new Mock<IRoomRepository>();
+            _mappingRepoMock = new Mock<IEnemiesRoomsRepository>();
+            _enemyRepoMock = new Mock<IEnemyRepository>();
+            _roomRepoMock = new Mock<IRoomRepository>();
             _unitOfWorkMock = new Mock<IUnitOfWork>();
-            _service = new RoomTravelService(_repoMock.Object, _unitOfWorkMock.Object);
+
+            _service = new RoomTravelService(
+                _mappingRepoMock.Object,
+                _enemyRepoMock.Object,
+                _roomRepoMock.Object, 
+                _unitOfWorkMock.Object);
         }
 
         [Test]
@@ -39,11 +48,11 @@ namespace ShapeDungeon.Tests.ServiceTests.Rooms
             var oldRoom = new Room { IsActiveForMove = true, CoordX = oldCoordX, CoordY = oldCoordY };
             var newRoom = new Room { IsActiveForMove = false, CoordX = newCoordX, CoordY = newCoordY };
 
-            _repoMock
+            _roomRepoMock
                 .Setup(x => x.GetActiveForMove())
                 .ReturnsAsync(oldRoom);
 
-            _repoMock
+            _roomRepoMock
                 .Setup(x => x.GetByCoords(It.IsAny<int>(), It.IsAny<int>()))
                 .ReturnsAsync(newRoom);
 
@@ -65,7 +74,7 @@ namespace ShapeDungeon.Tests.ServiceTests.Rooms
             var oldCoordY = 0;
             var oldRoom = new Room { IsActiveForMove = true, CoordX = oldCoordX, CoordY = oldCoordY };
 
-            _repoMock
+            _roomRepoMock
                 .Setup(x => x.GetActiveForMove())
                 .ReturnsAsync(oldRoom);
 
@@ -99,11 +108,11 @@ namespace ShapeDungeon.Tests.ServiceTests.Rooms
             var scoutRoom = new Room { IsActiveForScout = true, IsActiveForMove = false };
             var moveRoom = new Room { IsActiveForScout = false, IsActiveForMove = true };
 
-            _repoMock
+            _roomRepoMock
                 .Setup(x => x.GetActiveForScout())
                 .ReturnsAsync(scoutRoom);
 
-            _repoMock
+            _roomRepoMock
                 .Setup(x => x.GetActiveForMove())
                 .ReturnsAsync(moveRoom);
 
@@ -120,7 +129,7 @@ namespace ShapeDungeon.Tests.ServiceTests.Rooms
             // Arrange
             var moveRoom = new Room { IsActiveForScout = false, IsActiveForMove = true };
 
-            _repoMock
+            _roomRepoMock
                 .Setup(x => x.GetActiveForMove())
                 .ReturnsAsync(moveRoom);
 
@@ -137,7 +146,7 @@ namespace ShapeDungeon.Tests.ServiceTests.Rooms
             // Arrange
             var scoutRoom = new Room { IsActiveForScout = true, IsActiveForMove = false };
 
-            _repoMock
+            _roomRepoMock
                 .Setup(x => x.GetActiveForScout())
                 .ReturnsAsync(scoutRoom);
 
