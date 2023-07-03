@@ -8,6 +8,7 @@ namespace ShapeDungeon.Services
 {
     public class CombatService : ICombatService
     {
+        private readonly ICombatRepository _combatRepository;
         private readonly IEnemyRepository _enemyRepository;
         private readonly IEnemiesRoomsRepository _enemiesRoomsRepository;
         private readonly IPlayerRepository _playerRepository;
@@ -15,12 +16,14 @@ namespace ShapeDungeon.Services
         private readonly IUnitOfWork _unitOfWork;
 
         public CombatService(
+            ICombatRepository combatRepository,
             IEnemyRepository enemyRepository,
             IEnemiesRoomsRepository enemiesRoomsRepository,
             IPlayerRepository playerRepository,
             IRoomRepository roomRepository,
             IUnitOfWork unitOfWork)
         {
+            _combatRepository = combatRepository;
             _enemyRepository = enemyRepository;
             _enemiesRoomsRepository = enemiesRoomsRepository;
             _playerRepository = playerRepository;
@@ -28,7 +31,7 @@ namespace ShapeDungeon.Services
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<CombatDto> InitializeCombat()
+        public async Task InitializeCombat()
         {
             var activeRoom = await _roomRepository.GetActiveForMove();
             await IsActiveRoomValidForCombat(activeRoom);
@@ -39,12 +42,29 @@ namespace ShapeDungeon.Services
             var activeEnemy = await _enemyRepository.GetActiveForCombat();
             if (activeEnemy == null) throw new ArgumentNullException(nameof(activeEnemy));
 
-            var combatDto = new CombatDto()
+            await _unitOfWork.Commit(async () =>
             {
-                Player = activePlayer,
-                Enemy = activeEnemy,
-                CombatRoomId = activeRoom.Id,
-            };
+                await _combatRepository.CreateCombat(activePlayer, activeEnemy, activeRoom.Id);
+            });
+        }
+
+        public async Task<CombatDto> GetActiveCombat()
+        {
+            var isThereActiveCombat = await _combatRepository.IsActiveCombatPresent();
+            if (!isThereActiveCombat) await InitializeCombat();
+
+            var activeCombat = await _combatRepository.GetActiveCombat();
+            if (activeCombat == null) throw new ArgumentNullException(nameof(activeCombat));
+
+            var activePlayer = await _playerRepository.GetActive();
+            if (activePlayer == null) throw new ArgumentNullException(nameof(activeCombat));
+
+            var activeEnemy = await _enemyRepository.GetActiveForCombat();
+            if (activeEnemy == null) throw new ArgumentNullException(nameof(activeCombat));
+
+            activeCombat.Player = activePlayer;
+            activeCombat.Enemy = activeEnemy;
+            CombatDto combatDto = activeCombat;
 
             return combatDto;
         }

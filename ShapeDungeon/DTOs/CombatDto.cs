@@ -1,5 +1,6 @@
 ﻿using ShapeDungeon.DTOs.Enemies;
 using ShapeDungeon.DTOs.Players;
+using ShapeDungeon.Entities;
 
 namespace ShapeDungeon.DTOs
 {
@@ -12,5 +13,13 @@ namespace ShapeDungeon.DTOs
             = null!;
 
         public Guid CombatRoomId { get; init; }
+
+        public static implicit operator CombatDto(Combat combat)
+            => new()
+            {
+                Player = combat.Player,
+                Enemy = combat.Enemy,
+                CombatRoomId = combat.CombatRoomId,
+            };
     }
 }

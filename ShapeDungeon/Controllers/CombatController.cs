@@ -18,7 +18,7 @@ namespace ShapeDungeon.Controllers
         [HttpGet]
         public async Task<IActionResult> Action()
         {
-            var combatDto = await _combatService.InitializeCombat();
+            var combatDto = await _combatService.GetActiveCombat();
             return View(combatDto);
         }
     }

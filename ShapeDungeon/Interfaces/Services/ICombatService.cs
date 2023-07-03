@@ -4,6 +4,7 @@ namespace ShapeDungeon.Interfaces.Services
 {
     public interface ICombatService
     {
-        Task<CombatDto> InitializeCombat();
+        Task InitializeCombat();
+        Task<CombatDto> GetActiveCombat();
     }
 }
