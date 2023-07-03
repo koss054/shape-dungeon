@@ -20,5 +20,7 @@ namespace ShapeDungeon.Entities
             = null!;
         public int CurrentEnemyHp { get; set; }
         public int TotalEnemyHp { get; set; }
+
+        public Guid CombatRoomId { get; set; }
     }
 }
