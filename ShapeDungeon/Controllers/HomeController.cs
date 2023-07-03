@@ -11,6 +11,7 @@ namespace ShapeDungeon.Controllers
         private readonly IGetRoomService _getRoomService;
         private readonly IRoomEnemyService _roomEnemyService;
         private readonly IRoomTravelService _roomTravelService;
+        private readonly IRoomConditionService _roomConditionService;
         private readonly IPlayerGetService _playerGetService;
         private readonly IPlayerScoutService _playerScoutService;
         private readonly ICheckRoomNeighborsService _checkRoomNeighborsService;
@@ -19,6 +20,7 @@ namespace ShapeDungeon.Controllers
             IGetRoomService getRoomService,
             IRoomEnemyService roomEnemyService,
             IRoomTravelService roomTravelService,
+            IRoomConditionService roomConditionService,
             IPlayerGetService playerGetService,
             IPlayerScoutService playerScoutService,
             ICheckRoomNeighborsService checkRoomNeighborsService)
@@ -26,6 +28,7 @@ namespace ShapeDungeon.Controllers
             _getRoomService = getRoomService;
             _roomEnemyService = roomEnemyService;
             _roomTravelService = roomTravelService;
+            _roomConditionService = roomConditionService;
             _playerGetService = playerGetService;
             _playerScoutService = playerScoutService;
             _checkRoomNeighborsService = checkRoomNeighborsService;
@@ -102,6 +105,10 @@ namespace ShapeDungeon.Controllers
         public async Task<IActionResult> Move(RoomDirection direction)
         {
             await _roomTravelService.RoomTravelAsync(direction, RoomTravelAction.Move);
+
+            if (await _roomConditionService.IsCurrentRoomActiveEnemyRoom())
+                return RedirectToAction("Action", "Combat");
+
             return RedirectToAction("Active");
         }
 

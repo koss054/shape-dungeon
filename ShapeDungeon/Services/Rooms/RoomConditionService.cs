@@ -26,7 +26,7 @@ namespace ShapeDungeon.Services.Rooms
             var currRoom = await _roomRepository.GetActiveForMove();
             var isEnemyDefeated = await _enemiesRoomsRepository.IsRoomEnemyDefeated(currRoom.Id);
 
-            if (currRoom.IsEnemyRoom && isEnemyDefeated) return true;
+            if (currRoom.IsEnemyRoom && !isEnemyDefeated) return true;
             return false;
         }
     }
