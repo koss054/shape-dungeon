@@ -14,6 +14,7 @@ namespace ShapeDungeon.Controllers
         private readonly IRoomConditionService _roomConditionService;
         private readonly IPlayerGetService _playerGetService;
         private readonly IPlayerScoutService _playerScoutService;
+        private readonly IPlayerUpdateService _playerUpdateService;
         private readonly ICheckRoomNeighborsService _checkRoomNeighborsService;
 
         public HomeController(
@@ -23,6 +24,7 @@ namespace ShapeDungeon.Controllers
             IRoomConditionService roomConditionService,
             IPlayerGetService playerGetService,
             IPlayerScoutService playerScoutService,
+            IPlayerUpdateService playerUpdateService,
             ICheckRoomNeighborsService checkRoomNeighborsService)
         {
             _getRoomService = getRoomService;
@@ -31,6 +33,7 @@ namespace ShapeDungeon.Controllers
             _roomConditionService = roomConditionService;
             _playerGetService = playerGetService;
             _playerScoutService = playerScoutService;
+            _playerUpdateService = playerUpdateService;
             _checkRoomNeighborsService = checkRoomNeighborsService;
         }
 
@@ -107,8 +110,12 @@ namespace ShapeDungeon.Controllers
             await _roomTravelService.RoomTravelAsync(direction, RoomTravelAction.Move);
 
             if (await _roomConditionService.IsCurrentRoomActiveEnemyRoom())
+            {
+                await _playerUpdateService.EnterCombat();
                 return RedirectToAction("Action", "Combat");
+            }
 
+            await _playerUpdateService.ExitCombat();
             return RedirectToAction("Active");
         }
 

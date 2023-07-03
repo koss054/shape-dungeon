@@ -42,6 +42,7 @@ namespace ShapeDungeon.Data
                 {
                     Id = new Guid("3DE35703-1FEF-4070-D75D-08DB4BEAC0A7"),
                     IsActive = true,
+                    IsInCombat = false,
                     Name = "Squary",
                     Level = 8,
                     Strength = 2,
