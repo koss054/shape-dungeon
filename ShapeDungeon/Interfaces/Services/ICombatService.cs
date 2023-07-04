@@ -6,5 +6,8 @@ namespace ShapeDungeon.Interfaces.Services
     {
         Task InitializeCombat();
         Task<CombatDto> GetActiveCombat();
+
+        Task Test(int hp);
+        Task<int> Test2();
     }
 }

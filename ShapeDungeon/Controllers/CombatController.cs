@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using ShapeDungeon.DTOs;
 using ShapeDungeon.DTOs.Enemies;
 using ShapeDungeon.DTOs.Players;
 using ShapeDungeon.Interfaces.Services;
@@ -20,6 +21,24 @@ namespace ShapeDungeon.Controllers
         {
             var combatDto = await _combatService.GetActiveCombat();
             return View(combatDto);
+        }
+
+        [HttpPatch]
+        public async Task<IActionResult> Test([FromBody]TestResponse response)
+        {
+            await _combatService.Test(response.Hp);
+            return Json(response);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Test2()
+        {
+            var currEnemyHp = await _combatService.Test2();
+            var model = new
+            {
+                hp = currEnemyHp,
+            };
+            return Json(model);
         }
     }
 }

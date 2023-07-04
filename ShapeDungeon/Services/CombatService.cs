@@ -69,6 +69,21 @@ namespace ShapeDungeon.Services
             return combatDto;
         }
 
+        public async Task Test(int hp)
+        {
+            var test = await _combatRepository.GetActiveCombat();
+            await _unitOfWork.Commit(() =>
+            {
+                test!.CurrentEnemyHp = hp;
+            });
+        }
+
+        public async Task<int> Test2()
+        {
+            var test = await _combatRepository.GetActiveCombat();
+            return test!.CurrentEnemyHp;
+        }
+
         // Exception with string in () will be the name of the custom exception.
         private async Task IsActiveRoomValidForCombat(Room activeRoom)
         {
