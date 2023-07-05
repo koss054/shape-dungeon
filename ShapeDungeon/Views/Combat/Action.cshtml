@@ -7,7 +7,7 @@
 }
 
 <div class="position-absolute"
-     style="top:50%;left:25%;transform:translate(0%, -50%)">
+     style="top:50%;left:25%;transform:translate(0%, -50%);width:15rem">
     <div>
         <div style="height:10rem;width:10rem;">
             @if (Model.Player.Shape == Shape.Square)
@@ -23,8 +23,8 @@
                 <partial name="_ShapeCirclePlayer" />
             }
         </div>
-        <h2>@Model.Player.Name</h2>
-        <h3>@Model.Player.Shape</h3>
+        <h4 class="mb-0">@Model.Player.Name</h4>
+        <h6 class="text-muted fst-italic">@Model.Player.Shape</h6>
         <div class="progress mb-2">
             <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" role="progressbar" id="player-health-bar"
                  aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 100%;">
@@ -37,7 +37,7 @@
 </div>
 
 <div class="position-absolute"
-     style="top:50%;right:25%;transform:translate(0%, -50%)">
+     style="top:50%;right:25%;transform:translate(0%, -50%);width:15rem">
     <div>
         <div style="height:10rem;width:10rem;">
             @if (Model.Enemy.Shape == Shape.Square)
@@ -53,8 +53,8 @@
                 <partial name="_ShapeCircleEnemy" />
             }
         </div>
-        <h2>@Model.Enemy.Name</h2>
-        <h3>@Model.Enemy.Shape</h3>
+        <h4 class="mb-0">@Model.Enemy.Name</h4>
+        <h6 class="text-muted fst-italic">@Model.Enemy.Shape</h6>
         <div class="progress mb-2">
             <div class="progress-bar bg-danger" role="progressbar" id="enemy-health-bar"
                  aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 100%;">
