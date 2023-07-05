@@ -12,10 +12,27 @@ attackBtn.addEventListener("click", attackEnemy);
 
 onCombatPageLoad();
 
+const player = {
+    strength: 0,
+    vigor: 0,
+    agility: 0,
+};
+
+function populatePlayerStats() {
+    fetch("/PlayerResponse/GetStats")
+        .then(response => response.json())
+        .then(stats => {
+            player.strength = stats.strength;
+            player.vigor = stats.vigor;
+            player.agility = stats.agility;
+        });
+}
+
 function attackEnemy() {
+
     fetch("/Combat/Test", {
         method: "PATCH",
-        body: JSON.stringify({ hp: 1 }),
+        body: JSON.stringify({ hp: Number(currentHpEnemyEl.innerText) - player.strength }),
         headers: { "Content-type": "application/json;" }
     })
         .then(response => response.json())
@@ -33,6 +50,9 @@ function updateEnemyHp() {
 }
 
 function onCombatPageLoad() {
+    // Assign character stats.
+    populatePlayerStats();
+
     // Update hp bars.
     updateEnemyHpBar(currentHpEnemyEl.innerText, totalHpEnemyEl.innerText);
     updatePlayerHpBar(currentHpPlayerEl.innerText, totalHpPlayerEl.innerText);
