@@ -19,7 +19,7 @@ const player = {
 };
 
 function populatePlayerStats() {
-    fetch("/PlayerResponse/GetStats")
+    fetch("/Response/Player/Stats")
         .then(response => response.json())
         .then(stats => {
             player.strength = stats.strength;

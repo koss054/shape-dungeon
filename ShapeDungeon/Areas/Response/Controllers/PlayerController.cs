@@ -1,18 +1,20 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ShapeDungeon.Interfaces.Services.Players;
 
-namespace ShapeDungeon.Controllers
+namespace ShapeDungeon.Areas.Response.Controllers
 {
-    public class PlayerResponseController : Controller
+    [Route("Response/Player/")]
+    public class PlayerController : Controller
     {
         private readonly IPlayerGetService _playerGetService;
 
-        public PlayerResponseController(IPlayerGetService playerGetService)
+        public PlayerController(IPlayerGetService playerGetService)
         {
             _playerGetService = playerGetService;
         }
 
-        public async Task<IActionResult> GetStats()
+        [Route("Stats")]
+        public async Task<IActionResult> GetActivePlayerStats()
         {
             var playerStats = await _playerGetService.GetActivePlayerStats();
             return Json(playerStats);

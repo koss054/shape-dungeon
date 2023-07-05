@@ -38,6 +38,10 @@ app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
 app.UseExceptionHandler("/Home/Error/500");
 
 app.MapControllerRoute(
+    name: "areas",
+    pattern: "{area:exists}/{controller}/{action=Index}/{id?}");
+
+app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
