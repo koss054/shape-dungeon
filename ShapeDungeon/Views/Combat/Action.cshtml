@@ -25,7 +25,13 @@
         </div>
         <h2>@Model.Player.Name</h2>
         <h3>@Model.Player.Shape</h3>
-        <h4 id="player-strength">@Model.Player.Strength</h4>
+        <div class="progress mb-2">
+            <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" role="progressbar" id="player-health-bar"
+                 aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 75%;">
+            </div>
+            <span id="player-current-hp" class="position-absolute" style="left:5%;color:lightgray">@Model.CurrentPlayerHp</span>
+            <span id="player-total-hp" class="position-absolute" style="right:5%;color:white">@Model.TotalPlayerHp</span>
+        </div>
     </div>
     <a class="btn btn-outline-danger" id="attack-btn">Attack</a>
 </div>
@@ -49,7 +55,6 @@
         </div>
         <h2>@Model.Enemy.Name</h2>
         <h3>@Model.Enemy.Shape</h3>
-        <h4 id="enemy-hp">@Model.CurrentEnemyHp</h4>
         <div class="progress mb-2">
             <div class="progress-bar bg-danger" role="progressbar" id="enemy-health-bar"
                  aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 75%;">

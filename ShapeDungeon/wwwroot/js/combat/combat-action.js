@@ -1,10 +1,12 @@
-﻿import { updateEnemyHpBar } from "../combat/combat-hp-bars.js";
+﻿import { updateEnemyHpBar, updatePlayerHpBar } from "../combat/combat-hp-bars.js";
 
 const attackBtn = document.getElementById("attack-btn");
 const playerStrengthEl = document.getElementById("player-strength");
 
 const currentHpEnemyEl = document.getElementById("enemy-current-hp");
 const totalHpEnemyEl = document.getElementById("enemy-total-hp");
+const currentHpPlayerEl = document.getElementById("player-current-hp");
+const totalHpPlayerEl = document.getElementById("player-total-hp");
 
 attackBtn.addEventListener("click", attackEnemy);
 
@@ -33,4 +35,5 @@ function updateEnemyHp() {
 function onCombatPageLoad() {
     // Update hp bars.
     updateEnemyHpBar(currentHpEnemyEl.innerText, totalHpEnemyEl.innerText);
+    updatePlayerHpBar(currentHpPlayerEl.innerText, totalHpPlayerEl.innerText);
 }
