@@ -1,22 +1,18 @@
 ﻿import { updateEnemyHpBar, updatePlayerHpBar } from "../combat/combat-hp-bars.js";
 
 const attackBtn = document.getElementById("attack-btn");
-const playerStrengthEl = document.getElementById("player-strength");
 
 const currentHpEnemyEl = document.getElementById("enemy-current-hp");
 const totalHpEnemyEl = document.getElementById("enemy-total-hp");
 const currentHpPlayerEl = document.getElementById("player-current-hp");
 const totalHpPlayerEl = document.getElementById("player-total-hp");
 
+const player = { strength: 0, vigor: 0, agility: 0 };
+const enemy = { strength: 0, vigor: 0, agility: 0 };
+
 attackBtn.addEventListener("click", attackEnemy);
 
 onCombatPageLoad();
-
-const player = {
-    strength: 0,
-    vigor: 0,
-    agility: 0,
-};
 
 function populatePlayerStats() {
     fetch("/Response/Player/Stats")
@@ -25,6 +21,16 @@ function populatePlayerStats() {
             player.strength = stats.strength;
             player.vigor = stats.vigor;
             player.agility = stats.agility;
+        });
+}
+
+function populateEnemyStats() {
+    fetch("/Response/Enemy/Stats")
+        .then(response => response.json())
+        .then(stats => {
+            enemy.strength = stats.strength;
+            enemy.vigor = stats.vigor;
+            enemy.agility = stats.agility;
         });
 }
 
@@ -52,6 +58,7 @@ function updateEnemyHp() {
 function onCombatPageLoad() {
     // Assign character stats.
     populatePlayerStats();
+    populateEnemyStats();
 
     // Update hp bars.
     updateEnemyHpBar(currentHpEnemyEl.innerText, totalHpEnemyEl.innerText);
