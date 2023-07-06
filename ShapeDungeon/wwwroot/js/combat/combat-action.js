@@ -1,17 +1,21 @@
 ﻿import { updateEnemyHpBar, updatePlayerHpBar } from "../combat/combat-hp-bars.js";
+import { shake } from "../animations/shake.js";
 
+// Buttons.
 const attackBtn = document.getElementById("attack-btn");
 
-const currentHpEnemyEl = document.getElementById("enemy-current-hp");
+// Visual elements.
 const totalHpEnemyEl = document.getElementById("enemy-total-hp");
-const currentHpPlayerEl = document.getElementById("player-current-hp");
 const totalHpPlayerEl = document.getElementById("player-total-hp");
+const currentHpEnemyEl = document.getElementById("enemy-current-hp");
+const currentHpPlayerEl = document.getElementById("player-current-hp");
+const enemyHealthBarContainerEl = document.getElementById("enemy-health-bar-container");
 
+// Variables used in script.
 const player = { strength: 0, vigor: 0, agility: 0 };
 const enemy = { strength: 0, vigor: 0, agility: 0 };
 
 attackBtn.addEventListener("click", attackEnemy);
-
 onCombatPageLoad();
 
 function populatePlayerStats() {
@@ -35,15 +39,16 @@ function populateEnemyStats() {
 }
 
 function attackEnemy() {
-
     fetch("/Combat/Test", {
         method: "PATCH",
         body: JSON.stringify({ hp: Number(currentHpEnemyEl.innerText) - player.strength }),
         headers: { "Content-type": "application/json;" }
     })
         .then(response => response.json())
-        .then(() => updateEnemyHp())
-
+        .then(() => {
+            updateEnemyHp()
+            shake(enemyHealthBarContainerEl);
+        });
 }
 
 function updateEnemyHp() {
