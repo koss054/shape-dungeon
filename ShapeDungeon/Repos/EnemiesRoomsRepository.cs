@@ -46,6 +46,17 @@ namespace ShapeDungeon.Repos
             return enemyRoom.EnemyId;
         }
 
+        public async Task DefeatEnemyForRoom(Guid roomId)
+        {
+            var enemyRoom = await this.Context.EnemiesRooms
+                .FirstOrDefaultAsync(x => x.RoomId == roomId);
+
+            if (enemyRoom == null)
+                throw new ArgumentNullException();
+
+            enemyRoom.IsEnemyDefeated = true;
+        }
+
         /// <summary>
         /// Checks if the enemy in the searched room has been defeated.
         /// </summary>

@@ -18,5 +18,12 @@ namespace ShapeDungeon.Controllers
             var combatDto = await _combatService.GetActiveCombat();
             return View(combatDto);
         }
+
+        public async Task<IActionResult> Win()
+        {
+            var isWinValid = await _combatService.HasPlayerWon();
+            if (isWinValid) return RedirectToAction("Index", "Active");
+            return RedirectToAction("Action");
+        }
     }
 }

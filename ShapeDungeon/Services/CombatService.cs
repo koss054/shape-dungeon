@@ -35,18 +35,21 @@ namespace ShapeDungeon.Services
         public async Task InitializeCombat()
         {
             var activeRoom = await _roomRepository.GetActiveForMove();
-            await IsActiveRoomValidForCombat(activeRoom);
+            var isActiveRoomValid = await IsActiveRoomValidForCombat(activeRoom);
 
-            var activePlayer = await _playerRepository.GetActive();
-            if (activePlayer == null) throw new ArgumentNullException(nameof(activePlayer));
-
-            var activeEnemy = await _enemyRepository.GetActiveForCombat();
-            if (activeEnemy == null) throw new ArgumentNullException(nameof(activeEnemy));
-
-            await _unitOfWork.Commit(async () =>
+            if (isActiveRoomValid)
             {
-                await _combatRepository.CreateCombat(activePlayer, activeEnemy, activeRoom.Id);
-            });
+                var activePlayer = await _playerRepository.GetActive();
+                if (activePlayer == null) throw new ArgumentNullException(nameof(activePlayer));
+
+                var activeEnemy = await _enemyRepository.GetActiveForCombat();
+                if (activeEnemy == null) throw new ArgumentNullException(nameof(activeEnemy));
+
+                await _unitOfWork.Commit(async () =>
+                {
+                    await _combatRepository.CreateCombat(activePlayer, activeEnemy, activeRoom.Id);
+                });
+            }
         }
 
         public async Task<CombatDto> GetActiveCombat()
@@ -68,6 +71,27 @@ namespace ShapeDungeon.Services
             CombatDto combatDto = activeCombat;
 
             return combatDto;
+        }
+
+        public async Task<bool> HasPlayerWon()
+        {
+            var activeCombat = await _combatRepository.GetActiveCombat();
+            if (activeCombat == null) throw new ArgumentNullException(
+                "IsActive", "NoActiveCombatException");
+
+            if (activeCombat.CurrentEnemyHp <= 0)
+            {
+                await _unitOfWork.Commit(() =>
+                {
+                    activeCombat.IsActive = false;
+                    _playerRepository.ExitCombat(activeCombat.PlayerId);
+                    _enemiesRoomsRepository.DefeatEnemyForRoom(activeCombat.CombatRoomId);
+                });
+
+                return true;
+            }
+
+            return false;
         }
 
         /// <summary>
@@ -105,7 +129,7 @@ namespace ShapeDungeon.Services
         }
 
         // Exception with string in () will be the name of the custom exception.
-        private async Task IsActiveRoomValidForCombat(Room activeRoom)
+        private async Task<bool> IsActiveRoomValidForCombat(Room activeRoom)
         {
             if (activeRoom == null) 
                 throw new ArgumentNullException(nameof(activeRoom));
@@ -117,7 +141,9 @@ namespace ShapeDungeon.Services
                 .IsRoomEnemyDefeated(activeRoom.Id);
 
             if (isEnemyDefeated)
-                throw new Exception("EnemyAlreadyDefeatedException");
+                return false;
+
+            return true;
         }
     }
 }

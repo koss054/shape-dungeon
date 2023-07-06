@@ -45,11 +45,16 @@ function attackEnemy() {
         headers: { "Content-type": "application/json;" }
     })
         .then(response => response.json())
-        .then( updatedEnemyHp => {
+        .then(updatedEnemyHp => {
             currentHpEnemyEl.innerText = updatedEnemyHp;
             updateEnemyHpBar(updatedEnemyHp, totalHpEnemyEl.innerText);
             shake(enemyHealthBarContainerEl);
+            if (updatedEnemyHp <= 0) playerWinCombat();
         });
+}
+
+function playerWinCombat() {
+    fetch("/Combat/Win");
 }
 
 function onCombatPageLoad() {

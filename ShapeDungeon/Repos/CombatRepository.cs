@@ -12,7 +12,7 @@ namespace ShapeDungeon.Repos
         }
 
         public async Task<Combat?> GetActiveCombat()
-            => await this.Context.Combats.FirstOrDefaultAsync(x => x.IsActive);
+            => await this.Context.Combats.SingleOrDefaultAsync(x => x.IsActive);
 
         public async Task CreateCombat(Player player, Enemy enemy, Guid roomId)
         {
