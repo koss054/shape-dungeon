@@ -15,9 +15,9 @@ namespace ShapeDungeon.Areas.Response.Controllers
         }
 
         [Route("Stats")]
-        public async Task<IActionResult> GetCurrentEnemyStats(Guid enemyId)
+        public async Task<IActionResult> GetCurrentEnemyStats()
         {
-            var enemy = await _enemyGetService.GetById(enemyId);
+            var enemy = await _enemyGetService.GetIsActiveForCombat();
             EnemyStatResponse enemyStats = enemy;
             return Json(enemyStats);
         }
