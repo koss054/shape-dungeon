@@ -11,7 +11,8 @@ namespace ShapeDungeon.Controllers
 {
     public class RoomController : Controller
     {
-        private readonly IEnemyService _enemyService;
+        private readonly IEnemyCreateService _enemyCreateService;
+        private readonly IEnemyGetService _enemyGetService;
         private readonly IGetRoomService _getRoomService;
         private readonly IRoomEnemyService _roomEnemyService;
         private readonly IRoomCreateService _roomCreateService;
@@ -21,7 +22,8 @@ namespace ShapeDungeon.Controllers
         private readonly ICheckRoomNeighborsService _checkRoomNeighborsService;
 
         public RoomController(
-            IEnemyService enemyService, 
+            IEnemyCreateService enemyCreateService,
+            IEnemyGetService enemyGetService,
             IGetRoomService getRoomService, 
             IRoomEnemyService roomEnemyService, 
             IRoomCreateService roomCreateService, 
@@ -30,7 +32,8 @@ namespace ShapeDungeon.Controllers
             IRoomActiveForEditService roomActiveForEditService, 
             ICheckRoomNeighborsService checkRoomNeighborsService)
         {
-            _enemyService = enemyService;
+            _enemyCreateService = enemyCreateService;
+            _enemyGetService = enemyGetService;
             _getRoomService = getRoomService;
             _roomEnemyService = roomEnemyService;
             _roomCreateService = roomCreateService;
@@ -63,7 +66,7 @@ namespace ShapeDungeon.Controllers
 
             if (newRoom.IsEnemyRoom)
             {
-                var enemy = await _enemyService.GetById(roomDto.EnemyId);
+                var enemy = await _enemyGetService.GetById(roomDto.EnemyId);
 
                 if (enemy != null)
                     await _enemiesRoomsService.AddEnemyToRoom(newRoom, enemy);
@@ -83,7 +86,7 @@ namespace ShapeDungeon.Controllers
                 return RedirectToAction("Create");
             }
 
-            var enemyRange = await _enemyService.GetRangeAsync(GetLevel("min"), GetLevel("max"));
+            var enemyRange = await _enemyGetService.GetRangeAsync(GetLevel("min"), GetLevel("max"));
             var room = new RoomCreateDto() { Details = roomDetails, EnemyRange = enemyRange };
             return View(room);
         }

@@ -30,7 +30,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddScoped<IPlayerUpdateService, PlayerUpdateService>();
 
             // Enemy
-            services.AddScoped<IEnemyService, EnemyService>();
+            services.AddScoped<IEnemyCreateService, EnemyCreateService>();
 
             // Room
             services.AddScoped<IGetRoomService, GetRoomService>();
@@ -43,6 +43,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
             // Enemy Room mapping entity
             services.AddScoped<IEnemiesRoomsService, EnemiesRoomsService>();
+            services.AddScoped<IEnemyGetService, EnemyGetService>();
 
             // Repos
             services.AddScoped<IUnitOfWork, UnitOfWork>();

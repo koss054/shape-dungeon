@@ -6,9 +6,9 @@ namespace ShapeDungeon.Controllers
 {
     public class EnemyController : Controller
     {
-        private readonly IEnemyService _enemyService;
+        private readonly IEnemyCreateService _enemyService;
 
-        public EnemyController(IEnemyService enemyService)
+        public EnemyController(IEnemyCreateService enemyService)
         {
             _enemyService = enemyService;
         }
