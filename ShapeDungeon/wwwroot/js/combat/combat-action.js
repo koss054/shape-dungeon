@@ -39,24 +39,16 @@ function populateEnemyStats() {
 }
 
 function attackEnemy() {
-    fetch("/Combat/Test", {
+    fetch("/Response/Enemy/Reduce-Health", {
         method: "PATCH",
-        body: JSON.stringify({ hp: Number(currentHpEnemyEl.innerText) - player.strength }),
+        body: JSON.stringify({ hpToReduce: Number(player.strength) }),
         headers: { "Content-type": "application/json;" }
     })
         .then(response => response.json())
-        .then(() => {
-            updateEnemyHp()
+        .then( updatedEnemyHp => {
+            currentHpEnemyEl.innerText = updatedEnemyHp;
+            updateEnemyHpBar(updatedEnemyHp, totalHpEnemyEl.innerText);
             shake(enemyHealthBarContainerEl);
-        });
-}
-
-function updateEnemyHp() {
-    fetch("/Combat/Test2")
-        .then(response => response.json())
-        .then(enemyInfo => {
-            currentHpEnemyEl.innerText = enemyInfo.hp;
-            updateEnemyHpBar(enemyInfo.hp, totalHpEnemyEl.innerText);
         });
 }
 

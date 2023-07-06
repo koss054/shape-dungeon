@@ -1,6 +1,7 @@
 ﻿using ShapeDungeon.Data;
 using ShapeDungeon.DTOs;
 using ShapeDungeon.Entities;
+using ShapeDungeon.Helpers.Enums;
 using ShapeDungeon.Interfaces.Services;
 using ShapeDungeon.Repos;
 
@@ -69,19 +70,38 @@ namespace ShapeDungeon.Services
             return combatDto;
         }
 
-        public async Task Test(int hp)
+        /// <summary>
+        /// Updates the health of the character that has been attacked.
+        /// </summary>
+        /// <param name="hpToReduce">The amount of hp the attacked character has lost.</param>
+        /// <param name="characterType"> 
+        /// CombatCharacterType.Player == 0. CombatCharacterType.Enemy == 1.
+        /// Any other int value will throw an exception.
+        /// </param>
+        /// <returns>The updated health value of the affected character type.</returns>
+        /// <exception cref="ArgumentNullException">No active combat could be found.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Incorrect character type has been passed.</exception>
+        public async Task<int> UpdateHealthAfterAttack(int hpToReduce, int characterType)
         {
-            var test = await _combatRepository.GetActiveCombat();
+            var activeCombat = await _combatRepository.GetActiveCombat();
+            if (activeCombat == null) throw new ArgumentNullException(
+                "IsActive", "NoActiveCombatException");
+
             await _unitOfWork.Commit(() =>
             {
-                test!.CurrentEnemyHp = hp;
+                switch (characterType)
+                {
+                    case (int)CombatCharacterType.Player:
+                        activeCombat.CurrentPlayerHp -= hpToReduce; break;
+                    case (int)CombatCharacterType.Enemy:
+                        activeCombat.CurrentEnemyHp -= hpToReduce;  break;
+                    default: throw new ArgumentOutOfRangeException(nameof(characterType));
+                }
             });
-        }
 
-        public async Task<int> Test2()
-        {
-            var test = await _combatRepository.GetActiveCombat();
-            return test!.CurrentEnemyHp;
+            return characterType == (int)CombatCharacterType.Player
+                ? activeCombat.CurrentPlayerHp
+                : activeCombat.CurrentEnemyHp;
         }
 
         // Exception with string in () will be the name of the custom exception.
