@@ -25,12 +25,19 @@ namespace ShapeDungeon.Services.Enemies
             return enemyDtos;
         }
 
+        // TODO: Make exceptions return better info.
         public async Task<Enemy> GetById(Guid enemyId)
         {
             var enemy = await _enemyRepository.GetById(enemyId);
-            if (enemy == null) throw new ArgumentNullException(nameof(enemy));
-            return enemy;
+            return enemy ?? throw new ArgumentNullException("Enemy id.", 
+                "No entity matches provided id.");
+        }
 
+        public async Task<Enemy> GetIsActiveForCombat()
+        {
+            var enemy = await _enemyRepository.GetActiveForCombat();
+            return enemy ?? throw new ArgumentNullException("Enemy for combat.", 
+                "No active combat enemy when expected.");
         }
     }
 }
