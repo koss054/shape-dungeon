@@ -5,6 +5,7 @@ import { shake } from "../animations/shake.js";
 const attackBtn = document.getElementById("attack-btn");
 
 // Visual elements.
+const enemyShapeEl = document.getElementById("enemy-shape");
 const totalHpEnemyEl = document.getElementById("enemy-total-hp");
 const totalHpPlayerEl = document.getElementById("player-total-hp");
 const currentHpEnemyEl = document.getElementById("enemy-current-hp");
@@ -54,7 +55,18 @@ function attackEnemy() {
 }
 
 function playerWinCombat() {
-    fetch("/Combat/Win");
+    fetch("/Response/Combat/Win")
+        .then(response => response.json())
+        .then(hasWon => {
+            if (hasWon) {
+                updateScreenOnPlayerWin();
+            }
+        });
+}
+
+function updateScreenOnPlayerWin() {
+    attackBtn.disabled = true;
+    enemyShapeEl.style.transform = "translateY(1000%)";
 }
 
 function onCombatPageLoad() {
