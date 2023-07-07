@@ -42,6 +42,9 @@ namespace ShapeDungeon.Controllers
 
         public async Task<IActionResult> Active()
         {
+            await _roomTravelService.IsScoutResetAsync(); // Doing this if player changes the URL manually.
+            await _playerScoutService.UpdateActiveScoutEnergyAsync(PlayerScoutAction.Refill);
+
             var player = await _playerGetService.GetActivePlayer();
             if (player == null)
             {
@@ -49,10 +52,6 @@ namespace ShapeDungeon.Controllers
 
             if (player!.IsInCombat)
                 return RedirectToAction("Action", "Combat");
-
-            await _roomTravelService.IsScoutResetAsync(); // Doing this if player changes the URL manually.
-            await _playerScoutService.UpdateActiveScoutEnergyAsync(PlayerScoutAction.Refill);
-
 
             var room = await _getRoomService.GetActiveForMoveAsync();
             if (room == null)
