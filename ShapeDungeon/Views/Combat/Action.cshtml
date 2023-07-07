@@ -6,6 +6,14 @@
     ViewBag.Title = "Shape Combat";
 }
 
+<link rel="stylesheet" href="~/css/combat.css" />
+
+<div id="win-screen">
+    <h2>@Model.Player.Name defeated @Model.Enemy.Name...</h2>
+    <p>...and gained @Model.Enemy.DroppedExp experience!</p>
+    <a class="btn btn-outline-warning gold" asp-controller="Home" asp-action="Active">Go Back to Room</a>
+</div>
+
 <div class="position-absolute"
      style="top:50%;left:25%;transform:translate(0%, -50%);width:15rem">
     <div>
@@ -69,19 +77,5 @@
         </div>
     </div>
 </div>
-
-<style>
-    #selected-shape, #enemy-shape {
-        top: 15%!important;
-    }
-
-    #enemy-shape {
-        transition: transform 5s;
-    }
-
-    body {
-        overflow-y: hidden;
-    }
-</style>
 
 <script src="~/js/combat/combat-action.js" type="module"></script>

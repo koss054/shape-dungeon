@@ -5,6 +5,7 @@ import { shake } from "../animations/shake.js";
 const attackBtn = document.getElementById("attack-btn");
 
 // Visual elements.
+const winScreenEl = document.getElementById("win-screen");
 const enemyShapeEl = document.getElementById("enemy-shape");
 const totalHpEnemyEl = document.getElementById("enemy-total-hp");
 const totalHpPlayerEl = document.getElementById("player-total-hp");
@@ -66,6 +67,8 @@ function playerWinCombat() {
 
 function updateScreenOnPlayerWin() {
     attackBtn.disabled = true;
+    winScreenEl.style.zIndex = "100";
+    winScreenEl.style.opacity = "100";
     enemyShapeEl.style.transform = "translateY(1000%)";
 }
 
