@@ -25,14 +25,13 @@ namespace ShapeDungeon.Repos
             var enemyRoom = await this.Context.EnemiesRooms
                 .FirstOrDefaultAsync(x => x.RoomId == roomId);
 
-            // Gotta do some error exception work after I finish implementing enemy stuff.
             if (enemyRoom == null)
-                return new Enemy();
+                throw new ArgumentNullException();
 
             var enemy = await this.Context.Enemies
                 .FirstOrDefaultAsync(x => x.Id == enemyRoom.EnemyId);
 
-            return enemy ?? new Enemy();
+            return enemy ?? throw new ArgumentNullException();
         }
 
         public async Task<Guid> GetEnemyIdByRoomId(Guid roomId)
@@ -46,15 +45,12 @@ namespace ShapeDungeon.Repos
             return enemyRoom.EnemyId;
         }
 
-        public async Task DefeatEnemyForRoom(Guid roomId)
+        public async Task<EnemyRoom> GetEntityByRoomId(Guid roomId)
         {
             var enemyRoom = await this.Context.EnemiesRooms
                 .FirstOrDefaultAsync(x => x.RoomId == roomId);
 
-            if (enemyRoom == null)
-                throw new ArgumentNullException();
-
-            enemyRoom.IsEnemyDefeated = true;
+            return enemyRoom ?? throw new ArgumentNullException();
         }
 
         /// <summary>

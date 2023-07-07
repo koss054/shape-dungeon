@@ -7,7 +7,7 @@ namespace ShapeDungeon.Repos
         Task AddAsync(Room room, Enemy enemy);
         Task<Enemy> GetEnemyByRoomId(Guid roomId);
         Task<Guid> GetEnemyIdByRoomId(Guid roomId);
-        Task DefeatEnemyForRoom(Guid roomId);
+        Task<EnemyRoom> GetEntityByRoomId(Guid roomId);
 
         /// <summary>
         /// Checks if the enemy in the searched room has been defeated.
