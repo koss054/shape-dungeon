@@ -209,6 +209,19 @@
                      class="position-absolute top-50 start-50 translate-middle">
                 </div>
             }
+
+            @if (Model.IsEnemyDefeated)
+            {
+                <script src="~/js/enemy/defeated-style.js"></script>
+                @if (Model.Enemy.Shape == Shape.Triangle)
+                {
+                    <script>defeatedEnemyTriangle()</script>
+                }
+                else
+                {
+                    <script>defeatedEnemy()</script>
+                }
+            }
         }
 
     </div>

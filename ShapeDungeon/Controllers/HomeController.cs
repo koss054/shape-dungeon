@@ -70,6 +70,7 @@ namespace ShapeDungeon.Controllers
             {
                 var roomId = await _getRoomService.GetActiveForMoveId();
                 room.Enemy = await _roomEnemyService.GetEnemy(roomId);
+                room.IsEnemyDefeated = await _roomEnemyService.IsEnemyDefeated(roomId);
             }
 
             var game = new GameDto() { Player = player!, Room = room! };
@@ -105,6 +106,7 @@ namespace ShapeDungeon.Controllers
             {
                 var roomId = await _getRoomService.GetActiveForScoutId();
                 room.Enemy = await _roomEnemyService.GetEnemy(roomId);
+                room.IsEnemyDefeated = await _roomEnemyService.IsEnemyDefeated(roomId);
             }
 
             var game = new GameDto() { Player = player!, Room = room! };

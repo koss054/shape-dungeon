@@ -20,5 +20,12 @@ namespace ShapeDungeon.Services.Rooms
             EnemyDto enemyDto = enemy;
             return enemyDto;
         }
+
+        public async Task<bool> IsEnemyDefeated(Guid roomId)
+        {
+            var enemyRoom = await _enemiesRoomsRepository.GetEntityByRoomId(roomId);
+            if (enemyRoom == null) throw new ArgumentNullException();
+            return enemyRoom.IsEnemyDefeated;
+        }
     }
 }
