@@ -84,6 +84,7 @@ namespace ShapeDungeon.Services
                 var enemyRoom = await _enemiesRoomsRepository
                     .GetEntityByRoomId(activeCombat.CombatRoomId);
 
+
                 await _unitOfWork.Commit(() =>
                 {
                     activeCombat.IsActive = false;

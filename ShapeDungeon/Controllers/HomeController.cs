@@ -12,6 +12,7 @@ namespace ShapeDungeon.Controllers
         private readonly IRoomEnemyService _roomEnemyService;
         private readonly IRoomTravelService _roomTravelService;
         private readonly IRoomConditionService _roomConditionService;
+        private readonly IPlayerCombatService _playerCombatService;
         private readonly IPlayerGetService _playerGetService;
         private readonly IPlayerScoutService _playerScoutService;
         private readonly IPlayerUpdateService _playerUpdateService;
@@ -22,6 +23,7 @@ namespace ShapeDungeon.Controllers
             IRoomEnemyService roomEnemyService,
             IRoomTravelService roomTravelService,
             IRoomConditionService roomConditionService,
+            IPlayerCombatService playerCombatService,
             IPlayerGetService playerGetService,
             IPlayerScoutService playerScoutService,
             IPlayerUpdateService playerUpdateService,
@@ -31,6 +33,7 @@ namespace ShapeDungeon.Controllers
             _roomEnemyService = roomEnemyService;
             _roomTravelService = roomTravelService;
             _roomConditionService = roomConditionService;
+            _playerCombatService = playerCombatService;
             _playerGetService = playerGetService;
             _playerScoutService = playerScoutService;
             _playerUpdateService = playerUpdateService;
@@ -127,7 +130,7 @@ namespace ShapeDungeon.Controllers
                 return RedirectToAction("Action", "Combat");
             }
 
-            await _playerUpdateService.ExitCombat();
+            await _playerCombatService.ExitCombat();
             return RedirectToAction("Active");
         }
 

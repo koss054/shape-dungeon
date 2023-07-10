@@ -49,15 +49,6 @@ namespace ShapeDungeon.Services.Players
             });
         }
 
-        public async Task ExitCombat()
-        {
-            var activePlayer = await GetActivePlayer();
-            await _unitOfWork.Commit(() =>
-            {
-                activePlayer.IsInCombat = false;
-            });
-        }
-
         private async Task<Player> GetActivePlayer()
         {
             var player = await _playerRepository.GetActive();
