@@ -13,9 +13,9 @@
 #win-screen {
     transform: translate(-50%, -50%);
     border: solid 0.05rem gold;
-    transition: opacity 2.5s;
     justify-content: center;
     flex-direction: column;
+    transition: opacity 1s;
     align-items: center;
     background: #060606;
     position: absolute;
