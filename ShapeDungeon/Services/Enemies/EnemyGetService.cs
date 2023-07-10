@@ -39,5 +39,12 @@ namespace ShapeDungeon.Services.Enemies
             return enemy ?? throw new ArgumentNullException("Enemy for combat.", 
                 "No active combat enemy when expected.");
         }
+
+        public async Task<int> GetActiveForCombatExp()
+        {
+            var enemy = await _enemyRepository.GetActiveForCombat();
+            return enemy != null ? enemy.DroppedExp
+                : throw new ArgumentNullException();
+        }
     }
 }

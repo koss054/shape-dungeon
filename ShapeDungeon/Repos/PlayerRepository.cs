@@ -58,15 +58,6 @@ namespace ShapeDungeon.Repos
         public async Task<bool> DoesNameExist(string name)
             => await this.Context.Players.AnyAsync(x => x.Name == name);
 
-        public async Task ExitCombat(Guid playerId)
-        {
-            var player = await this.Context.Players
-                .FirstOrDefaultAsync(x => x.Id == playerId);
-
-            if (player != null)
-                player.IsInCombat = false;
-        }
-
         public async Task AddAsync(Player player)
             => await this.Context.Players.AddAsync(player);
     }

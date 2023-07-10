@@ -8,5 +8,6 @@ namespace ShapeDungeon.Interfaces.Services.Enemies
         Task<IEnumerable<EnemyRangeDto>> GetRangeAsync(int minLevel, int maxLevel);
         Task<Enemy> GetById(Guid enemyId);
         Task<Enemy> GetIsActiveForCombat();
+        Task<int> GetActiveForCombatExp();
     }
 }

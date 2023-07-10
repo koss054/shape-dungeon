@@ -43,7 +43,6 @@ namespace ShapeDungeon.Repos
         /// <returns>True if name is in the database, otherwise false.</returns>
         Task<bool> DoesNameExist(string name);
 
-        Task ExitCombat(Guid playerId);
         Task AddAsync(Player player);
     }
 }

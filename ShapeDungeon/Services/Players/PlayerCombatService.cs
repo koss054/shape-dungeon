@@ -1,4 +1,5 @@
 ﻿using ShapeDungeon.Data;
+using ShapeDungeon.Entities;
 using ShapeDungeon.Interfaces.Services.Players;
 using ShapeDungeon.Repos;
 
@@ -19,14 +20,27 @@ namespace ShapeDungeon.Services.Players
 
         public async Task ExitCombat()
         {
-            var player = await _playerRepository.GetActive();
-            if (player != null)
+            var player = await GetActive();
+            await _unitOfWork.Commit(() =>
             {
-                await _unitOfWork.Commit(() =>
-                {
-                    player.IsInCombat = false;
-                });
-            }
+                player.IsInCombat = false;
+            });
+        }
+
+        public async Task GainExp(int gainedExp)
+        {
+            var player = await GetActive();
+            await _unitOfWork.Commit(() =>
+            {
+                player.CurrentExp += gainedExp;
+            });
+        }
+
+        private async Task<Player> GetActive()
+        {
+            var player = await _playerRepository.GetActive();
+            if (player == null) throw new ArgumentNullException();
+            return player;
         }
     }
 }

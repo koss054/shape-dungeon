@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ShapeDungeon.Interfaces.Services;
+using ShapeDungeon.Interfaces.Services.Enemies;
+using ShapeDungeon.Interfaces.Services.Players;
 
 namespace ShapeDungeon.Controllers
 {
@@ -22,7 +24,9 @@ namespace ShapeDungeon.Controllers
         public async Task<IActionResult> Win()
         {
             var isWinValid = await _combatService.HasPlayerWon();
-            if (isWinValid) return RedirectToAction("Index", "Active");
+            if (isWinValid)
+                return RedirectToAction("Index", "Active");
+
             return RedirectToAction("Action");
         }
     }

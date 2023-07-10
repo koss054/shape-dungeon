@@ -3,5 +3,6 @@
     public interface IPlayerCombatService
     {
         Task ExitCombat();
+        Task GainExp(int gainedExp);
     }
 }
