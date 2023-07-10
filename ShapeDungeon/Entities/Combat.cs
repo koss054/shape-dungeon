@@ -6,6 +6,7 @@ namespace ShapeDungeon.Entities
     {
         public Guid Id { get; set; }
         public bool IsActive { get; set; }
+        public bool IsPlayerAttacking { get; set; }
 
         [ForeignKey(nameof(Player))]
         public Guid PlayerId { get; set; }

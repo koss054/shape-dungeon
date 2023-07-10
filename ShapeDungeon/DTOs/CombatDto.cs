@@ -6,6 +6,7 @@ namespace ShapeDungeon.DTOs
 {
     public class CombatDto
     {
+        public bool IsPlayerAttacking { get; init; }
         public PlayerDto Player { get; init; }
             = null!;
         public int CurrentPlayerHp { get; init; }
@@ -21,6 +22,7 @@ namespace ShapeDungeon.DTOs
         public static implicit operator CombatDto(Combat combat)
             => new()
             {
+                IsPlayerAttacking = combat.IsPlayerAttacking,
                 Player = combat.Player,
                 CurrentPlayerHp = combat.CurrentPlayerHp,
                 TotalPlayerHp = combat.TotalPlayerHp,

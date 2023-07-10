@@ -19,6 +19,7 @@ namespace ShapeDungeon.Repos
             var combat = new Combat
             {
                 IsActive = true,
+                IsPlayerAttacking = player.Agility >= enemy.Agility,
                 PlayerId = player.Id,
                 Player = player,
                 CurrentPlayerHp = player.Vigor * 2,
