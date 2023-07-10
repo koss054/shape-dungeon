@@ -31,12 +31,23 @@ namespace ShapeDungeon.Areas.Response.Controllers
         }
 
         [HttpPatch]
-        [Route("Reduce-Health")]
-        public async Task<IActionResult> ReduceEnemyHealth([FromBody]CharacterHpResponse response)
+        [Route("Defend")]
+        public async Task<IActionResult> Defend([FromBody]CharacterHpResponse response)
         {
             var updatedEnemyHp = await _combatService.UpdateHealthAfterAttack(
                 response.HpToReduce, (int)CombatCharacterType.Enemy);
-            return Json(updatedEnemyHp);
+
+            await _combatService.ToggleIsPlayerAttackingInActiveCombat();
+            var isPlayerAttacking = await _combatService.
+                IsPlayerAttackingInActiveCombat();
+
+            var enemyResponse = new EnemyDefendResponse
+            {
+                UpdatedEnemyHp = updatedEnemyHp,
+                IsPlayerAttacking = isPlayerAttacking,
+            };
+
+            return Json(enemyResponse);
         }
     }
 }

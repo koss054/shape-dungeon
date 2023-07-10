@@ -73,6 +73,8 @@ namespace ShapeDungeon.Services
             return combatDto;
         }
 
+        // TODO: Split method so it doesn't do two things at the same time.
+        // 1. Updates entity; 2. Returns value.
         public async Task<bool> HasPlayerWon()
         {
             var activeCombat = await _combatRepository.GetActiveCombat();
@@ -94,6 +96,27 @@ namespace ShapeDungeon.Services
             }
 
             return false;
+        }
+
+        public async Task<bool> IsPlayerAttackingInActiveCombat()
+        {
+            var activeCombat = await _combatRepository.GetActiveCombat();
+            if (activeCombat == null) throw new ArgumentNullException(
+                "IsActive", "NoActiveCombatException");
+
+            return activeCombat.IsPlayerAttacking;
+        }
+
+        public async Task ToggleIsPlayerAttackingInActiveCombat()
+        {
+            var activeCombat = await _combatRepository.GetActiveCombat();
+            if (activeCombat == null) throw new ArgumentNullException(
+                "IsActive", "NoActiveCombatException");
+
+            await _unitOfWork.Commit(() => 
+            {
+                activeCombat.IsPlayerAttacking = !activeCombat.IsPlayerAttacking;
+            });
         }
 
         /// <summary>

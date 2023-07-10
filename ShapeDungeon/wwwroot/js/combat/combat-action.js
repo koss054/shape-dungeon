@@ -7,6 +7,7 @@ const attackBtn = document.getElementById("attack-btn");
 // Visual elements.
 const winScreenEl = document.getElementById("win-screen");
 const enemyShapeEl = document.getElementById("enemy-shape");
+const enemyActionEl = document.getElementById("enemy-action");
 const totalHpEnemyEl = document.getElementById("enemy-total-hp");
 const totalHpPlayerEl = document.getElementById("player-total-hp");
 const currentHpEnemyEl = document.getElementById("enemy-current-hp");
@@ -41,18 +42,31 @@ function populateEnemyStats() {
 }
 
 function attackEnemy() {
-    fetch("/Response/Enemy/Reduce-Health", {
+    fetch("/Response/Enemy/Defend", {
         method: "PATCH",
         body: JSON.stringify({ hpToReduce: Number(player.strength) }),
         headers: { "Content-type": "application/json;" }
     })
         .then(response => response.json())
-        .then(updatedEnemyHp => {
-            currentHpEnemyEl.innerText = updatedEnemyHp;
-            updateEnemyHpBar(updatedEnemyHp, totalHpEnemyEl.innerText);
+        .then(x => {
             shake(enemyHealthBarContainerEl);
-            if (updatedEnemyHp <= 0) playerWinCombat();
+            updateEnemyActionBar(x.isPlayerAttacking);
+            currentHpEnemyEl.innerText = x.updatedEnemyHp;
+            updateEnemyHpBar(x.updatedEnemyHp, totalHpEnemyEl.innerText);
+            if (x.updatedEnemyHp <= 0) playerWinCombat();
         });
+}
+
+function updateEnemyActionBar(isPlayerAttacking) {
+    if (isPlayerAttacking) {
+        enemyActionEl.classList.remove("btn-outline-danger");
+        enemyActionEl.classList.add("btn-outline-info");
+        enemyActionEl.innerText = "Defending....";
+    } else {
+        enemyActionEl.classList.remove("btn-outline-info");
+        enemyActionEl.classList.add("btn-outline-danger");
+        enemyActionEl.innerText = "Attacking....";
+    }
 }
 
 function playerWinCombat() {

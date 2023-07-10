@@ -7,6 +7,8 @@ namespace ShapeDungeon.Interfaces.Services
         Task InitializeCombat();
         Task<CombatDto> GetActiveCombat();
         Task<bool> HasPlayerWon();
+        Task<bool> IsPlayerAttackingInActiveCombat();
+        Task ToggleIsPlayerAttackingInActiveCombat();
 
         /// <summary>
         /// Updates the health of the character that has been attacked.

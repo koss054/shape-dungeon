@@ -71,8 +71,16 @@
             <span id="enemy-total-hp" class="position-absolute" style="right:5%;color:white">@Model.TotalEnemyHp</span>
         </div>
         <div class="btn-group" role="group" aria-label="Enemy Action Display" style="width:100%">
-            <input type="radio" class="btn-check" name="enemy-action" id="enemy-action" value="atk-dmg" checked>
-            <label class="btn btn-outline-danger" for="enemy-action">Attacking....</label>
+            @if (Model.IsPlayerAttacking)
+            {
+                <input type="radio" class="btn-check" name="enemy-action" value="atk-dmg" checked>
+                <label class="btn btn-outline-info" id="enemy-action">Defending....</label>
+            }
+            else
+            {
+                <input type="radio" class="btn-check" name="enemy-action" value="atk-dmg" checked>
+                <label class="btn btn-outline-danger" id="enemy-action">Attacking....</label>
+            }
            
         </div>
     </div>
