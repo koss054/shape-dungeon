@@ -40,12 +40,24 @@ namespace ShapeDungeon.Services.Players
             }
         }
 
+        // Move to player combat serivce.
         public async Task EnterCombat()
         {
             var activePlayer = await GetActivePlayer();
             await _unitOfWork.Commit(() =>
             {
                 activePlayer.IsInCombat = true;
+            });
+        }
+
+        public async Task LoseCombat()
+        {
+            var activePlayer = await GetActivePlayer();
+
+            await _unitOfWork.Commit(() =>
+            {
+                activePlayer.IsInCombat = false;
+                activePlayer.CurrentExp = 0;
             });
         }
 

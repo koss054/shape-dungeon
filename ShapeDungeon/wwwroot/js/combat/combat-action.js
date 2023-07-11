@@ -53,7 +53,7 @@ function attackEnemy() {
             updateEnemyActionBar(x.isPlayerAttacking);
             currentHpEnemyEl.innerText = x.updatedCharacterHp;
             updateEnemyHpBar(x.updatedCharacterHp, totalHpEnemyEl.innerText);
-            if (x.updatedCharacterHp <= 0) playerWinCombat();
+            if (x.updatedCharacterHp <= 0) endCombat();
             else attackPlayer();
         });
 }
@@ -71,7 +71,7 @@ function attackPlayer() {
                 shake(playerHealthBarContainerEl);
                 currentHpPlayerEl.innerText = x.updatedCharacterHp;
                 updatePlayerHpBar(x.updatedCharacterHp, totalHpPlayerEl.innerText);
-                if (x.updatedCharacterHp <= 0) console.log("Player lost.... bruuuh");
+                if (x.updatedCharacterHp <= 0) endCombat();
             }, 1000)
         })
 }
@@ -95,8 +95,8 @@ function updateEnemyActionBar(isPlayerAttacking) {
     }
 }
 
-function playerWinCombat() {
-    fetch("/Response/Combat/Win")
+function endCombat() {
+    fetch("/Response/Combat/End")
         .then(response => response.json())
         .then(hasWon => {
             if (hasWon) {

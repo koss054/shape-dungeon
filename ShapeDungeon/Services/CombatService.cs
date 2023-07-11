@@ -82,21 +82,33 @@ namespace ShapeDungeon.Services
             if (activeCombat == null) throw new ArgumentNullException(
                 "IsActive", "NoActiveCombatException");
 
-            if (activeCombat.CurrentEnemyHp <= 0)
+            var enemyRoom = await _enemiesRoomsRepository
+                .GetEntityByRoomId(activeCombat.CombatRoomId);
+
+            await _unitOfWork.Commit(async () =>
             {
-                var enemyRoom = await _enemiesRoomsRepository
-                    .GetEntityByRoomId(activeCombat.CombatRoomId);
-
-                await _unitOfWork.Commit(() =>
+                activeCombat.IsActive = false;
+                if (activeCombat.CurrentEnemyHp <= 0)
                 {
-                    activeCombat.IsActive = false;
                     enemyRoom.IsEnemyDefeated = true;
-                });
+                }
+                else
+                {
+                    activeCombat.Player.IsInCombat = false;
 
-                return true;
-            }
+                    var combatRoom = await _roomRepository.GetActiveForMove();
+                    var startRoom = await _roomRepository.GetByCoords(0, 0);
 
-            return false;
+                    combatRoom.IsActiveForScout = false;
+                    combatRoom.IsActiveForMove = false;
+
+                    // Start room always exists - seeded to db with coords x0 y0.
+                    startRoom!.IsActiveForScout = true;
+                    startRoom!.IsActiveForMove = true;
+                }
+            });
+
+            return enemyRoom.IsEnemyDefeated;
         }
 
         public async Task<bool> IsPlayerAttackingInActiveCombat()

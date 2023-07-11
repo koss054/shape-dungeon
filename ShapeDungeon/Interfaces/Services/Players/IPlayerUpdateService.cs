@@ -6,6 +6,7 @@ namespace ShapeDungeon.Interfaces.Services.Players
     {
         Task IncreaseStat(CharacterStat statToIncrease);
         Task EnterCombat();
+        Task LoseCombat();
         Task LevelUp();
     }
 }

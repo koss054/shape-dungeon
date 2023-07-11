@@ -54,7 +54,6 @@ namespace ShapeDungeon.Controllers
         [HttpGet]
         public async Task<IActionResult> Current()
         {
-            await _playerUpdateService.LevelUp();
             var activePlayer = await _playerGetService.GetActivePlayer();
             return View(activePlayer);
         }

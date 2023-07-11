@@ -21,7 +21,7 @@ namespace ShapeDungeon.Controllers
             return View(combatDto);
         }
 
-        public async Task<IActionResult> Win()
+        public async Task<IActionResult> End()
         {
             var isWinValid = await _combatService.HasPlayerWon();
             if (isWinValid)
