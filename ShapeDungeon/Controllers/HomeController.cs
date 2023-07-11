@@ -152,8 +152,11 @@ namespace ShapeDungeon.Controllers
         }
 
         [HttpGet]
-        public IActionResult Error()
+        public IActionResult Error(int statusCode)
         {
+            if (statusCode == 454)
+                return RedirectToAction("Index");
+
             return View();
         }
     }

@@ -1,6 +1,7 @@
 ﻿using ShapeDungeon.Data;
 using ShapeDungeon.DTOs;
 using ShapeDungeon.Entities;
+using ShapeDungeon.Exceptions;
 using ShapeDungeon.Helpers.Enums;
 using ShapeDungeon.Interfaces.Services;
 using ShapeDungeon.Repos;
@@ -58,7 +59,7 @@ namespace ShapeDungeon.Services
             if (!isThereActiveCombat) await InitializeCombat();
 
             var activeCombat = await _combatRepository.GetActiveCombat();
-            if (activeCombat == null) throw new ArgumentNullException(nameof(activeCombat));
+            if (activeCombat == null) throw new NoActiveCombatException("bruh");
 
             var activePlayer = await _playerRepository.GetActive();
             if (activePlayer == null) throw new ArgumentNullException(nameof(activeCombat));
