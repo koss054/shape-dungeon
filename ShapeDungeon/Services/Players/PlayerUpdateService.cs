@@ -49,6 +49,20 @@ namespace ShapeDungeon.Services.Players
             });
         }
 
+        public async Task LevelUp()
+        {
+            var activePlayer = await GetActivePlayer();
+            while (activePlayer.CurrentExp >= activePlayer.ExpToNextLevel)
+            {
+                await _unitOfWork.Commit(() =>
+                {
+                    activePlayer.CurrentExp -= activePlayer.ExpToNextLevel;
+                    activePlayer.CurrentSkillpoints++;
+                    activePlayer.ExpToNextLevel += 50;
+                });
+            }
+        }
+
         private async Task<Player> GetActivePlayer()
         {
             var player = await _playerRepository.GetActive();
