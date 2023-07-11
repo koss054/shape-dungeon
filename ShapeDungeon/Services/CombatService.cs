@@ -88,19 +88,23 @@ namespace ShapeDungeon.Services
             await _unitOfWork.Commit(async () =>
             {
                 activeCombat.IsActive = false;
+                activeCombat.Player.IsInCombat = false;
+                activeCombat.Enemy.IsActiveForCombat = false;
+
                 if (activeCombat.CurrentEnemyHp <= 0)
                 {
                     enemyRoom.IsEnemyDefeated = true;
                 }
                 else
                 {
-                    activeCombat.Player.IsInCombat = false;
-
                     var combatRoom = await _roomRepository.GetActiveForMove();
+                    var prevRoom = await _roomRepository.GetActiveForScout();
                     var startRoom = await _roomRepository.GetByCoords(0, 0);
 
                     combatRoom.IsActiveForScout = false;
                     combatRoom.IsActiveForMove = false;
+                    prevRoom.IsActiveForScout = false;
+                    prevRoom.IsActiveForMove = false;
 
                     // Start room always exists - seeded to db with coords x0 y0.
                     startRoom!.IsActiveForScout = true;
