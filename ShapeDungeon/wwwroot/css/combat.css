@@ -44,3 +44,7 @@
     --bs-btn-color: gold;
     --bs-gradient: none;
 }
+
+.disable-click {
+    pointer-events: none;
+}

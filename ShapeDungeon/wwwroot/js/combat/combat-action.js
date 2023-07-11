@@ -72,12 +72,12 @@ function attackPlayer() {
                 currentHpPlayerEl.innerText = x.updatedCharacterHp;
                 updatePlayerHpBar(x.updatedCharacterHp, totalHpPlayerEl.innerText);
                 if (x.updatedCharacterHp <= 0) console.log("Player lost.... bruuuh");
-            }, 2000)
+            }, 1000)
         })
 }
 
 function enemyAttacksFirst() {
-    attackBtn.disabled = true;
+    attackBtn.classList.add("disable-click");
     attackPlayer();
 }
 
@@ -86,12 +86,12 @@ function updateEnemyActionBar(isPlayerAttacking) {
         enemyActionEl.classList.remove("btn-outline-danger");
         enemyActionEl.classList.add("btn-outline-info");
         enemyActionEl.innerText = "Defending....";
-        attackBtn.disabled = false;
+        attackBtn.classList.remove("disable-click");
     } else {
         enemyActionEl.classList.remove("btn-outline-info");
         enemyActionEl.classList.add("btn-outline-danger");
         enemyActionEl.innerText = "Attacking....";
-        attackBtn.disabled = true;
+        attackBtn.classList.add("disable-click");
     }
 }
 
@@ -106,14 +106,14 @@ function playerWinCombat() {
 }
 
 function updateScreenOnPlayerWin() {
-    attackBtn.disabled = true;
+    attackBtn.classList.add("disable-click");
     winScreenEl.style.zIndex = "100";
     winScreenEl.style.opacity = "100";
     enemyShapeEl.style.transform = "translateY(1000%)";
     enemyActionEl.classList.remove("btn-outline-danger");
     enemyActionEl.classList.remove("btn-outline-info");
     enemyActionEl.classList.add("gold");
-    enemyActionEl.innerText = "Ded...."
+    enemyActionEl.innerText = "Homie deaded 😢";
 }
 
 function onCombatPageLoad() {
