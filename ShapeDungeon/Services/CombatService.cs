@@ -76,6 +76,7 @@ namespace ShapeDungeon.Services
 
         // TODO: Split method so it doesn't do two things at the same time.
         // 1. Updates entity; 2. Returns value.
+        // TODO2: Debug here cuz you somehow bugged the player win, lol.
         public async Task<bool> HasPlayerWon()
         {
             var activeCombat = await _combatRepository.GetActiveCombat();
