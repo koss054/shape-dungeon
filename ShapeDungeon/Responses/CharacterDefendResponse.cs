@@ -1,8 +1,8 @@
 ﻿namespace ShapeDungeon.Responses
 {
-    public class EnemyDefendResponse
+    public class CharacterDefendResponse
     {
-        public int UpdatedEnemyHp { get; set; }
+        public int UpdatedCharacterHp { get; set; }
         public bool IsPlayerAttacking { get; set; }
     }
 }
