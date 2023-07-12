@@ -10,17 +10,20 @@ namespace ShapeDungeon.Areas.Response.Controllers
     {
         private readonly ICombatService _combatService;
         private readonly IEnemyGetService _enemyGetService;
+        private readonly IEnemyUpdateService _enemyUpdateService;
         private readonly IPlayerCombatService _playerCombatService;
         private readonly IPlayerUpdateService _playerUpdateService;
 
         public CombatController(
             ICombatService combatService,
             IEnemyGetService enemyGetService,
+            IEnemyUpdateService enemyUpdateService,
             IPlayerCombatService playerCombatService, 
             IPlayerUpdateService playerUpdateService)
         {
             _combatService = combatService;
             _enemyGetService = enemyGetService;
+            _enemyUpdateService = enemyUpdateService;
             _playerCombatService = playerCombatService;
             _playerUpdateService = playerUpdateService;
         }
@@ -33,6 +36,7 @@ namespace ShapeDungeon.Areas.Response.Controllers
             if (isWinValid)
             {
                 var gainedExp = await _enemyGetService.GetActiveForCombatExp();
+                await _enemyUpdateService.RemoveActiveForCombat();
                 await _playerCombatService.GainExp(gainedExp);
                 await _playerUpdateService.LevelUp();
                 await _playerCombatService.ExitCombat();

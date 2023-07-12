@@ -90,7 +90,6 @@ namespace ShapeDungeon.Services
             {
                 activeCombat.IsActive = false;
                 activeCombat.Player.IsInCombat = false;
-                activeCombat.Enemy.IsActiveForCombat = false;
 
                 if (activeCombat.CurrentEnemyHp <= 0)
                 {

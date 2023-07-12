@@ -32,6 +32,8 @@ namespace Microsoft.Extensions.DependencyInjection
 
             // Enemy
             services.AddScoped<IEnemyCreateService, EnemyCreateService>();
+            services.AddScoped<IEnemyGetService, EnemyGetService>();
+            services.AddScoped<IEnemyUpdateService, EnemyUpdateService>();
 
             // Room
             services.AddScoped<IGetRoomService, GetRoomService>();
@@ -44,7 +46,6 @@ namespace Microsoft.Extensions.DependencyInjection
 
             // Enemy Room mapping entity
             services.AddScoped<IEnemiesRoomsService, EnemiesRoomsService>();
-            services.AddScoped<IEnemyGetService, EnemyGetService>();
 
             // Repos
             services.AddScoped<IUnitOfWork, UnitOfWork>();
