@@ -8,6 +8,7 @@ using ShapeDungeon.Interfaces.Services.Players;
 using ShapeDungeon.Interfaces.Services.Rooms;
 using ShapeDungeon.Middlewares;
 using ShapeDungeon.Repos;
+using ShapeDungeon.Repos.Rooms;
 using ShapeDungeon.Services;
 using ShapeDungeon.Services.Enemies;
 using ShapeDungeon.Services.EnemiesRooms;

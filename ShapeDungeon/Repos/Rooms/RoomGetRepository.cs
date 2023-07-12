@@ -3,7 +3,7 @@ using ShapeDungeon.Entities;
 using ShapeDungeon.Interfaces.Repositories;
 using ShapeDungeon.Specifications.Rooms;
 
-namespace ShapeDungeon.Repos
+namespace ShapeDungeon.Repos.Rooms
 {
     public class NewRoomRepository : RepositoryBase<Room>, IRepositoryGet<Room>
     {
@@ -12,10 +12,10 @@ namespace ShapeDungeon.Repos
         }
 
         public async Task<IEnumerable<Room>> GetAll()
-            => await this.Context.Rooms.ToListAsync();
+            => await Context.Rooms.ToListAsync();
 
         public Room GetBy(
-            IRoomSpecification specification, 
+            IRoomSpecification specification,
             IEnumerable<Room> rooms)
         {
             var roomToReturn = new Room();
