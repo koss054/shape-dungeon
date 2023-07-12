@@ -109,6 +109,8 @@ namespace ShapeDungeon.Services
                     // Start room always exists - seeded to db with coords x0 y0.
                     startRoom!.IsActiveForScout = true;
                     startRoom!.IsActiveForMove = true;
+
+                    activeCombat.Player.CurrentExp = 0;
                 }
             });
 
