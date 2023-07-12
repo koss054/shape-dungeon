@@ -58,7 +58,8 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddScoped<ICombatRepository, CombatRepository>();
 
             // New Repos
-            services.AddScoped<IRepositoryGet<Room>, NewRoomRepository>();
+            services.AddScoped<IRepositoryGet<Room>, RoomGetRepository>();
+            services.AddScoped<IRepositoryUpdate<Room>, RoomUpdateRepository>();
 
             // Combat
             services.AddScoped<ICombatService, CombatService>();
