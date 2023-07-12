@@ -5,9 +5,9 @@ using ShapeDungeon.Specifications.Rooms;
 
 namespace ShapeDungeon.Repos.Rooms
 {
-    public class NewRoomRepository : RepositoryBase<Room>, IRepositoryGet<Room>
+    public class RoomGetRepository : RepositoryBase<Room>, IRepositoryGet<Room>
     {
-        public NewRoomRepository(IDbContext context) : base(context)
+        public RoomGetRepository(IDbContext context) : base(context)
         {
         }
 
