@@ -1,4 +1,5 @@
 ﻿using ShapeDungeon.Data;
+using ShapeDungeon.Entities;
 using ShapeDungeon.Interfaces.Repositories;
 using ShapeDungeon.Interfaces.Services;
 using ShapeDungeon.Interfaces.Services.Enemies;
@@ -54,6 +55,9 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddScoped<IPlayerRepository, PlayerRepository>();
             services.AddScoped<IEnemiesRoomsRepository, EnemiesRoomsRepository>();
             services.AddScoped<ICombatRepository, CombatRepository>();
+
+            // New Repos
+            services.AddScoped<IRepositoryGet<Room>, NewRoomRepository>();
 
             // Combat
             services.AddScoped<ICombatService, CombatService>();

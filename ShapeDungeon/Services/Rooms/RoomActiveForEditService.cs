@@ -1,29 +1,41 @@
 ﻿using ShapeDungeon.Data;
 using ShapeDungeon.Entities;
+using ShapeDungeon.Helpers.Enums;
+using ShapeDungeon.Interfaces.Repositories;
 using ShapeDungeon.Interfaces.Services.Rooms;
 using ShapeDungeon.Repos;
+using ShapeDungeon.Specifications.Rooms;
 
 namespace ShapeDungeon.Services.Rooms
 {
     public class RoomActiveForEditService : IRoomActiveForEditService
     {
         private readonly IRoomRepository _roomRepository;
+        private readonly IRepositoryGet<Room> _roomRepositoryGet;
         private readonly IUnitOfWork _unitOfWork;
 
         public RoomActiveForEditService
-            (IRoomRepository roomRepository, 
+            (IRoomRepository roomRepository,
+            IRepositoryGet<Room> roomRepositoryGet,
             IUnitOfWork unitOfWork)
         {
             _roomRepository = roomRepository;
+            _roomRepositoryGet = roomRepositoryGet;
             _unitOfWork = unitOfWork;
         }
 
         public async Task ApplyActiveForEditAsync(Guid roomId)
         {
-            var oldRoom = await _roomRepository.GetActiveForEdit();
+            var rooms = await _roomRepositoryGet.GetAll();
+
+            var oldRoom = _roomRepositoryGet.GetBy(
+                new RoomTypeSpecification(RoomActiveType.Edit), rooms);
+
             if (oldRoom != null)
             {
-                var newRoom = await _roomRepository.GetById(roomId);
+                var newRoom = _roomRepositoryGet.GetBy(
+                    new RoomIdSpecification(roomId), rooms);
+
                 if (newRoom != null)
                     await ToggleActiveForEdit(oldRoom, newRoom);
             }
