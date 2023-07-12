@@ -14,6 +14,12 @@
     <a class="btn btn-outline-warning gold" asp-controller="Home" asp-action="Active">Go Back to Room</a>
 </div>
 
+<div id="lose-screen">
+    <h2>@Model.Player.Name has been defeated by @Model.Enemy.Name...</h2>
+    <p>...and lost @Model.Player.CurrentExp experience!</p>
+    <a class="btn btn-outline-warning" asp-controller="Home" asp-action="Active">Respawn</a>
+</div>
+
 <div class="position-absolute"
      style="top:50%;left:25%;transform:translate(0%, -50%);width:15rem">
     <div>

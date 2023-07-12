@@ -6,7 +6,9 @@ const attackBtn = document.getElementById("attack-btn");
 
 // Visual elements.
 const winScreenEl = document.getElementById("win-screen");
+const loseScreenEl = document.getElementById("lose-screen");
 const enemyShapeEl = document.getElementById("enemy-shape");
+const playerShapeEl = document.getElementById("selected-shape");
 const enemyActionEl = document.getElementById("enemy-action");
 const totalHpEnemyEl = document.getElementById("enemy-total-hp");
 const totalHpPlayerEl = document.getElementById("player-total-hp");
@@ -101,6 +103,8 @@ function endCombat() {
         .then(hasWon => {
             if (hasWon) {
                 updateScreenOnPlayerWin();
+            } else {
+                updateScreenOnPlayerLose();
             }
         });
 }
@@ -114,6 +118,17 @@ function updateScreenOnPlayerWin() {
     enemyActionEl.classList.remove("btn-outline-info");
     enemyActionEl.classList.add("gold");
     enemyActionEl.innerText = "Homie deaded 😢";
+}
+
+function updateScreenOnPlayerLose() {
+    attackBtn.classList.add("disable-click");
+    loseScreenEl.style.zIndex = "100";
+    loseScreenEl.style.opacity = "100";
+    playerShapeEl.style.transform = "translateY(1000%)";
+    enemyActionEl.classList.remove("btn-outline-danger");
+    enemyActionEl.classList.remove("btn-outline-info");
+    enemyActionEl.classList.add("btn-outline-warning");
+    enemyActionEl.innerText = "Homie won 😢";
 }
 
 function onCombatPageLoad() {
