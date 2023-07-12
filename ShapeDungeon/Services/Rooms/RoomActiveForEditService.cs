@@ -43,10 +43,16 @@ namespace ShapeDungeon.Services.Rooms
 
         public async Task MoveActiveForEditAsync(int coordX, int coordY)
         {
-            var oldRoom = await _roomRepository.GetActiveForEdit();
+            var rooms = await _roomRepositoryGet.GetAll();
+
+            var oldRoom = _roomRepositoryGet.GetBy(
+                new RoomTypeSpecification(RoomActiveType.Edit), rooms);
+
             if (oldRoom != null)
             {
-                var newRoom = await _roomRepository.GetByCoords(coordX, coordY);
+                var newRoom = _roomRepositoryGet.GetBy(
+                    new RoomCoordsSpecification(coordX, coordY), rooms);
+
                 if (newRoom != null)
                     await ToggleActiveForEdit(oldRoom, newRoom);
             }
