@@ -1,4 +1,5 @@
 ﻿using ShapeDungeon.Data;
+using ShapeDungeon.Entities;
 using ShapeDungeon.Helpers.Enums;
 using ShapeDungeon.Interfaces.Services.Rooms;
 using ShapeDungeon.Repos;
@@ -7,13 +8,19 @@ namespace ShapeDungeon.Services.Rooms
 {
     public class RoomTravelService : IRoomTravelService
     {
+        private readonly IEnemiesRoomsRepository _enemiesRoomsRepository;
+        private readonly IEnemyRepository _enemyRepository;
         private readonly IRoomRepository _roomRepository;
         private readonly IUnitOfWork _unitOfWork;
 
-        public RoomTravelService( 
+        public RoomTravelService(
+            IEnemiesRoomsRepository enemiesRoomsRepository,
+            IEnemyRepository enemyRepository,
             IRoomRepository roomRepository, 
             IUnitOfWork unitOfWork)
         {
+            _enemiesRoomsRepository = enemiesRoomsRepository;
+            _enemyRepository = enemyRepository;
             _roomRepository = roomRepository;
             _unitOfWork = unitOfWork;
         }
@@ -57,13 +64,15 @@ namespace ShapeDungeon.Services.Rooms
             var newRoom = await _roomRepository.GetByCoords(coordX, coordY);
             if (newRoom != null)
             {
-                await _unitOfWork.Commit(() =>
+                await _unitOfWork.Commit(async () =>
                 {
                     switch (action)
                     {
                         case RoomTravelAction.Move:
                             oldRoom.IsActiveForMove = false;
                             newRoom.IsActiveForMove = true;
+                            await _enemyRepository.ClearActiveForCombat();
+                            await ActivateEnemyForCombat(newRoom);
                             break;
                         case RoomTravelAction.Scout:
                             oldRoom.IsActiveForScout = false;
@@ -92,6 +101,17 @@ namespace ShapeDungeon.Services.Rooms
             }
 
             return false;
+        }
+
+        private async Task ActivateEnemyForCombat(Room currRoom) 
+        {
+            bool isEnemyDefeated = await _enemiesRoomsRepository.IsRoomEnemyDefeated(currRoom.Id);
+            if (currRoom.IsEnemyRoom 
+                && !isEnemyDefeated)
+            {
+                var enemyId = await _enemiesRoomsRepository.GetEnemyIdByRoomId(currRoom.Id);
+                await _enemyRepository.SetActiveForCombat(enemyId);
+            }
         }
     }
 }

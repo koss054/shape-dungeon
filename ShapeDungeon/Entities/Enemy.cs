@@ -7,6 +7,8 @@ namespace ShapeDungeon.Entities
     {
         public Guid Id { get; set; }
 
+        public bool IsActiveForCombat { get; set; }
+
         public string Name { get; set; }
             = null!;
 

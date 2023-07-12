@@ -17,6 +17,48 @@ namespace ShapeDungeon.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.16");
 
+            modelBuilder.Entity("ShapeDungeon.Entities.Combat", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("CombatRoomId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("CurrentEnemyHp")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("CurrentPlayerHp")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<Guid>("EnemyId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("IsPlayerAttacking")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<Guid>("PlayerId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("TotalEnemyHp")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("TotalPlayerHp")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EnemyId");
+
+                    b.HasIndex("PlayerId");
+
+                    b.ToTable("Combats");
+                });
+
             modelBuilder.Entity("ShapeDungeon.Entities.Enemy", b =>
                 {
                     b.Property<Guid>("Id")
@@ -30,6 +72,9 @@ namespace ShapeDungeon.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("DroppedExp")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("IsActiveForCombat")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("Level")
@@ -126,6 +171,9 @@ namespace ShapeDungeon.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("INTEGER");
 
+                    b.Property<bool>("IsInCombat")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int>("Level")
                         .HasColumnType("INTEGER");
 
@@ -156,6 +204,7 @@ namespace ShapeDungeon.Migrations
                             CurrentSkillpoints = 0,
                             ExpToNextLevel = 100,
                             IsActive = true,
+                            IsInCombat = false,
                             Level = 8,
                             Name = "Squary",
                             Shape = 0,
@@ -231,6 +280,25 @@ namespace ShapeDungeon.Migrations
                             IsSafeRoom = false,
                             IsStartRoom = true
                         });
+                });
+
+            modelBuilder.Entity("ShapeDungeon.Entities.Combat", b =>
+                {
+                    b.HasOne("ShapeDungeon.Entities.Enemy", "Enemy")
+                        .WithMany()
+                        .HasForeignKey("EnemyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ShapeDungeon.Entities.Player", "Player")
+                        .WithMany()
+                        .HasForeignKey("PlayerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Enemy");
+
+                    b.Navigation("Player");
                 });
 
             modelBuilder.Entity("ShapeDungeon.Entities.EnemyRoom", b =>

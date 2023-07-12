@@ -3,3 +3,5 @@ bin/
 obj/
 
 shape-dungeon.db
+shape-dungeon.db-shm
+shape-dungeon.db-wal

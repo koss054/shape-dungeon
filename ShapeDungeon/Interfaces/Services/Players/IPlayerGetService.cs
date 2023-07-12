@@ -1,4 +1,5 @@
 ﻿using ShapeDungeon.DTOs.Players;
+using ShapeDungeon.Responses.Players;
 
 namespace ShapeDungeon.Interfaces.Services.Players
 {
@@ -7,5 +8,7 @@ namespace ShapeDungeon.Interfaces.Services.Players
         Task<IEnumerable<PlayerGridDto>> GetAllPlayersAsync();
         Task<PlayerDto> GetPlayerAsync(string name);
         Task<PlayerDto> GetActivePlayer();
+
+        Task<PlayerStatsResponse> GetActivePlayerStats();
     }
 }

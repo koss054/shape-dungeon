@@ -11,23 +11,32 @@ namespace ShapeDungeon.Controllers
         private readonly IGetRoomService _getRoomService;
         private readonly IRoomEnemyService _roomEnemyService;
         private readonly IRoomTravelService _roomTravelService;
+        private readonly IRoomConditionService _roomConditionService;
+        private readonly IPlayerCombatService _playerCombatService;
         private readonly IPlayerGetService _playerGetService;
         private readonly IPlayerScoutService _playerScoutService;
+        private readonly IPlayerUpdateService _playerUpdateService;
         private readonly ICheckRoomNeighborsService _checkRoomNeighborsService;
 
         public HomeController(
             IGetRoomService getRoomService,
             IRoomEnemyService roomEnemyService,
             IRoomTravelService roomTravelService,
+            IRoomConditionService roomConditionService,
+            IPlayerCombatService playerCombatService,
             IPlayerGetService playerGetService,
             IPlayerScoutService playerScoutService,
+            IPlayerUpdateService playerUpdateService,
             ICheckRoomNeighborsService checkRoomNeighborsService)
         {
             _getRoomService = getRoomService;
             _roomEnemyService = roomEnemyService;
             _roomTravelService = roomTravelService;
+            _roomConditionService = roomConditionService;
+            _playerCombatService = playerCombatService;
             _playerGetService = playerGetService;
             _playerScoutService = playerScoutService;
+            _playerUpdateService = playerUpdateService;
             _checkRoomNeighborsService = checkRoomNeighborsService;
         }
 
@@ -43,6 +52,9 @@ namespace ShapeDungeon.Controllers
             if (player == null)
             {
             }
+
+            if (player!.IsInCombat)
+                return RedirectToAction("Action", "Combat");
 
             var room = await _getRoomService.GetActiveForMoveAsync();
             if (room == null)
@@ -60,6 +72,7 @@ namespace ShapeDungeon.Controllers
             {
                 var roomId = await _getRoomService.GetActiveForMoveId();
                 room.Enemy = await _roomEnemyService.GetEnemy(roomId);
+                room.IsEnemyDefeated = await _roomEnemyService.IsEnemyDefeated(roomId);
             }
 
             var game = new GameDto() { Player = player!, Room = room! };
@@ -73,6 +86,9 @@ namespace ShapeDungeon.Controllers
             if (player == null)
             {
             }
+
+            if (player!.IsInCombat)
+                return RedirectToAction("Action", "Combat");
 
             var room = await _getRoomService.GetActiveForScoutAsync();
             if (room == null)
@@ -92,6 +108,7 @@ namespace ShapeDungeon.Controllers
             {
                 var roomId = await _getRoomService.GetActiveForScoutId();
                 room.Enemy = await _roomEnemyService.GetEnemy(roomId);
+                room.IsEnemyDefeated = await _roomEnemyService.IsEnemyDefeated(roomId);
             }
 
             var game = new GameDto() { Player = player!, Room = room! };
@@ -101,13 +118,29 @@ namespace ShapeDungeon.Controllers
         [HttpGet]
         public async Task<IActionResult> Move(RoomDirection direction)
         {
+            var activePlayer = await _playerGetService.GetActivePlayer();
+            if (activePlayer.IsInCombat) 
+                return RedirectToAction("Action", "Combat");
+
             await _roomTravelService.RoomTravelAsync(direction, RoomTravelAction.Move);
+
+            if (await _roomConditionService.IsCurrentRoomActiveEnemyRoom())
+            {
+                await _playerUpdateService.EnterCombat();
+                return RedirectToAction("Action", "Combat");
+            }
+
+            await _playerCombatService.ExitCombat();
             return RedirectToAction("Active");
         }
 
         [HttpGet]
         public async Task<IActionResult> Scout(RoomDirection direction)
         {
+            var activePlayer = await _playerGetService.GetActivePlayer();
+            if (activePlayer.IsInCombat)
+                return RedirectToAction("Action", "Combat");
+
             var energyLeft = await _playerScoutService.UpdateActiveScoutEnergyAsync(PlayerScoutAction.Reduce);
 
             if (energyLeft != -1)
@@ -119,8 +152,11 @@ namespace ShapeDungeon.Controllers
         }
 
         [HttpGet]
-        public IActionResult Error()
+        public IActionResult Error(int statusCode)
         {
+            if (statusCode == 454)
+                return RedirectToAction("Index");
+
             return View();
         }
     }

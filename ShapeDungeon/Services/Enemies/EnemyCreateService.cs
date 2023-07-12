@@ -6,12 +6,12 @@ using ShapeDungeon.Repos;
 
 namespace ShapeDungeon.Services.Enemies
 {
-    public class EnemyService : IEnemyService
+    public class EnemyCreateService : IEnemyCreateService
     {
         private readonly IEnemyRepository _enemyRepository;
         private readonly IUnitOfWork _unitOfWork;
 
-        public EnemyService(
+        public EnemyCreateService(
             IEnemyRepository enemyRepository,
             IUnitOfWork unitOfWork)
         {
@@ -23,6 +23,7 @@ namespace ShapeDungeon.Services.Enemies
         {
             var enemy = new Enemy()
             {
+                IsActiveForCombat = false,
                 Name = $"{eDto.Name} Lvl.{eDto.Level}",
                 Strength = eDto.Strength,
                 Vigor = eDto.Vigor,
@@ -37,24 +38,6 @@ namespace ShapeDungeon.Services.Enemies
             {
                 _enemyRepository.AddAsync(enemy);
             });
-        }
-
-        public async Task<IEnumerable<EnemyRangeDto>> GetRangeAsync(int minLevel, int maxLevel)
-        {
-            var enemies = await _enemyRepository.GetRangeAsync(minLevel, maxLevel);
-            var enemyDtos = new List<EnemyRangeDto>();
-
-            foreach (var enemy in enemies)
-                enemyDtos.Add(enemy);
-
-            return enemyDtos;
-        }
-
-        public async Task<Enemy?> GetById(Guid enemyId)
-        {
-            var enemy = await _enemyRepository.GetById(enemyId);
-            return enemy;
-
         }
     }
 }

@@ -29,6 +29,8 @@ namespace ShapeDungeon.DTOs.Rooms
         public bool IsUpDeadEnd { get; set; }
         public bool IsDownDeadEnd { get; set; }
 
+        public bool IsEnemyDefeated { get; set; }
+
         public static implicit operator RoomDto(Room room)
             => new()
             {

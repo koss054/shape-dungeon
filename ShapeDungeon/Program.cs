@@ -13,6 +13,7 @@ builder.Services.AddApplicationServices();
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
+app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
 
 // Apply DB migration.
 await using var scope = app.Services.CreateAsyncScope();
@@ -34,8 +35,9 @@ app.UseRouting();
 
 app.UseAuthorization();
 
-app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
-app.UseExceptionHandler("/Home/Error/500");
+app.MapControllerRoute(
+    name: "areas",
+    pattern: "{area:exists}/{controller}/{action=Index}/{id?}");
 
 app.MapControllerRoute(
     name: "default",

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using ShapeDungeon.Exceptions;
 using System.Net;
 using System.Text.Json;
 
@@ -14,21 +15,15 @@ namespace ShapeDungeon.Middlewares
             }
             catch (Exception e)
             {
-                context.Response.StatusCode =
-                    (int)HttpStatusCode.InternalServerError;
-
-                var problemDetails = new ProblemDetails()
+                if (e is NoActiveCombatException combatEx)
                 {
-                    Status = (int)HttpStatusCode.InternalServerError,
-                    Type = "Server error",
-                    Title = "Server error",
-                    Detail = e.Message
-                };
-
-                string json = JsonSerializer.Serialize(problemDetails);
-
-                await context.Response.WriteAsync(json);
-                context.Response.ContentType = "application/json";
+                    context.Response.StatusCode = combatEx.StatusCode;
+                    context.Response.Redirect($"/Home/Error?statusCode={combatEx.StatusCode}");
+                } 
+                else
+                {
+                    context.Response.Redirect("/Home/Error");
+                }
             }
         }
     }

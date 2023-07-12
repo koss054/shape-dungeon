@@ -9,6 +9,8 @@ namespace ShapeDungeon.Entities
 
         public bool IsActive { get; set; }
 
+        public bool IsInCombat { get; set; }
+
         public string Name { get; set; } 
             = null!;
 

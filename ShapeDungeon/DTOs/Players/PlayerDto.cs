@@ -6,6 +6,7 @@ namespace ShapeDungeon.DTOs.Players
     public class PlayerDto
     {
         public bool IsActive { get; set; }
+        public bool IsInCombat { get; set; }
         public string Name { get; set; }
             = null!;
 
@@ -24,6 +25,7 @@ namespace ShapeDungeon.DTOs.Players
             => new()
             {
                 IsActive = player.IsActive,
+                IsInCombat = player.IsInCombat,
                 Name = player.Name,
                 Strength = player.Strength,
                 Vigor = player.Vigor,

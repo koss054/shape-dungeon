@@ -1,6 +1,7 @@
 ﻿using ShapeDungeon.DTOs.Players;
 using ShapeDungeon.Interfaces.Services.Players;
 using ShapeDungeon.Repos;
+using ShapeDungeon.Responses.Players;
 
 namespace ShapeDungeon.Services.Players
 {
@@ -37,5 +38,12 @@ namespace ShapeDungeon.Services.Players
 
         public async Task<PlayerDto> GetActivePlayer()
             => await _playerRepository.GetActive();
+
+        public async Task<PlayerStatsResponse> GetActivePlayerStats()
+        {
+            var player = await _playerRepository.GetActive();
+            if (player == null) throw new ArgumentNullException(nameof(player));
+            return player;
+        }
     }
 }

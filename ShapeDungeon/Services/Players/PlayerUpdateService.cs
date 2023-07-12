@@ -1,4 +1,5 @@
 ﻿using ShapeDungeon.Data;
+using ShapeDungeon.Entities;
 using ShapeDungeon.Helpers.Enums;
 using ShapeDungeon.Interfaces.Services.Players;
 using ShapeDungeon.Repos;
@@ -18,30 +19,70 @@ namespace ShapeDungeon.Services.Players
             _unitOfWork = unitOfWork;
         }
 
-        // Haduken code created lol
-        // After error handling middleware is implemented this will be fixed, hopefully :D
         public async Task IncreaseStat(CharacterStat statToIncrease)
         {
-            var activePlayer = await _playerRepository.GetActive();
-            if (activePlayer != null)
+            var activePlayer = await GetActivePlayer();
+            if (activePlayer.CurrentSkillpoints > 0)
             {
-                if (activePlayer.CurrentSkillpoints > 0)
+                await _unitOfWork.Commit(() =>
                 {
-                    await _unitOfWork.Commit(() =>
+                    switch (statToIncrease)
                     {
-                        switch (statToIncrease)
-                        {
-                            case CharacterStat.Strength: activePlayer.Strength++; break;
-                            case CharacterStat.Vigor: activePlayer.Vigor++; break;
-                            case CharacterStat.Agility: activePlayer.Agility++; break;
-                            default: throw new ArgumentOutOfRangeException(statToIncrease.ToString());
-                        }
+                        case CharacterStat.Strength: activePlayer.Strength++; break;
+                        case CharacterStat.Vigor: activePlayer.Vigor++; break;
+                        case CharacterStat.Agility: activePlayer.Agility++; break;
+                        default: throw new ArgumentOutOfRangeException(statToIncrease.ToString());
+                    }
 
-                        activePlayer.CurrentSkillpoints--;
-                        activePlayer.Level++;
-                    });
-                }
+                    activePlayer.CurrentSkillpoints--;
+                    activePlayer.Level++;
+                });
             }
+        }
+
+        // Move to player combat serivce.
+        public async Task EnterCombat()
+        {
+            var activePlayer = await GetActivePlayer();
+            await _unitOfWork.Commit(() =>
+            {
+                activePlayer.IsInCombat = true;
+            });
+        }
+
+        public async Task LoseCombat()
+        {
+            var activePlayer = await GetActivePlayer();
+
+            await _unitOfWork.Commit(() =>
+            {
+                activePlayer.IsInCombat = false;
+                activePlayer.CurrentExp = 0;
+            });
+        }
+
+        public async Task LevelUp()
+        {
+            var activePlayer = await GetActivePlayer();
+            while (activePlayer.CurrentExp >= activePlayer.ExpToNextLevel)
+            {
+                await _unitOfWork.Commit(() =>
+                {
+                    activePlayer.CurrentExp -= activePlayer.ExpToNextLevel;
+                    activePlayer.CurrentSkillpoints++;
+                    activePlayer.ExpToNextLevel += 50;
+                });
+            }
+        }
+
+        private async Task<Player> GetActivePlayer()
+        {
+            var player = await _playerRepository.GetActive();
+
+            if (player == null)
+                throw new ArgumentNullException(nameof(player));
+
+            return player;
         }
     }
 }

@@ -30,6 +30,7 @@ namespace ShapeDungeon.Services.Players
             var player = new Player()
             {
                 IsActive = false,
+                IsInCombat = false,
                 Name = pDto.Name,
                 Strength = pDto.Strength,
                 Vigor = pDto.Vigor,

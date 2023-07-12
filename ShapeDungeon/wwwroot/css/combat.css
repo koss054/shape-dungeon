@@ -1,0 +1,55 @@
+﻿body {
+    overflow-y: hidden;
+}
+
+#selected-shape, #enemy-shape {
+    top: 15% !important;
+}
+
+#enemy-shape, #selected-shape {
+    transition: transform 5s;
+}
+
+#win-screen, #lose-screen {
+    transform: translate(-50%, -50%);
+    border: solid 0.05rem gold;
+    justify-content: center;
+    flex-direction: column;
+    transition: opacity 1s;
+    align-items: center;
+    background: #060606;
+    position: absolute;
+    padding: 1.5rem;
+    display: flex;
+    z-index: -100;
+    height: 65vh;
+    width: 75vw;
+    opacity: 0;
+    left: 50%;
+    top: 50%;
+}
+
+#lose-screen {
+    border: solid 0.05rem red;
+}
+
+.btn.gold {
+    --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+    --bs-btn-focus-shadow-rgb: 255, 136, 0;
+    --bs-btn-disabled-border-color: gold;
+    --bs-btn-active-border-color: gold;
+    --bs-btn-hover-border-color: gold;
+    --bs-btn-disabled-bg: transparent;
+    --bs-btn-disabled-color: gold;
+    --bs-btn-border-color: gold;
+    --bs-btn-active-color: #fff;
+    --bs-btn-hover-color: #fff;
+    --bs-btn-active-bg: gold;
+    --bs-btn-hover-bg: gold;
+    --bs-btn-color: gold;
+    --bs-gradient: none;
+}
+
+.disable-click {
+    pointer-events: none;
+}
