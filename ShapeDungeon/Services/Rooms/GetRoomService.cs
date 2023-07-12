@@ -1,55 +1,79 @@
 ﻿using ShapeDungeon.DTOs.Rooms;
+using ShapeDungeon.Entities;
+using ShapeDungeon.Helpers.Enums;
+using ShapeDungeon.Interfaces.Repositories;
 using ShapeDungeon.Interfaces.Services.Rooms;
-using ShapeDungeon.Repos;
+using ShapeDungeon.Specifications.Rooms;
 
 namespace ShapeDungeon.Services.Rooms
 {
     public class GetRoomService : IGetRoomService
     {
-        private readonly IRoomRepository _roomRepository;
+        private readonly IRepositoryGet<Room> _roomGetRepository;
 
-        public GetRoomService(IRoomRepository roomRepository)
+        public GetRoomService(IRepositoryGet<Room> roomGetRepository)
         {
-            _roomRepository = roomRepository;
+            _roomGetRepository = roomGetRepository;
         }
 
         public async Task<RoomDto> GetActiveForMoveAsync()
         {
-            var room = await _roomRepository.GetActiveForMove();
+            var room = _roomGetRepository.GetBy(
+                new RoomTypeSpecification(RoomActiveType.Move),
+                await GetAllRooms());
+
             RoomDto roomDto = room;
             return roomDto;
         }
 
         public async Task<RoomDto> GetActiveForScoutAsync()
         {
-            var room = await _roomRepository.GetActiveForScout();
+            var room = _roomGetRepository.GetBy(
+                new RoomTypeSpecification(RoomActiveType.Scout),
+                await GetAllRooms());
+
             RoomDto roomDto = room; 
             return roomDto;
         }
 
         public async Task<RoomDetailsDto> GetActiveForEditAsync()
         {
-            var room = await _roomRepository.GetActiveForEdit();
+            var room = _roomGetRepository.GetBy(
+                new RoomTypeSpecification(RoomActiveType.Edit),
+                await GetAllRooms());
+
             RoomDetailsDto roomDto = room;
             return roomDto;
         }
 
         public async Task<Guid> GetActiveForMoveId()
         {
-            var room = await _roomRepository.GetActiveForMove();
+            var room = _roomGetRepository.GetBy(
+                new RoomTypeSpecification(RoomActiveType.Move),
+                await GetAllRooms());
+
             return room.Id;
         }
 
         public async Task<Guid> GetActiveForScoutId()
         {
-            var room = await _roomRepository.GetActiveForScout();
+            var room = _roomGetRepository.GetBy(
+                new RoomTypeSpecification(RoomActiveType.Scout),
+                await GetAllRooms());
+
             return room.Id;
         }
 
         public async Task<Guid> GetActiveForEditId()
         {
-            var room = await _roomRepository.GetActiveForEdit();
+            var room = _roomGetRepository.GetBy(
+                new RoomTypeSpecification(RoomActiveType.Edit),
+                await GetAllRooms());
+
             return room.Id;
         }
+
+        private async Task<IEnumerable<Room>> GetAllRooms()
+            => await _roomGetRepository.GetAll();
     }
 }
