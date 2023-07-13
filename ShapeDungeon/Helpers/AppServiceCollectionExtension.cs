@@ -8,7 +8,6 @@ using ShapeDungeon.Interfaces.Services.Players;
 using ShapeDungeon.Interfaces.Services.Rooms;
 using ShapeDungeon.Middlewares;
 using ShapeDungeon.Repos;
-using ShapeDungeon.Repos.Rooms;
 using ShapeDungeon.Services;
 using ShapeDungeon.Services.Enemies;
 using ShapeDungeon.Services.EnemiesRooms;
@@ -45,6 +44,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddScoped<IRoomActiveForEditService, RoomActiveForEditService>();
             services.AddScoped<ICheckRoomNeighborsService, CheckRoomNeighborsService>();
             services.AddScoped<IRoomConditionService, RoomConditionService>();
+            services.AddScoped<IRoomValidateService, RoomValidateService>();
 
             // Enemy Room mapping entity
             services.AddScoped<IEnemiesRoomsService, EnemiesRoomsService>();
@@ -57,9 +57,10 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddScoped<IEnemiesRoomsRepository, EnemiesRoomsRepository>();
             services.AddScoped<ICombatRepository, CombatRepository>();
 
-            // New Repos
+            // New Room Repos
             services.AddScoped<IRepositoryGet<Room>, RoomRepository>();
-            services.AddScoped<IRepositoryUpdate<Room>, RoomUpdateRepository>();
+            services.AddScoped<IRepositoryUpdate<Room>, RoomRepository>();
+            services.AddScoped<IRepositoryCoordsGet<Room>, RoomRepository>();
 
             // Combat
             services.AddScoped<ICombatService, CombatService>();
