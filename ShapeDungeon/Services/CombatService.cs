@@ -4,6 +4,7 @@ using ShapeDungeon.Entities;
 using ShapeDungeon.Exceptions;
 using ShapeDungeon.Helpers.Enums;
 using ShapeDungeon.Interfaces.Services;
+using ShapeDungeon.Interfaces.Services.EnemiesRooms;
 using ShapeDungeon.Repos;
 
 namespace ShapeDungeon.Services
@@ -13,6 +14,7 @@ namespace ShapeDungeon.Services
         private readonly ICombatRepository _combatRepository;
         private readonly IEnemyRepository _enemyRepository;
         private readonly IEnemiesRoomsRepository _enemiesRoomsRepository;
+        private readonly IEnemiesRoomsValidateService _enemiesRoomsValidateService;
         private readonly IPlayerRepository _playerRepository;
         private readonly IRoomRepository _roomRepository;
         private readonly IUnitOfWork _unitOfWork;
@@ -21,6 +23,7 @@ namespace ShapeDungeon.Services
             ICombatRepository combatRepository,
             IEnemyRepository enemyRepository,
             IEnemiesRoomsRepository enemiesRoomsRepository,
+            IEnemiesRoomsValidateService enemiesRoomsValidateService,
             IPlayerRepository playerRepository,
             IRoomRepository roomRepository,
             IUnitOfWork unitOfWork)
@@ -28,6 +31,7 @@ namespace ShapeDungeon.Services
             _combatRepository = combatRepository;
             _enemyRepository = enemyRepository;
             _enemiesRoomsRepository = enemiesRoomsRepository;
+            _enemiesRoomsValidateService = enemiesRoomsValidateService;
             _playerRepository = playerRepository;
             _roomRepository = roomRepository;
             _unitOfWork = unitOfWork;
@@ -181,7 +185,7 @@ namespace ShapeDungeon.Services
             if (!activeRoom.IsEnemyRoom) 
                 throw new Exception("NotEnemyRoomException");
 
-            bool isEnemyDefeated = await _enemiesRoomsRepository
+            bool isEnemyDefeated = await _enemiesRoomsValidateService
                 .IsRoomEnemyDefeated(activeRoom.Id);
 
             if (isEnemyDefeated)
