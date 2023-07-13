@@ -2,28 +2,30 @@
 using ShapeDungeon.Entities;
 using ShapeDungeon.Helpers.Enums;
 using ShapeDungeon.Interfaces.Repositories;
+using ShapeDungeon.Interfaces.Services.EnemiesRooms;
 using ShapeDungeon.Interfaces.Services.Rooms;
 using ShapeDungeon.Repos;
+using ShapeDungeon.Specifications.EnemiesRooms;
 using ShapeDungeon.Specifications.Rooms;
 
 namespace ShapeDungeon.Services.Rooms
 {
     public class RoomTravelService : IRoomTravelService
     {
-        private readonly IEnemiesRoomsRepository _enemiesRoomsRepository;
+        private readonly IRepositoryGet<EnemyRoom> _enemyRoomGetRepository;
         private readonly IRoomValidateService _roomValidateService;
         private readonly IRepositoryGet<Room> _roomGetRepository;
         private readonly IEnemyRepository _enemyRepository;
         private readonly IUnitOfWork _unitOfWork;
 
         public RoomTravelService(
-            IEnemiesRoomsRepository enemiesRoomsRepository,
+            IRepositoryGet<EnemyRoom> enemyRoomGetRepository,
             IRoomValidateService roomValidateService,
             IRepositoryGet<Room> roomGetRepository,
             IEnemyRepository enemyRepository,
             IUnitOfWork unitOfWork)
         {
-            _enemiesRoomsRepository = enemiesRoomsRepository;
+            _enemyRoomGetRepository = enemyRoomGetRepository;
             _roomValidateService = roomValidateService;
             _roomGetRepository = roomGetRepository;
             _enemyRepository = enemyRepository;
@@ -133,13 +135,11 @@ namespace ShapeDungeon.Services.Rooms
 
         private async Task ActivateEnemyForCombat(Room currRoom) 
         {
-            bool isEnemyDefeated = await _enemiesRoomsRepository.IsRoomEnemyDefeated(currRoom.Id);
-            if (currRoom.IsEnemyRoom 
-                && !isEnemyDefeated)
-            {
-                var enemyId = await _enemiesRoomsRepository.GetEnemyIdByRoomId(currRoom.Id);
-                await _enemyRepository.SetActiveForCombat(enemyId);
-            }
+            var enemyRoom = await _enemyRoomGetRepository.GetFirstOrDefaultByAsync(
+                    new EnemyRoomIdSpecification(currRoom.Id));
+
+            if (currRoom.IsEnemyRoom && !enemyRoom.IsEnemyDefeated)
+                await _enemyRepository.SetActiveForCombat(enemyRoom.EnemyId);
         }
     }
 }
