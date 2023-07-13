@@ -5,10 +5,10 @@ using ShapeDungeon.Specifications;
 
 namespace ShapeDungeon.Repos
 {
-    public class RoomGetRepository : RepositoryBase<Room>,
-        IRepositoryGet<Room>, ICoordsRepositoryGet<Room>
+    public class RoomRepository : RepositoryBase<Room>,
+        IRepositoryGet<Room>, IRepositoryUpdate<Room>, ICoordsRepositoryGet<Room>
     {
-        public RoomGetRepository(IDbContext context) : base(context)
+        public RoomRepository(IDbContext context) : base(context)
         {
         }
 
@@ -49,6 +49,11 @@ namespace ShapeDungeon.Repos
                 .FirstOrDefaultAsync();
 
             return coordToReturn;
+        }
+
+        public void Update(Room room)
+        {
+            this.Context.Rooms.Update(room);
         }
     }
 }
