@@ -12,18 +12,15 @@ namespace ShapeDungeon.Services.Rooms
     {
         private readonly IRepositoryCoordsGet<Room> _roomCoordsGetRepository;
         private readonly IRepositoryUpdate<Room> _roomUpdateRepository;
-        private readonly IRepositoryGet<Room> _roomRepositoryGet;
         private readonly IUnitOfWork _unitOfWork;
 
         public RoomCreateService(
             IRepositoryCoordsGet<Room> roomCoordsGetRepository,
             IRepositoryUpdate<Room> roomUpdateRepository,
-            IRepositoryGet<Room> roomRepositoryGet,
             IUnitOfWork unitOfWork)
         {
             _roomCoordsGetRepository = roomCoordsGetRepository;
             _roomUpdateRepository = roomUpdateRepository;
-            _roomRepositoryGet = roomRepositoryGet;
             _unitOfWork = unitOfWork;
         }
 
