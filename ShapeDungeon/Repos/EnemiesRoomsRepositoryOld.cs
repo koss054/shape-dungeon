@@ -4,9 +4,9 @@ using ShapeDungeon.Interfaces.Repositories;
 
 namespace ShapeDungeon.Repos
 {
-    public class EnemiesRoomsRepository : RepositoryBase<EnemyRoom>, IEnemiesRoomsRepository
+    public class EnemiesRoomsRepositoryOld : RepositoryBase<EnemyRoom>, IEnemiesRoomsRepository
     {
-        public EnemiesRoomsRepository(IDbContext context) : base(context)
+        public EnemiesRoomsRepositoryOld(IDbContext context) : base(context)
         {
         }
 
@@ -61,12 +61,6 @@ namespace ShapeDungeon.Repos
         /// If enemy room exists, the value of the IsEnemyDefeated property.
         /// If enemy room doesn't exist, true (dude's been evaporated from existance, lol).
         /// </returns>
-        public async Task<bool> IsRoomEnemyDefeated(Guid roomId)
-        {
-            var enemyRoom = await this.Context.EnemiesRooms
-                .FirstOrDefaultAsync(x => x.RoomId == roomId);
-
-            return enemyRoom != null ? enemyRoom.IsEnemyDefeated : true;
-        }
+        
     }
 }
