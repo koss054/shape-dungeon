@@ -28,7 +28,7 @@ namespace ShapeDungeon.Services.Rooms
         public async Task<bool> IsCurrentRoomActiveEnemyRoom()
         {
             var currRoom = await _roomGetRepository.GetFirstOrDefaultByAsync(
-                new RoomTypeSpecification(RoomActiveType.Move));
+                new RoomMoveSpecification());
 
             var isEnemyDefeated = await _enemiesRoomsRepository
                 .IsRoomEnemyDefeated(currRoom.Id);

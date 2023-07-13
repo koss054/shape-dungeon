@@ -1,5 +1,4 @@
-﻿using ShapeDungeon.Entities;
-using ShapeDungeon.Specifications.Rooms;
+﻿using ShapeDungeon.Specifications;
 
 namespace ShapeDungeon.Interfaces.Repositories
 {
@@ -8,6 +7,6 @@ namespace ShapeDungeon.Interfaces.Repositories
     {
         Task<IEnumerable<T>> GetAll();
 
-        Task<T> GetFirstOrDefaultByAsync(IRoomSpecification specification);
+        Task<T> GetFirstOrDefaultByAsync(ISpecification<T> specification);
     }
 }

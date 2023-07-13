@@ -19,7 +19,7 @@ namespace ShapeDungeon.Services.Rooms
         public async Task<RoomDto> GetActiveForMoveAsync()
         {
             var room = await _roomGetRepository.GetFirstOrDefaultByAsync(
-                new RoomTypeSpecification(RoomActiveType.Move));
+                new RoomMoveSpecification());
 
             RoomDto roomDto = room;
             return roomDto;
@@ -28,7 +28,7 @@ namespace ShapeDungeon.Services.Rooms
         public async Task<RoomDto> GetActiveForScoutAsync()
         {
             var room = await _roomGetRepository.GetFirstOrDefaultByAsync(
-                new RoomTypeSpecification(RoomActiveType.Scout));
+                new RoomScoutSpecification());
 
             RoomDto roomDto = room; 
             return roomDto;
@@ -37,7 +37,7 @@ namespace ShapeDungeon.Services.Rooms
         public async Task<RoomDetailsDto> GetActiveForEditAsync()
         {
             var room = await _roomGetRepository.GetFirstOrDefaultByAsync(
-                new RoomTypeSpecification(RoomActiveType.Edit));
+                new RoomEditSpecification());
 
             RoomDetailsDto roomDto = room;
             return roomDto;
@@ -46,7 +46,7 @@ namespace ShapeDungeon.Services.Rooms
         public async Task<Guid> GetActiveForMoveId()
         {
             var room = await _roomGetRepository.GetFirstOrDefaultByAsync(
-                new RoomTypeSpecification(RoomActiveType.Move));
+                new RoomMoveSpecification());
 
             return room.Id;
         }
@@ -54,7 +54,7 @@ namespace ShapeDungeon.Services.Rooms
         public async Task<Guid> GetActiveForScoutId()
         {
             var room = await _roomGetRepository.GetFirstOrDefaultByAsync(
-                new RoomTypeSpecification(RoomActiveType.Scout));
+                new RoomScoutSpecification());
 
             return room.Id;
         }
@@ -62,7 +62,7 @@ namespace ShapeDungeon.Services.Rooms
         public async Task<Guid> GetActiveForEditId()
         {
             var room = await _roomGetRepository.GetFirstOrDefaultByAsync(
-                new RoomTypeSpecification(RoomActiveType.Edit));
+                new RoomEditSpecification());
 
             return room.Id;
         }

@@ -1,8 +1,9 @@
 ﻿using ShapeDungeon.Entities;
+using System.Linq.Expressions;
 
 namespace ShapeDungeon.Specifications.Rooms
 {
-    public class RoomCoordsSpecification : IRoomSpecification
+    public class RoomCoordsSpecification : Specification<Room>
     {
         private readonly int _coordX;
         private readonly int _coordY;
@@ -15,10 +16,12 @@ namespace ShapeDungeon.Specifications.Rooms
             _coordY = coordY;
         }
 
-        public bool IsSatisfiedBy(Room room)
-        {
-            return room.CoordX == _coordX 
-                && room.CoordY == _coordY;
-        }
+        public override bool IsSatisfiedBy(Room room)
+            => room.CoordX.Equals(_coordX) 
+            && room.CoordY.Equals(_coordY);
+
+        public override Expression<Func<Room, bool>> ToExpression()
+            => room => room.CoordX.Equals(_coordX)
+                    && room.CoordY.Equals(_coordY);
     }
 }

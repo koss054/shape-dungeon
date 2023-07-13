@@ -26,7 +26,7 @@ namespace ShapeDungeon.Services.Rooms
         public async Task ApplyActiveForEditAsync(Guid roomId)
         {
             var oldRoom = await _roomGetRepository.GetFirstOrDefaultByAsync(
-                new RoomTypeSpecification(RoomActiveType.Edit));
+                new RoomEditSpecification());
 
             if (oldRoom != null)
             {
@@ -41,7 +41,7 @@ namespace ShapeDungeon.Services.Rooms
         public async Task MoveActiveForEditAsync(int coordX, int coordY)
         {
             var oldRoom = await _roomGetRepository.GetFirstOrDefaultByAsync(
-                new RoomTypeSpecification(RoomActiveType.Edit));
+                new RoomEditSpecification());
 
             if (oldRoom != null)
             {

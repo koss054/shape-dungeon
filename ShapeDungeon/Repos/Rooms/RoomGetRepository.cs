@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ShapeDungeon.Entities;
 using ShapeDungeon.Interfaces.Repositories;
-using ShapeDungeon.Specifications.Rooms;
+using ShapeDungeon.Specifications;
 
 namespace ShapeDungeon.Repos.Rooms
 {
@@ -12,12 +12,15 @@ namespace ShapeDungeon.Repos.Rooms
         }
 
         public async Task<IEnumerable<Room>> GetAll()
-            => await Context.Rooms.ToListAsync();
+            => await this.Context.Rooms.ToListAsync();
 
-        public async Task<Room> GetFirstOrDefaultByAsync(IRoomSpecification specification)
+        public async Task<Room> GetFirstOrDefaultByAsync(ISpecification<Room> specification)
         {
-            var rooms = await Context.Rooms.ToListAsync();
-            var roomToReturn = rooms.FirstOrDefault(x => specification.IsSatisfiedBy(x));
+            var expression = specification.ToExpression();
+            var roomToReturn = await this.Context.Rooms
+                .AsQueryable()
+                .Where(expression)
+                .FirstOrDefaultAsync();
 
             return roomToReturn ?? throw new ArgumentNullException(
                 nameof(roomToReturn), "No room matches provided specification.");
