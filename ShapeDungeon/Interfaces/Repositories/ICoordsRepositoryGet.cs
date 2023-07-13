@@ -1,9 +1,9 @@
 ﻿using ShapeDungeon.Entities;
 using ShapeDungeon.Specifications;
 
-namespace ShapeDungeon.Interfaces.Repositories.Rooms
+namespace ShapeDungeon.Interfaces.Repositories
 {
-    public interface IRoomCoordsRepositoryGet<T>
+    public interface ICoordsRepositoryGet<T>
         where T : class
     {
         Task<int> GetCoordXByAsync(ISpecification<Room> specification);

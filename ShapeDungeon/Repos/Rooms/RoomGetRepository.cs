@@ -1,13 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ShapeDungeon.Entities;
 using ShapeDungeon.Interfaces.Repositories;
-using ShapeDungeon.Interfaces.Repositories.Rooms;
 using ShapeDungeon.Specifications;
 
 namespace ShapeDungeon.Repos.Rooms
 {
     public class RoomGetRepository : RepositoryBase<Room>, 
-        IRepositoryGet<Room>, IRoomCoordsRepositoryGet<Room>
+        IRepositoryGet<Room>, ICoordsRepositoryGet<Room>
     {
         public RoomGetRepository(IDbContext context) : base(context)
         {
