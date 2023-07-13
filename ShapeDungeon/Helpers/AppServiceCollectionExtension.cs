@@ -51,14 +51,14 @@ namespace Microsoft.Extensions.DependencyInjection
 
             // Repos
             services.AddScoped<IUnitOfWork, UnitOfWork>();
-            services.AddScoped<IRoomRepository, RoomRepository>();
+            services.AddScoped<IRoomRepository, RoomRepositoryOld>();
             services.AddScoped<IEnemyRepository, EnemyRepository>();
             services.AddScoped<IPlayerRepository, PlayerRepository>();
             services.AddScoped<IEnemiesRoomsRepository, EnemiesRoomsRepository>();
             services.AddScoped<ICombatRepository, CombatRepository>();
 
             // New Repos
-            services.AddScoped<IRepositoryGet<Room>, RoomGetRepository>();
+            services.AddScoped<IRepositoryGet<Room>, RoomRepository>();
             services.AddScoped<IRepositoryUpdate<Room>, RoomUpdateRepository>();
 
             // Combat
