@@ -4,5 +4,7 @@
         where T : class
     {
         void Update(T entity);
+
+        Task AddAsync(T entity);
     }
 }

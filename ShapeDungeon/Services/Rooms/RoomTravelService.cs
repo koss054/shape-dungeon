@@ -1,27 +1,32 @@
 ﻿using ShapeDungeon.Data;
 using ShapeDungeon.Entities;
 using ShapeDungeon.Helpers.Enums;
+using ShapeDungeon.Interfaces.Repositories;
 using ShapeDungeon.Interfaces.Services.Rooms;
 using ShapeDungeon.Repos;
+using ShapeDungeon.Specifications.Rooms;
 
 namespace ShapeDungeon.Services.Rooms
 {
     public class RoomTravelService : IRoomTravelService
     {
         private readonly IEnemiesRoomsRepository _enemiesRoomsRepository;
+        private readonly IRoomValidateService _roomValidateService;
+        private readonly IRepositoryGet<Room> _roomGetRepository;
         private readonly IEnemyRepository _enemyRepository;
-        private readonly IRoomRepository _roomRepository;
         private readonly IUnitOfWork _unitOfWork;
 
         public RoomTravelService(
             IEnemiesRoomsRepository enemiesRoomsRepository,
+            IRoomValidateService roomValidateService,
+            IRepositoryGet<Room> roomGetRepository,
             IEnemyRepository enemyRepository,
-            IRoomRepository roomRepository, 
             IUnitOfWork unitOfWork)
         {
             _enemiesRoomsRepository = enemiesRoomsRepository;
+            _roomValidateService = roomValidateService;
+            _roomGetRepository = roomGetRepository;
             _enemyRepository = enemyRepository;
-            _roomRepository = roomRepository;
             _unitOfWork = unitOfWork;
         }
 
@@ -29,8 +34,10 @@ namespace ShapeDungeon.Services.Rooms
         {
             var oldRoom = action switch
             {
-                RoomTravelAction.Move => await _roomRepository.GetActiveForMove(),
-                RoomTravelAction.Scout => await _roomRepository.GetActiveForScout(),
+                RoomTravelAction.Move => await _roomGetRepository.GetFirstOrDefaultByAsync(
+                    new RoomMoveSpecification()),
+                RoomTravelAction.Scout => await _roomGetRepository.GetFirstOrDefaultByAsync(
+                    new RoomScoutSpecification()),
                 _ => throw new ArgumentOutOfRangeException(nameof(action)),
             };
 
@@ -43,25 +50,43 @@ namespace ShapeDungeon.Services.Rooms
             switch (direction)
             {
                 case RoomDirection.Left: 
-                    var isLeftDeadEnd = !(await _roomRepository.CanEnterRoomFromDirection(coordX - 1, coordY, RoomDirection.Left));
-                    if (oldRoom.CanGoLeft && !isLeftDeadEnd) coordX--;
+                    var isLeftDeadEnd = !(await _roomValidateService
+                        .CanEnterRoomFromDirection(coordX - 1, coordY, RoomDirection.Left));
+
+                    if (oldRoom.CanGoLeft && !isLeftDeadEnd)
+                        coordX--;
+
                     break;
                 case RoomDirection.Right:
-                    var isRightDeadEnd = !(await _roomRepository.CanEnterRoomFromDirection(coordX + 1, coordY, RoomDirection.Right));
-                    if (oldRoom.CanGoRight && !isRightDeadEnd) coordX++;  
+                    var isRightDeadEnd = !(await _roomValidateService
+                        .CanEnterRoomFromDirection(coordX + 1, coordY, RoomDirection.Right));
+
+                    if (oldRoom.CanGoRight && !isRightDeadEnd) 
+                        coordX++;  
+
                     break;
                 case RoomDirection.Top: 
-                    var isUpDeadEnd = !(await _roomRepository.CanEnterRoomFromDirection(coordX, coordY + 1, RoomDirection.Top));
-                    if (oldRoom.CanGoUp && !isUpDeadEnd) coordY++; 
+                    var isUpDeadEnd = !(await _roomValidateService
+                        .CanEnterRoomFromDirection(coordX, coordY + 1, RoomDirection.Top));
+
+                    if (oldRoom.CanGoUp && !isUpDeadEnd) 
+                        coordY++; 
+
                     break;
                 case RoomDirection.Bottom: 
-                    var isDownDeadEnd = !(await _roomRepository.CanEnterRoomFromDirection(coordX, coordY - 1, RoomDirection.Bottom));
-                    if (oldRoom.CanGoDown && !isDownDeadEnd) coordY--;  
+                    var isDownDeadEnd = !(await _roomValidateService
+                        .CanEnterRoomFromDirection(coordX, coordY - 1, RoomDirection.Bottom));
+
+                    if (oldRoom.CanGoDown && !isDownDeadEnd)
+                        coordY--;  
+
                     break;
                 default: throw new ArgumentOutOfRangeException(nameof(direction));
             }
 
-            var newRoom = await _roomRepository.GetByCoords(coordX, coordY);
+            var newRoom = await _roomGetRepository.GetFirstOrDefaultByAsync(
+                new RoomCoordsSpecification(coordX, coordY));
+
             if (newRoom != null)
             {
                 await _unitOfWork.Commit(async () =>
@@ -86,8 +111,11 @@ namespace ShapeDungeon.Services.Rooms
 
         public async Task<bool> IsScoutResetAsync()
         {
-            var activeForScoutRoom = await _roomRepository.GetActiveForScout();
-            var activeForMoveRoom = await _roomRepository.GetActiveForMove();
+            var activeForScoutRoom = await _roomGetRepository.GetFirstOrDefaultByAsync(
+                new RoomScoutSpecification());
+
+            var activeForMoveRoom = await _roomGetRepository.GetFirstOrDefaultByAsync(
+                new RoomMoveSpecification());
 
             if (activeForScoutRoom != null && activeForMoveRoom != null)
             {

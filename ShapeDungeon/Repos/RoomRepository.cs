@@ -58,5 +58,8 @@ namespace ShapeDungeon.Repos
         {
             this.Context.Rooms.Update(room);
         }
+
+        public async Task AddAsync(Room room)
+            => await this.Context.Rooms.AddAsync(room);
     }
 }
