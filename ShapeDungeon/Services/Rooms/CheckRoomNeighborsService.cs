@@ -11,13 +11,16 @@ namespace ShapeDungeon.Services.Rooms
     {
         private readonly IRepositoryGet<Room> _roomGetRepository;
         private readonly IRoomValidateService _roomValidateService;
+        private readonly IRepositoryCoordsGet<Room> _roomCoordsGetRepository;
 
         public CheckRoomNeighborsService(
-            IRepositoryGet<Room> roomGetRepository, 
-            IRoomValidateService roomValidateService)
+            IRepositoryGet<Room> roomGetRepository,
+            IRoomValidateService roomValidateService,
+            IRepositoryCoordsGet<Room> roomCoordsGetRepository)
         {
             _roomGetRepository = roomGetRepository;
             _roomValidateService = roomValidateService;
+            _roomCoordsGetRepository = roomCoordsGetRepository;
         }
 
         public async Task<RoomNavDto?> SetDtoNeighborsAsync(int coordX, int coordY)
@@ -90,11 +93,7 @@ namespace ShapeDungeon.Services.Rooms
         }
 
         private async Task<bool> IsRoomWithCoordsValidAsync(int coordX, int coordY)
-        {
-            var room = await _roomGetRepository.GetFirstOrDefaultByAsync(
+            => await _roomCoordsGetRepository.DoCoordsExistByAsync(
                 new RoomCoordsSpecification(coordX, coordY));
-
-            return room != null;
-        }
     }
 }

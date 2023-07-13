@@ -86,7 +86,7 @@ namespace ShapeDungeon.Services.Rooms
         }
 
         public async Task<bool> AreCoordsInUse(int coordX, int coordY)
-            => await _roomRepositoryGet.GetFirstOrDefaultByAsync(
-                new RoomCoordsSpecification(coordX, coordY)) != null;
+            => await _roomCoordsGetRepository.DoCoordsExistByAsync(
+                new RoomCoordsSpecification(coordX, coordY));
     }
 }

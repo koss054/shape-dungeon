@@ -6,7 +6,8 @@ namespace ShapeDungeon.Interfaces.Repositories
     public interface IRepositoryCoordsGet<T>
         where T : class
     {
-        Task<int> GetCoordXByAsync(ISpecification<Room> specification);
-        Task<int> GetCoordYByAsync(ISpecification<Room> specification);
+        Task<int> GetCoordXByAsync(ISpecification<T> specification);
+        Task<int> GetCoordYByAsync(ISpecification<T> specification);
+        Task<bool> DoCoordsExistByAsync(ISpecification<T> specification);
     }
 }

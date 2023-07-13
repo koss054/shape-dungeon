@@ -21,7 +21,7 @@ namespace ShapeDungeon.Repos
         public async Task<Room> GetFirstOrDefaultByAsync(ISpecification<Room> specification)
         {
             var expression = specification.ToExpression();
-            var roomToReturn = await Context.Rooms
+            var roomToReturn = await this.Context.Rooms
                 .AsQueryable()
                 .Where(expression)
                 .FirstOrDefaultAsync();
@@ -33,7 +33,7 @@ namespace ShapeDungeon.Repos
         public async Task<int> GetCoordXByAsync(ISpecification<Room> specification)
         {
             var expression = specification.ToExpression();
-            var coordToReturn = await Context.Rooms
+            var coordToReturn = await this.Context.Rooms
                 .AsQueryable()
                 .Where(expression)
                 .Select(x => x.CoordX)
@@ -45,13 +45,24 @@ namespace ShapeDungeon.Repos
         public async Task<int> GetCoordYByAsync(ISpecification<Room> specification)
         {
             var expression = specification.ToExpression();
-            var coordToReturn = await Context.Rooms
+            var coordToReturn = await this.Context.Rooms
                 .AsQueryable()
                 .Where(expression)
                 .Select(x => x.CoordY)
                 .FirstOrDefaultAsync();
 
             return coordToReturn;
+        }
+
+        public async Task<bool> DoCoordsExistByAsync(ISpecification<Room> specification)
+        {
+            var expression = specification.ToExpression();
+            var doCoordsExist = await this.Context.Rooms
+                .AsQueryable()
+                .Where(expression)
+                .AnyAsync();
+
+            return doCoordsExist;
         }
 
         public void Update(Room room)
