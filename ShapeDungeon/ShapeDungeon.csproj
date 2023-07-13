@@ -18,7 +18,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Interfaces\Repositories\Rooms\" />
     <Folder Include="Migrations\" />
+    <Folder Include="Repos\Rooms\" />
   </ItemGroup>
 
 </Project>

@@ -9,7 +9,7 @@ namespace ShapeDungeon.Repos
         RepositoryBase<Room>,
         IRepositoryGet<Room>, 
         IRepositoryUpdate<Room>, 
-        ICoordsRepositoryGet<Room>
+        IRepositoryCoordsGet<Room>
     {
         public RoomRepository(IDbContext context) : base(context)
         {
