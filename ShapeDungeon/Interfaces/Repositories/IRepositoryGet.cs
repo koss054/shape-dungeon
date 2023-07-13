@@ -8,8 +8,6 @@ namespace ShapeDungeon.Interfaces.Repositories
     {
         Task<IEnumerable<T>> GetAll();
 
-        T GetBy(
-            IRoomSpecification specification, 
-            IEnumerable<T> entities);
+        Task<T> GetFirstOrDefaultByAsync(IRoomSpecification specification);
     }
 }

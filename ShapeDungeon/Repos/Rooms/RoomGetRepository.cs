@@ -14,17 +14,14 @@ namespace ShapeDungeon.Repos.Rooms
         public async Task<IEnumerable<Room>> GetAll()
             => await Context.Rooms.ToListAsync();
 
-        public Room GetBy(
-            IRoomSpecification specification,
-            IEnumerable<Room> rooms)
+        public async Task<Room> GetFirstOrDefaultByAsync(IRoomSpecification specification)
         {
-            var roomToReturn = new Room();
+            var rooms = await Context.Rooms.ToListAsync();
+            var roomToReturn = rooms
+                .FirstOrDefault(x => specification.IsSatisfiedBy(x));
 
-            foreach (Room room in rooms)
-                if (specification.IsSatisfiedBy(room))
-                    roomToReturn = room;
-
-            return roomToReturn;
+            return roomToReturn ?? throw new ArgumentNullException(
+                nameof(roomToReturn), "No room matches provided specification.");
         }
     }
 }

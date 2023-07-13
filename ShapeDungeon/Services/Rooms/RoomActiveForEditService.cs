@@ -25,15 +25,13 @@ namespace ShapeDungeon.Services.Rooms
 
         public async Task ApplyActiveForEditAsync(Guid roomId)
         {
-            var rooms = await _roomGetRepository.GetAll();
-
-            var oldRoom = _roomGetRepository.GetBy(
-                new RoomTypeSpecification(RoomActiveType.Edit), rooms);
+            var oldRoom = await _roomGetRepository.GetFirstOrDefaultByAsync(
+                new RoomTypeSpecification(RoomActiveType.Edit));
 
             if (oldRoom != null)
             {
-                var newRoom = _roomGetRepository.GetBy(
-                    new RoomIdSpecification(roomId), rooms);
+                var newRoom = await _roomGetRepository.GetFirstOrDefaultByAsync(
+                    new RoomIdSpecification(roomId));
 
                 if (newRoom != null)
                     await ToggleActiveForEdit(oldRoom, newRoom);
@@ -42,15 +40,13 @@ namespace ShapeDungeon.Services.Rooms
 
         public async Task MoveActiveForEditAsync(int coordX, int coordY)
         {
-            var rooms = await _roomGetRepository.GetAll();
-
-            var oldRoom = _roomGetRepository.GetBy(
-                new RoomTypeSpecification(RoomActiveType.Edit), rooms);
+            var oldRoom = await _roomGetRepository.GetFirstOrDefaultByAsync(
+                new RoomTypeSpecification(RoomActiveType.Edit));
 
             if (oldRoom != null)
             {
-                var newRoom = _roomGetRepository.GetBy(
-                    new RoomCoordsSpecification(coordX, coordY), rooms);
+                var newRoom = await _roomGetRepository.GetFirstOrDefaultByAsync(
+                    new RoomCoordsSpecification(coordX, coordY));
 
                 if (newRoom != null)
                     await ToggleActiveForEdit(oldRoom, newRoom);
