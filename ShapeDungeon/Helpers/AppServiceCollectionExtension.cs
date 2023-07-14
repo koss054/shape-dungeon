@@ -35,6 +35,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddScoped<IEnemyCreateService, EnemyCreateService>();
             services.AddScoped<IEnemyGetService, EnemyGetService>();
             services.AddScoped<IEnemyUpdateService, EnemyUpdateService>();
+            services.AddScoped<IEnemyCombatService, EnemyCombatService>();
 
             // Room
             services.AddScoped<IGetRoomService, GetRoomService>();
@@ -53,7 +54,7 @@ namespace Microsoft.Extensions.DependencyInjection
             // Repos
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IRoomRepository, RoomRepositoryOld>();
-            services.AddScoped<IEnemyRepository, EnemyRepository>();
+            services.AddScoped<IEnemyRepository, EnemyRepositoryOld>();
             services.AddScoped<IPlayerRepository, PlayerRepository>();
             services.AddScoped<IEnemiesRoomsRepository, EnemiesRoomsRepositoryOld>();
             services.AddScoped<ICombatRepository, CombatRepository>();
