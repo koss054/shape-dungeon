@@ -1,9 +1,7 @@
 ﻿using ShapeDungeon.Entities;
-using ShapeDungeon.Helpers.Enums;
 using ShapeDungeon.Interfaces.Repositories;
 using ShapeDungeon.Interfaces.Services.EnemiesRooms;
 using ShapeDungeon.Interfaces.Services.Rooms;
-using ShapeDungeon.Repos;
 using ShapeDungeon.Specifications.Rooms;
 
 namespace ShapeDungeon.Services.Rooms
@@ -11,16 +9,13 @@ namespace ShapeDungeon.Services.Rooms
     public class RoomConditionService : IRoomConditionService
     {
         private readonly IRepositoryGet<Room> _roomGetRepository;
-        private readonly IEnemiesRoomsRepository _enemiesRoomsRepository;
         private readonly IEnemiesRoomsValidateService _enemiesRoomsValidateService;
 
         public RoomConditionService(
             IRepositoryGet<Room> roomGetRepository,
-            IEnemiesRoomsRepository enemiesRoomsRepository,
             IEnemiesRoomsValidateService enemiesRoomsValidateService)
         {
             _roomGetRepository = roomGetRepository;
-            _enemiesRoomsRepository = enemiesRoomsRepository;
             _enemiesRoomsValidateService = enemiesRoomsValidateService;
         }
 

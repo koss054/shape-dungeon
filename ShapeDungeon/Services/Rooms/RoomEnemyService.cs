@@ -1,5 +1,4 @@
 ﻿using ShapeDungeon.DTOs.Enemies;
-using ShapeDungeon.Interfaces.Services.EnemiesRooms;
 using ShapeDungeon.Interfaces.Services.Rooms;
 using ShapeDungeon.Repos;
 
