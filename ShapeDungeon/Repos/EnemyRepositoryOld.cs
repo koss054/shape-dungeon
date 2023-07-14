@@ -4,9 +4,9 @@ using ShapeDungeon.Interfaces.Repositories;
 
 namespace ShapeDungeon.Repos
 {
-    public class EnemyRepository : RepositoryBase<Enemy>, IEnemyRepository
+    public class EnemyRepositoryOld : RepositoryBase<Enemy>, IEnemyRepository
     {
-        public EnemyRepository(IDbContext context) : base(context)
+        public EnemyRepositoryOld(IDbContext context) : base(context)
         {
         }
 
