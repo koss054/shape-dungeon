@@ -1,6 +1,8 @@
-﻿namespace ShapeDungeon.Services.Enemies
+﻿using ShapeDungeon.Interfaces.Services.Enemies;
+
+namespace ShapeDungeon.Services.Enemies
 {
-    public interface EnemyCombatService
+    public class EnemyCombatService : IEnemyCombatService
     {
     }
 }
