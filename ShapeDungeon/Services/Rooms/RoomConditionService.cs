@@ -1,7 +1,7 @@
 ﻿using ShapeDungeon.Entities;
 using ShapeDungeon.Interfaces.Repositories;
-using ShapeDungeon.Interfaces.Services.EnemiesRooms;
 using ShapeDungeon.Interfaces.Services.Rooms;
+using ShapeDungeon.Specifications.EnemiesRooms;
 using ShapeDungeon.Specifications.Rooms;
 
 namespace ShapeDungeon.Services.Rooms
@@ -9,14 +9,14 @@ namespace ShapeDungeon.Services.Rooms
     public class RoomConditionService : IRoomConditionService
     {
         private readonly IRepositoryGet<Room> _roomGetRepository;
-        private readonly IEnemiesRoomsValidateService _enemiesRoomsValidateService;
+        private readonly IRepositoryValidate<EnemyRoom> _enemyRoomValidateRepository;
 
         public RoomConditionService(
-            IRepositoryGet<Room> roomGetRepository,
-            IEnemiesRoomsValidateService enemiesRoomsValidateService)
+            IRepositoryGet<Room> roomGetRepository, 
+            IRepositoryValidate<EnemyRoom> enemyRoomValidateRepository)
         {
             _roomGetRepository = roomGetRepository;
-            _enemiesRoomsValidateService = enemiesRoomsValidateService;
+            _enemyRoomValidateRepository = enemyRoomValidateRepository;
         }
 
         /// <summary>
@@ -29,8 +29,8 @@ namespace ShapeDungeon.Services.Rooms
             var currRoom = await _roomGetRepository.GetFirstOrDefaultByAsync(
                 new RoomMoveSpecification());
 
-            var isEnemyDefeated = await _enemiesRoomsValidateService
-                .IsRoomEnemyDefeated(currRoom.Id);
+            var isEnemyDefeated = await _enemyRoomValidateRepository.IsValidByAsync(
+                new EnemyRoomDefeatedSpecification());
 
             if (currRoom.IsEnemyRoom && !isEnemyDefeated) 
                 return true;

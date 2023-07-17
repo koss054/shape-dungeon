@@ -3,9 +3,10 @@ using ShapeDungeon.DTOs;
 using ShapeDungeon.Entities;
 using ShapeDungeon.Exceptions;
 using ShapeDungeon.Helpers.Enums;
+using ShapeDungeon.Interfaces.Repositories;
 using ShapeDungeon.Interfaces.Services;
-using ShapeDungeon.Interfaces.Services.EnemiesRooms;
 using ShapeDungeon.Repos;
+using ShapeDungeon.Specifications.EnemiesRooms;
 
 namespace ShapeDungeon.Services
 {
@@ -14,26 +15,26 @@ namespace ShapeDungeon.Services
         private readonly ICombatRepository _combatRepository;
         private readonly IEnemyRepository _enemyRepository;
         private readonly IEnemiesRoomsRepository _enemiesRoomsRepository;
-        private readonly IEnemiesRoomsValidateService _enemiesRoomsValidateService;
         private readonly IPlayerRepository _playerRepository;
         private readonly IRoomRepository _roomRepository;
+        private readonly IRepositoryValidate<EnemyRoom> _enemyRoomValidateRepository;
         private readonly IUnitOfWork _unitOfWork;
 
         public CombatService(
             ICombatRepository combatRepository,
             IEnemyRepository enemyRepository,
             IEnemiesRoomsRepository enemiesRoomsRepository,
-            IEnemiesRoomsValidateService enemiesRoomsValidateService,
             IPlayerRepository playerRepository,
-            IRoomRepository roomRepository,
-            IUnitOfWork unitOfWork)
+            IUnitOfWork unitOfWork, 
+            IRepositoryValidate<EnemyRoom> enemyRoomValidateRepository,
+            IRoomRepository roomRepository)
         {
             _combatRepository = combatRepository;
             _enemyRepository = enemyRepository;
             _enemiesRoomsRepository = enemiesRoomsRepository;
-            _enemiesRoomsValidateService = enemiesRoomsValidateService;
             _playerRepository = playerRepository;
             _roomRepository = roomRepository;
+            _enemyRoomValidateRepository = enemyRoomValidateRepository;
             _unitOfWork = unitOfWork;
         }
 
@@ -185,8 +186,8 @@ namespace ShapeDungeon.Services
             if (!activeRoom.IsEnemyRoom) 
                 throw new Exception("NotEnemyRoomException");
 
-            bool isEnemyDefeated = await _enemiesRoomsValidateService
-                .IsRoomEnemyDefeated(activeRoom.Id);
+            bool isEnemyDefeated = await _enemyRoomValidateRepository.IsValidByAsync(
+                new EnemyRoomDefeatedSpecification());
 
             if (isEnemyDefeated)
                 return false;
