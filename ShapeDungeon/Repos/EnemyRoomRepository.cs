@@ -21,6 +21,8 @@ namespace ShapeDungeon.Repos
         {
             var expression = specification.ToExpression();
             var enemyRoomToReturn = await this.Context.EnemiesRooms
+                .Include(x => x.Enemy)
+                .Include(x => x.Room)
                 .AsQueryable()
                 .Where(expression)
                 .FirstOrDefaultAsync();
