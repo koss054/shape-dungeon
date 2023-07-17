@@ -17,7 +17,7 @@ namespace ShapeDungeon.Services.Rooms
 
         public async Task<EnemyDto> GetEnemy(Guid roomId)
         {
-            var enemyRoom = await _enemyRoomGetRepository.GetFirstOrDefaultByAsync(
+            var enemyRoom = await _enemyRoomGetRepository.GetFirstAsync(
                 new EnemyRoomIdSpecification(roomId));
 
             EnemyDto enemyDto = enemyRoom.Enemy;
@@ -26,7 +26,7 @@ namespace ShapeDungeon.Services.Rooms
 
         public async Task<bool> IsEnemyDefeated(Guid roomId)
         {
-            var enemyRoom = await _enemyRoomGetRepository.GetFirstOrDefaultByAsync(
+            var enemyRoom = await _enemyRoomGetRepository.GetFirstAsync(
                 new EnemyRoomIdSpecification(roomId));
 
             if (enemyRoom == null) throw new ArgumentNullException();

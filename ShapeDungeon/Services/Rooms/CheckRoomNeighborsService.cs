@@ -76,7 +76,7 @@ namespace ShapeDungeon.Services.Rooms
 
         private async Task<RoomNavDto?> InitializeCheckRoomAsync(int coordX, int coordY)
         {
-            var room = await _roomGetRepository.GetFirstOrDefaultByAsync(
+            var room = await _roomGetRepository.GetFirstAsync(
                 new RoomCoordsSpecification(coordX, coordY));
 
             var roomDto = new RoomNavDto();

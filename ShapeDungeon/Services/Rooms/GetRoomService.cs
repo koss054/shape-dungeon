@@ -17,7 +17,7 @@ namespace ShapeDungeon.Services.Rooms
 
         public async Task<RoomDto> GetActiveForMoveAsync()
         {
-            var room = await _roomGetRepository.GetFirstOrDefaultByAsync(
+            var room = await _roomGetRepository.GetFirstAsync(
                 new RoomMoveSpecification());
 
             RoomDto roomDto = room;
@@ -26,7 +26,7 @@ namespace ShapeDungeon.Services.Rooms
 
         public async Task<RoomDto> GetActiveForScoutAsync()
         {
-            var room = await _roomGetRepository.GetFirstOrDefaultByAsync(
+            var room = await _roomGetRepository.GetFirstAsync(
                 new RoomScoutSpecification());
 
             RoomDto roomDto = room; 
@@ -35,7 +35,7 @@ namespace ShapeDungeon.Services.Rooms
 
         public async Task<RoomDetailsDto> GetActiveForEditAsync()
         {
-            var room = await _roomGetRepository.GetFirstOrDefaultByAsync(
+            var room = await _roomGetRepository.GetFirstAsync(
                 new RoomEditSpecification());
 
             RoomDetailsDto roomDto = room;
@@ -44,7 +44,7 @@ namespace ShapeDungeon.Services.Rooms
 
         public async Task<Guid> GetActiveForMoveId()
         {
-            var room = await _roomGetRepository.GetFirstOrDefaultByAsync(
+            var room = await _roomGetRepository.GetFirstAsync(
                 new RoomMoveSpecification());
 
             return room.Id;
@@ -52,7 +52,7 @@ namespace ShapeDungeon.Services.Rooms
 
         public async Task<Guid> GetActiveForScoutId()
         {
-            var room = await _roomGetRepository.GetFirstOrDefaultByAsync(
+            var room = await _roomGetRepository.GetFirstAsync(
                 new RoomScoutSpecification());
 
             return room.Id;
@@ -60,7 +60,7 @@ namespace ShapeDungeon.Services.Rooms
 
         public async Task<Guid> GetActiveForEditId()
         {
-            var room = await _roomGetRepository.GetFirstOrDefaultByAsync(
+            var room = await _roomGetRepository.GetFirstAsync(
                 new RoomEditSpecification());
 
             return room.Id;

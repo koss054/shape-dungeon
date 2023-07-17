@@ -27,7 +27,7 @@ namespace ShapeDungeon.Services.Rooms
             if (!doesRoomExist)
                 return false;
 
-            var roomToCheck = await _roomGetRepository.GetFirstOrDefaultByAsync(
+            var roomToCheck = await _roomGetRepository.GetFirstAsync(
                 new RoomCoordsSpecification(coordX, coordY));
 
             var canGo = direction switch

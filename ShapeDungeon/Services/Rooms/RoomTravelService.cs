@@ -35,9 +35,9 @@ namespace ShapeDungeon.Services.Rooms
         {
             var oldRoom = action switch
             {
-                RoomTravelAction.Move => await _roomGetRepository.GetFirstOrDefaultByAsync(
+                RoomTravelAction.Move => await _roomGetRepository.GetFirstAsync(
                     new RoomMoveSpecification()),
-                RoomTravelAction.Scout => await _roomGetRepository.GetFirstOrDefaultByAsync(
+                RoomTravelAction.Scout => await _roomGetRepository.GetFirstAsync(
                     new RoomScoutSpecification()),
                 _ => throw new ArgumentOutOfRangeException(nameof(action)),
             };
@@ -85,7 +85,7 @@ namespace ShapeDungeon.Services.Rooms
                 default: throw new ArgumentOutOfRangeException(nameof(direction));
             }
 
-            var newRoom = await _roomGetRepository.GetFirstOrDefaultByAsync(
+            var newRoom = await _roomGetRepository.GetFirstAsync(
                 new RoomCoordsSpecification(coordX, coordY));
 
             if (newRoom != null)
@@ -112,10 +112,10 @@ namespace ShapeDungeon.Services.Rooms
 
         public async Task<bool> IsScoutResetAsync()
         {
-            var activeForScoutRoom = await _roomGetRepository.GetFirstOrDefaultByAsync(
+            var activeForScoutRoom = await _roomGetRepository.GetFirstAsync(
                 new RoomScoutSpecification());
 
-            var activeForMoveRoom = await _roomGetRepository.GetFirstOrDefaultByAsync(
+            var activeForMoveRoom = await _roomGetRepository.GetFirstAsync(
                 new RoomMoveSpecification());
 
             if (activeForScoutRoom != null && activeForMoveRoom != null)
@@ -136,7 +136,7 @@ namespace ShapeDungeon.Services.Rooms
         {
             if (currRoom.IsEnemyRoom)
             {
-                var enemyRoom = await _enemyRoomGetRepository.GetFirstOrDefaultByAsync(
+                var enemyRoom = await _enemyRoomGetRepository.GetFirstAsync(
                         new EnemyRoomIdSpecification(currRoom.Id));
 
                 if (!enemyRoom.IsEnemyDefeated)

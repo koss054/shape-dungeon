@@ -18,7 +18,7 @@ namespace ShapeDungeon.Repos
         public async Task<IEnumerable<Room>> GetAll()
             => await Context.Rooms.ToListAsync();
 
-        public async Task<Room> GetFirstOrDefaultByAsync(ISpecification<Room> specification)
+        public async Task<Room> GetFirstAsync(ISpecification<Room> specification)
         {
             var expression = specification.ToExpression();
             var roomToReturn = await this.Context.Rooms

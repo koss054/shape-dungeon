@@ -7,6 +7,6 @@ namespace ShapeDungeon.Interfaces.Repositories
     {
         Task<IEnumerable<T>> GetAll();
 
-        Task<T> GetFirstOrDefaultByAsync(ISpecification<T> specification);
+        Task<T> GetFirstAsync(ISpecification<T> specification);
     }
 }

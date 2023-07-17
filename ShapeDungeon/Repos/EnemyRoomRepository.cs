@@ -17,7 +17,7 @@ namespace ShapeDungeon.Repos
         public async Task<IEnumerable<EnemyRoom>> GetAll()
             => throw new NotImplementedException();
 
-        public async Task<EnemyRoom> GetFirstOrDefaultByAsync(ISpecification<EnemyRoom> specification)
+        public async Task<EnemyRoom> GetFirstAsync(ISpecification<EnemyRoom> specification)
         {
             var expression = specification.ToExpression();
             var enemyRoomToReturn = await this.Context.EnemiesRooms

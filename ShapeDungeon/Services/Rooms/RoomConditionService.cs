@@ -26,7 +26,7 @@ namespace ShapeDungeon.Services.Rooms
         /// <returns>True, if enemy room has an active enemy. Otherwise, false.</returns>
         public async Task<bool> IsCurrentRoomActiveEnemyRoom()
         {
-            var currRoom = await _roomGetRepository.GetFirstOrDefaultByAsync(
+            var currRoom = await _roomGetRepository.GetFirstAsync(
                 new RoomMoveSpecification());
 
             var isEnemyDefeated = await _enemyRoomValidateRepository.IsValidByAsync(
