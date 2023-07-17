@@ -134,11 +134,14 @@ namespace ShapeDungeon.Services.Rooms
 
         private async Task ActivateEnemyForCombat(Room currRoom) 
         {
-            var enemyRoom = await _enemyRoomGetRepository.GetFirstOrDefaultByAsync(
-                    new EnemyRoomIdSpecification(currRoom.Id));
+            if (currRoom.IsEnemyRoom)
+            {
+                var enemyRoom = await _enemyRoomGetRepository.GetFirstOrDefaultByAsync(
+                        new EnemyRoomIdSpecification(currRoom.Id));
 
-            if (currRoom.IsEnemyRoom && !enemyRoom.IsEnemyDefeated)
-                await _enemyRepository.SetActiveForCombat(enemyRoom.EnemyId);
+                if (enemyRoom.IsEnemyDefeated)
+                    await _enemyRepository.SetActiveForCombat(enemyRoom.EnemyId);
+            }
         }
     }
 }
