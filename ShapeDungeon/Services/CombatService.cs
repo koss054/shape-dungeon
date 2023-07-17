@@ -187,7 +187,7 @@ namespace ShapeDungeon.Services
                 throw new Exception("NotEnemyRoomException");
 
             bool isEnemyDefeated = await _enemyRoomValidateRepository.IsValidByAsync(
-                new EnemyRoomDefeatedSpecification());
+                new EnemyRoomDefeatedSpecification(activeRoom.Id));
 
             if (isEnemyDefeated)
                 return false;

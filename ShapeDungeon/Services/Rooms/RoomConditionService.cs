@@ -30,7 +30,7 @@ namespace ShapeDungeon.Services.Rooms
                 new RoomMoveSpecification());
 
             var isEnemyDefeated = await _enemyRoomValidateRepository.IsValidByAsync(
-                new EnemyRoomDefeatedSpecification());
+                new EnemyRoomDefeatedSpecification(currRoom.Id));
 
             if (currRoom.IsEnemyRoom && !isEnemyDefeated) 
                 return true;
