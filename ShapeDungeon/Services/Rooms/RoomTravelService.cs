@@ -139,7 +139,7 @@ namespace ShapeDungeon.Services.Rooms
                 var enemyRoom = await _enemyRoomGetRepository.GetFirstOrDefaultByAsync(
                         new EnemyRoomIdSpecification(currRoom.Id));
 
-                if (enemyRoom.IsEnemyDefeated)
+                if (!enemyRoom.IsEnemyDefeated)
                     await _enemyRepository.SetActiveForCombat(enemyRoom.EnemyId);
             }
         }
