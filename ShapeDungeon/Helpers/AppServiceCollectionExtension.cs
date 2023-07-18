@@ -52,7 +52,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
             // Repos
             services.AddScoped<IUnitOfWork, UnitOfWork>();
-            services.AddScoped<IRoomRepository, RoomRepositoryOld>();
+            services.AddScoped<IRoomRepositoryOld, RoomRepositoryOld>();
             services.AddScoped<IEnemyRepositoryOld, EnemyRepositoryOld>();
             services.AddScoped<IPlayerRepository, PlayerRepository>();
             services.AddScoped<IEnemiesRoomsRepository, EnemiesRoomsRepositoryOld>();

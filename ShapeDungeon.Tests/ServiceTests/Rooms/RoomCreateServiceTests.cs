@@ -15,14 +15,14 @@ namespace ShapeDungeon.Tests.ServiceTests.Rooms
 {
     internal class RoomCreateServiceTests
     {
-        private Mock<IRoomRepository> _repoMock;
+        private Mock<IRoomRepositoryOld> _repoMock;
         private Mock<IUnitOfWork> _unitOfWorkMock;
         private IRoomCreateService _service;
 
         [SetUp]
         public void Test_Initialize()
         {
-            _repoMock = new Mock<IRoomRepository>();
+            _repoMock = new Mock<IRoomRepositoryOld>();
             _unitOfWorkMock = new Mock<IUnitOfWork>();
             _service = new RoomCreateService(_repoMock.Object, _unitOfWorkMock.Object);
         }

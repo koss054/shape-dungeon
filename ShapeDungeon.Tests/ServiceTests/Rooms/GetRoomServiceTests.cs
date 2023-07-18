@@ -11,13 +11,13 @@ namespace ShapeDungeon.Tests.ServiceTests.Rooms
 {
     internal class GetRoomServiceTests
     {
-        private Mock<IRoomRepository> _repoMock;
+        private Mock<IRoomRepositoryOld> _repoMock;
         private IGetRoomService _service;
 
         [SetUp]
         public void Test_Initialize()
         {
-            _repoMock = new Mock<IRoomRepository>();
+            _repoMock = new Mock<IRoomRepositoryOld>();
             _service = new GetRoomService(_repoMock.Object);
         }
 

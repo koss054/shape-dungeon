@@ -139,6 +139,10 @@ namespace ShapeDungeon.Services.Rooms
             }
         }
 
+        /// <summary>
+        /// Use only in Unit of Work block.
+        /// </summary>
+        /// <returns>No return value - removes active for combat enemy.</returns>
         private async Task ClearActiveForCombat()
         {
             var isAlreadyActive = await _enemyRepository.IsValidByAsync(
@@ -154,6 +158,11 @@ namespace ShapeDungeon.Services.Rooms
             }
         }
 
+        /// <summary>
+        /// Use only in Unit of Work block.
+        /// </summary>
+        /// <param name="currRoom">The room that the player is in.</param>
+        /// <returns>No return value - adds active for combat enemy if comat room and enemy undefeated.</returns>
         private async Task ActivateEnemyForCombat(Room currRoom) 
         {
             if (currRoom.IsEnemyRoom)

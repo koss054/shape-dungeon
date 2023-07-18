@@ -3,7 +3,7 @@ using ShapeDungeon.Helpers.Enums;
 
 namespace ShapeDungeon.Repos
 {
-    public interface IRoomRepository
+    public interface IRoomRepositoryOld
     {
         #region Get methods
         /// <summary>

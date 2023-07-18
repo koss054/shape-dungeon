@@ -5,7 +5,7 @@ using ShapeDungeon.Interfaces.Repositories;
 
 namespace ShapeDungeon.Repos
 {
-    public class RoomRepositoryOld : RepositoryBase<Room>, IRoomRepository
+    public class RoomRepositoryOld : RepositoryBase<Room>, IRoomRepositoryOld
     {
         public RoomRepositoryOld(IDbContext context) : base(context)
         {
