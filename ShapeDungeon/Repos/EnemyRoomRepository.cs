@@ -5,10 +5,7 @@ using ShapeDungeon.Specifications;
 
 namespace ShapeDungeon.Repos
 {
-    public class EnemyRoomRepository : 
-        RepositoryBase<EnemyRoom>,
-        IRepositoryGet<EnemyRoom>,
-        IRepositoryValidate<EnemyRoom>
+    public class EnemyRoomRepository : RepositoryBase<EnemyRoom>, IEnemyRoomRepository
     {
         public EnemyRoomRepository(IDbContext context) : base(context)
         {
@@ -41,5 +38,13 @@ namespace ShapeDungeon.Repos
 
             return boolToReturn;
         }
+
+        public void Update(EnemyRoom enemyRoom)
+        {
+            this.Context.EnemiesRooms.Update(enemyRoom);
+        }
+
+        public async Task AddAsync(EnemyRoom enemyRoom)
+            => await this.Context.EnemiesRooms.AddAsync(enemyRoom);
     }
 }
