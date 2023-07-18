@@ -14,7 +14,7 @@ namespace ShapeDungeon.Repos
         {
         }
 
-        public async Task<IEnumerable<EnemyRoom>> GetAll()
+        public async Task<IEnumerable<EnemyRoom>> GetMultipleByAsync(ISpecification<EnemyRoom> specification)
             => throw new NotImplementedException();
 
         public async Task<EnemyRoom> GetFirstAsync(ISpecification<EnemyRoom> specification)

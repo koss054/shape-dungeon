@@ -11,7 +11,7 @@ namespace ShapeDungeon.Repos
         {
         }
 
-        public async Task<IEnumerable<Room>> GetAll()
+        public async Task<IEnumerable<Room>> GetMultipleByAsync(ISpecification<Room> specification)
             => await Context.Rooms.ToListAsync();
 
         public async Task<Room> GetFirstAsync(ISpecification<Room> specification)

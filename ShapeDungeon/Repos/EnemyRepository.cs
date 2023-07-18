@@ -5,27 +5,33 @@ using ShapeDungeon.Specifications;
 
 namespace ShapeDungeon.Repos
 {
-    public class EnemyRepository : 
-        RepositoryBase<Enemy>,
-        IEnemyRepository
+    public class EnemyRepository : RepositoryBase<Enemy>, IEnemyRepository
     {
         public EnemyRepository(IDbContext context) : base(context)
         {
         }
 
-        public async Task<IEnumerable<Enemy>> GetAll()
-            => throw new NotImplementedException();
+        public async Task<IEnumerable<Enemy>> GetMultipleByAsync(ISpecification<Enemy> specification)
+        {
+            var expression = specification.ToExpression();
+            var enemiesToReturn = await this.Context.Enemies
+                .AsQueryable()
+                .Where(expression)
+                .ToListAsync();
+
+            return enemiesToReturn;
+        }
 
         public async Task<Enemy> GetFirstAsync(ISpecification<Enemy> specification)
         {
             var expression = specification.ToExpression();
-            var enemyRoomToReturn = await this.Context.Enemies
+            var enemyToReturn = await this.Context.Enemies
                 .AsQueryable()
                 .Where(expression)
                 .FirstOrDefaultAsync();
 
-            return enemyRoomToReturn ?? throw new ArgumentNullException(
-                nameof(enemyRoomToReturn), "No enemy room matches provided specification.");
+            return enemyToReturn ?? throw new ArgumentNullException(
+                nameof(enemyToReturn), "No enemy matches provided specification.");
         }
 
         public async Task<bool> IsValidByAsync(ISpecification<Enemy> specification)
