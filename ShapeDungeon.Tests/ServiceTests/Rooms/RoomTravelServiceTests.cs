@@ -15,7 +15,7 @@ namespace ShapeDungeon.Tests.ServiceTests.Rooms
     internal class RoomTravelServiceTests
     {
         private Mock<IEnemiesRoomsRepository> _mappingRepoMock;
-        private Mock<IEnemyRepository> _enemyRepoMock;
+        private Mock<IEnemyRepositoryOld> _enemyRepoMock;
         private Mock<IRoomRepository> _roomRepoMock;
         private Mock<IUnitOfWork> _unitOfWorkMock;
         private IRoomTravelService _service;
@@ -24,7 +24,7 @@ namespace ShapeDungeon.Tests.ServiceTests.Rooms
         public void Test_Initialize()
         {
             _mappingRepoMock = new Mock<IEnemiesRoomsRepository>();
-            _enemyRepoMock = new Mock<IEnemyRepository>();
+            _enemyRepoMock = new Mock<IEnemyRepositoryOld>();
             _roomRepoMock = new Mock<IRoomRepository>();
             _unitOfWorkMock = new Mock<IUnitOfWork>();
 

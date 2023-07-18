@@ -6,11 +6,11 @@ namespace ShapeDungeon.Services.Enemies
 {
     public class EnemyUpdateService : IEnemyUpdateService
     {
-        private readonly IEnemyRepository _enemyRepository;
+        private readonly IEnemyRepositoryOld _enemyRepository;
         private readonly IUnitOfWork _unitOfWork;
 
         public EnemyUpdateService(
-            IEnemyRepository enemyRepository, 
+            IEnemyRepositoryOld enemyRepository, 
             IUnitOfWork unitOfWork)
         {
             _enemyRepository = enemyRepository;

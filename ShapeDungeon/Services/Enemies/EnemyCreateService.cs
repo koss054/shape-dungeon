@@ -8,11 +8,11 @@ namespace ShapeDungeon.Services.Enemies
 {
     public class EnemyCreateService : IEnemyCreateService
     {
-        private readonly IEnemyRepository _enemyRepository;
+        private readonly IEnemyRepositoryOld _enemyRepository;
         private readonly IUnitOfWork _unitOfWork;
 
         public EnemyCreateService(
-            IEnemyRepository enemyRepository,
+            IEnemyRepositoryOld enemyRepository,
             IUnitOfWork unitOfWork)
         {
             _enemyRepository = enemyRepository;

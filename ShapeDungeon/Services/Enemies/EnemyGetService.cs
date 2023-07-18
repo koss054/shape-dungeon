@@ -7,9 +7,9 @@ namespace ShapeDungeon.Services.Enemies
 {
     public class EnemyGetService : IEnemyGetService
     {
-        private readonly IEnemyRepository _enemyRepository;
+        private readonly IEnemyRepositoryOld _enemyRepository;
 
-        public EnemyGetService(IEnemyRepository enemyRepository)
+        public EnemyGetService(IEnemyRepositoryOld enemyRepository)
         {
             _enemyRepository = enemyRepository;
         }
