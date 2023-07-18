@@ -1,22 +1,26 @@
 ﻿using ShapeDungeon.DTOs.Enemies;
 using ShapeDungeon.Entities;
+using ShapeDungeon.Interfaces.Repositories;
 using ShapeDungeon.Interfaces.Services.Enemies;
 using ShapeDungeon.Repos;
+using ShapeDungeon.Specifications.Enemies;
 
 namespace ShapeDungeon.Services.Enemies
 {
     public class EnemyGetService : IEnemyGetService
     {
-        private readonly IEnemyRepositoryOld _enemyRepository;
+        private readonly IEnemyRepository _enemyRepository;
 
-        public EnemyGetService(IEnemyRepositoryOld enemyRepository)
+        public EnemyGetService(IEnemyRepository enemyRepository)
         {
             _enemyRepository = enemyRepository;
         }
 
         public async Task<IEnumerable<EnemyRangeDto>> GetRangeAsync(int minLevel, int maxLevel)
         {
-            var enemies = await _enemyRepository.GetRangeAsync(minLevel, maxLevel);
+            var enemies = await _enemyRepository.GetMultipleByAsync(
+                new EnemyLevelRangeSpecification(minLevel, maxLevel));
+
             var enemyDtos = new List<EnemyRangeDto>();
 
             foreach (var enemy in enemies)
@@ -28,23 +32,26 @@ namespace ShapeDungeon.Services.Enemies
         // TODO: Make exceptions return better info.
         public async Task<Enemy> GetById(Guid enemyId)
         {
-            var enemy = await _enemyRepository.GetById(enemyId);
-            return enemy ?? throw new ArgumentNullException("Enemy id.", 
-                "No entity matches provided id.");
+            var enemy = await _enemyRepository.GetFirstAsync(
+                new EnemyIdSpecification(enemyId));
+
+            return enemy;
         }
 
         public async Task<Enemy> GetIsActiveForCombat()
         {
-            var enemy = await _enemyRepository.GetActiveForCombat();
-            return enemy ?? throw new ArgumentNullException("Enemy for combat.", 
-                "No active combat enemy when expected.");
+            var enemy = await _enemyRepository.GetFirstAsync(
+                new EnemyActiveForCombatSpecification());
+
+            return enemy;
         }
 
         public async Task<int> GetActiveForCombatExp()
         {
-            var enemy = await _enemyRepository.GetActiveForCombat();
-            return enemy != null ? enemy.DroppedExp
-                : throw new ArgumentNullException();
+            var enemy = await _enemyRepository.GetFirstAsync(
+                new EnemyActiveForCombatSpecification());
+
+            return enemy.DroppedExp;
         }
     }
 }

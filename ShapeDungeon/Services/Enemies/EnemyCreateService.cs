@@ -1,18 +1,18 @@
 ﻿using ShapeDungeon.Data;
 using ShapeDungeon.DTOs.Enemies;
 using ShapeDungeon.Entities;
+using ShapeDungeon.Interfaces.Repositories;
 using ShapeDungeon.Interfaces.Services.Enemies;
-using ShapeDungeon.Repos;
 
 namespace ShapeDungeon.Services.Enemies
 {
     public class EnemyCreateService : IEnemyCreateService
     {
-        private readonly IEnemyRepositoryOld _enemyRepository;
+        private readonly IEnemyRepository _enemyRepository;
         private readonly IUnitOfWork _unitOfWork;
 
         public EnemyCreateService(
-            IEnemyRepositoryOld enemyRepository,
+            IEnemyRepository enemyRepository,
             IUnitOfWork unitOfWork)
         {
             _enemyRepository = enemyRepository;
