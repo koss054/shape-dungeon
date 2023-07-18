@@ -38,5 +38,13 @@ namespace ShapeDungeon.Repos
 
             return boolToReturn;
         }
+
+        public void Update(Enemy enemy)
+        {
+            this.Context.Enemies.Update(enemy);
+        }
+
+        public async Task AddAsync(Enemy enemy)
+            => await this.Context.Enemies.AddAsync(enemy);
     }
 }

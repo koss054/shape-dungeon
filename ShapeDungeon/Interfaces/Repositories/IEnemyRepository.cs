@@ -2,7 +2,10 @@
 
 namespace ShapeDungeon.Interfaces.Repositories
 {
-    public interface IEnemyRepository : IRepositoryGet<Enemy>, IRepositoryValidate<Enemy>
+    public interface IEnemyRepository : 
+        IRepositoryGet<Enemy>, 
+        IRepositoryUpdate<Enemy>,
+        IRepositoryValidate<Enemy>
     {
     }
 }
