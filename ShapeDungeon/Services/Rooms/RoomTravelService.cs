@@ -14,20 +14,20 @@ namespace ShapeDungeon.Services.Rooms
     {
         private readonly IRepositoryGet<EnemyRoom> _enemyRoomGetRepository;
         private readonly IRoomValidateService _roomValidateService;
-        private readonly IRepositoryGet<Room> _roomGetRepository;
+        private readonly IRoomRepository _roomRepository;
         private readonly IEnemyRepository _enemyRepository;
         private readonly IUnitOfWork _unitOfWork;
 
         public RoomTravelService(
             IRepositoryGet<EnemyRoom> enemyRoomGetRepository,
             IRoomValidateService roomValidateService,
-            IRepositoryGet<Room> roomGetRepository,
+            IRoomRepository roomRepository,
             IEnemyRepository enemyRepository,
             IUnitOfWork unitOfWork)
         {
             _enemyRoomGetRepository = enemyRoomGetRepository;
             _roomValidateService = roomValidateService;
-            _roomGetRepository = roomGetRepository;
+            _roomRepository = roomRepository;
             _enemyRepository = enemyRepository;
             _unitOfWork = unitOfWork;
         }
@@ -39,7 +39,7 @@ namespace ShapeDungeon.Services.Rooms
             var coordsDto = new RoomCoordsDto(oldRoom.CoordX, oldRoom.CoordY);
             await UpdateCoordsDto(direction, oldRoom, coordsDto);
 
-            var newRoom = await _roomGetRepository.GetFirstAsync(
+            var newRoom = await _roomRepository.GetFirstAsync(
                 new RoomCoordsSpecification(coordsDto.CoordX, coordsDto.CoordY));
 
             await _unitOfWork.Commit(async () =>
@@ -63,10 +63,10 @@ namespace ShapeDungeon.Services.Rooms
 
         public async Task<bool> IsScoutResetAsync()
         {
-            var activeForScoutRoom = await _roomGetRepository.GetFirstAsync(
+            var activeForScoutRoom = await _roomRepository.GetFirstAsync(
                 new RoomScoutSpecification());
 
-            var activeForMoveRoom = await _roomGetRepository.GetFirstAsync(
+            var activeForMoveRoom = await _roomRepository.GetFirstAsync(
                 new RoomMoveSpecification());
 
             if (activeForScoutRoom != null && activeForMoveRoom != null)
@@ -87,9 +87,9 @@ namespace ShapeDungeon.Services.Rooms
         {
             return action switch
             {
-                RoomTravelAction.Move => await _roomGetRepository.GetFirstAsync(
+                RoomTravelAction.Move => await _roomRepository.GetFirstAsync(
                     new RoomMoveSpecification()),
-                RoomTravelAction.Scout => await _roomGetRepository.GetFirstAsync(
+                RoomTravelAction.Scout => await _roomRepository.GetFirstAsync(
                     new RoomScoutSpecification()),
                 _ => throw new ArgumentOutOfRangeException(nameof(action)),
             };

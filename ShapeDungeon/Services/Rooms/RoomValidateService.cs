@@ -1,5 +1,4 @@
-﻿using ShapeDungeon.Entities;
-using ShapeDungeon.Helpers.Enums;
+﻿using ShapeDungeon.Helpers.Enums;
 using ShapeDungeon.Interfaces.Repositories;
 using ShapeDungeon.Interfaces.Services.Rooms;
 using ShapeDungeon.Specifications.Rooms;
@@ -8,26 +7,22 @@ namespace ShapeDungeon.Services.Rooms
 {
     public class RoomValidateService : IRoomValidateService
     {
-        private readonly IRepositoryGet<Room> _roomGetRepository;
-        private readonly IRepositoryCoordsGet<Room> _roomCoordsGetRepository;
+        private readonly IRoomRepository _roomRepository;
 
-        public RoomValidateService(
-            IRepositoryGet<Room> roomGetRepository,
-            IRepositoryCoordsGet<Room> roomCoordsGetRepository)
+        public RoomValidateService(IRoomRepository roomRepository)
         {
-            _roomGetRepository = roomGetRepository;
-            _roomCoordsGetRepository = roomCoordsGetRepository;
+            _roomRepository = roomRepository;
         }
 
         public async Task<bool> CanEnterRoomFromDirection(int coordX, int coordY, RoomDirection direction)
         {
-            var doesRoomExist = await _roomCoordsGetRepository.DoCoordsExistByAsync(
+            var doesRoomExist = await _roomRepository.DoCoordsExistByAsync(
                 new RoomCoordsSpecification(coordX, coordY));
 
             if (!doesRoomExist)
                 return false;
 
-            var roomToCheck = await _roomGetRepository.GetFirstAsync(
+            var roomToCheck = await _roomRepository.GetFirstAsync(
                 new RoomCoordsSpecification(coordX, coordY));
 
             var canGo = direction switch

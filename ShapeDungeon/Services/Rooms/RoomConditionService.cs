@@ -8,14 +8,14 @@ namespace ShapeDungeon.Services.Rooms
 {
     public class RoomConditionService : IRoomConditionService
     {
-        private readonly IRepositoryGet<Room> _roomGetRepository;
+        private readonly IRoomRepository _roomRepository;
         private readonly IRepositoryValidate<EnemyRoom> _enemyRoomValidateRepository;
 
         public RoomConditionService(
-            IRepositoryGet<Room> roomGetRepository, 
+            IRoomRepository roomRepository, 
             IRepositoryValidate<EnemyRoom> enemyRoomValidateRepository)
         {
-            _roomGetRepository = roomGetRepository;
+            _roomRepository = roomRepository;
             _enemyRoomValidateRepository = enemyRoomValidateRepository;
         }
 
@@ -26,7 +26,7 @@ namespace ShapeDungeon.Services.Rooms
         /// <returns>True, if enemy room has an active enemy. Otherwise, false.</returns>
         public async Task<bool> IsCurrentRoomActiveEnemyRoom()
         {
-            var currRoom = await _roomGetRepository.GetFirstAsync(
+            var currRoom = await _roomRepository.GetFirstAsync(
                 new RoomMoveSpecification());
 
             var isEnemyDefeated = await _enemyRoomValidateRepository.IsValidByAsync(

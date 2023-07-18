@@ -1,5 +1,4 @@
 ﻿using ShapeDungeon.DTOs.Rooms;
-using ShapeDungeon.Entities;
 using ShapeDungeon.Helpers.Enums;
 using ShapeDungeon.Interfaces.Repositories;
 using ShapeDungeon.Interfaces.Services.Rooms;
@@ -9,18 +8,15 @@ namespace ShapeDungeon.Services.Rooms
 {
     public class CheckRoomNeighborsService : ICheckRoomNeighborsService
     {
-        private readonly IRepositoryGet<Room> _roomGetRepository;
+        private readonly IRoomRepository _roomRepository;
         private readonly IRoomValidateService _roomValidateService;
-        private readonly IRepositoryCoordsGet<Room> _roomCoordsGetRepository;
 
         public CheckRoomNeighborsService(
-            IRepositoryGet<Room> roomGetRepository,
-            IRoomValidateService roomValidateService,
-            IRepositoryCoordsGet<Room> roomCoordsGetRepository)
+            IRoomRepository roomRepository,
+            IRoomValidateService roomValidateService)
         {
-            _roomGetRepository = roomGetRepository;
+            _roomRepository = roomRepository;
             _roomValidateService = roomValidateService;
-            _roomCoordsGetRepository = roomCoordsGetRepository;
         }
 
         public async Task<RoomNavDto?> SetDtoNeighborsAsync(int coordX, int coordY)
@@ -76,7 +72,7 @@ namespace ShapeDungeon.Services.Rooms
 
         private async Task<RoomNavDto?> InitializeCheckRoomAsync(int coordX, int coordY)
         {
-            var room = await _roomGetRepository.GetFirstAsync(
+            var room = await _roomRepository.GetFirstAsync(
                 new RoomCoordsSpecification(coordX, coordY));
 
             var roomDto = new RoomNavDto();
@@ -93,7 +89,7 @@ namespace ShapeDungeon.Services.Rooms
         }
 
         private async Task<bool> IsRoomWithCoordsValidAsync(int coordX, int coordY)
-            => await _roomCoordsGetRepository.DoCoordsExistByAsync(
+            => await _roomRepository.DoCoordsExistByAsync(
                 new RoomCoordsSpecification(coordX, coordY));
     }
 }

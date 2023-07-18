@@ -8,28 +8,25 @@ namespace ShapeDungeon.Services.Rooms
 {
     public class RoomActiveForEditService : IRoomActiveForEditService
     {
-        private readonly IRepositoryGet<Room> _roomGetRepository;
-        private readonly IRepositoryUpdate<Room> _roomUpdateRepository;
+        private readonly IRoomRepository _roomRepository;
         private readonly IUnitOfWork _unitOfWork;
 
         public RoomActiveForEditService(
-            IRepositoryGet<Room> roomGetRepository,
-            IRepositoryUpdate<Room> roomUpdateRepository,
+            IRoomRepository roomRepository,
             IUnitOfWork unitOfWork)
         {
-            _roomGetRepository = roomGetRepository;
-            _roomUpdateRepository = roomUpdateRepository;
+            _roomRepository = roomRepository;
             _unitOfWork = unitOfWork;
         }
 
         public async Task ApplyActiveForEditAsync(Guid roomId)
         {
-            var oldRoom = await _roomGetRepository.GetFirstAsync(
+            var oldRoom = await _roomRepository.GetFirstAsync(
                 new RoomEditSpecification());
 
             if (oldRoom != null)
             {
-                var newRoom = await _roomGetRepository.GetFirstAsync(
+                var newRoom = await _roomRepository.GetFirstAsync(
                     new RoomIdSpecification(roomId));
 
                 if (newRoom != null)
@@ -39,12 +36,12 @@ namespace ShapeDungeon.Services.Rooms
 
         public async Task MoveActiveForEditAsync(int coordX, int coordY)
         {
-            var oldRoom = await _roomGetRepository.GetFirstAsync(
+            var oldRoom = await _roomRepository.GetFirstAsync(
                 new RoomEditSpecification());
 
             if (oldRoom != null)
             {
-                var newRoom = await _roomGetRepository.GetFirstAsync(
+                var newRoom = await _roomRepository.GetFirstAsync(
                     new RoomCoordsSpecification(coordX, coordY));
 
                 if (newRoom != null)
@@ -58,8 +55,8 @@ namespace ShapeDungeon.Services.Rooms
             newRoom.IsActiveForEdit = true;
             await _unitOfWork.Commit(() =>
             {
-                _roomUpdateRepository.Update(oldRoom);
-                _roomUpdateRepository.Update(newRoom);
+                _roomRepository.Update(oldRoom);
+                _roomRepository.Update(newRoom);
             });
         }
     }

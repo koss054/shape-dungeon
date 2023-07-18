@@ -5,11 +5,7 @@ using ShapeDungeon.Specifications;
 
 namespace ShapeDungeon.Repos
 {
-    public class RoomRepository : 
-        RepositoryBase<Room>,
-        IRepositoryGet<Room>, 
-        IRepositoryUpdate<Room>, 
-        IRepositoryCoordsGet<Room>
+    public class RoomRepository : RepositoryBase<Room>, IRoomRepository
     {
         public RoomRepository(IDbContext context) : base(context)
         {

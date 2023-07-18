@@ -10,17 +10,14 @@ namespace ShapeDungeon.Services.Rooms
 {
     public class RoomCreateService : IRoomCreateService
     {
-        private readonly IRepositoryCoordsGet<Room> _roomCoordsGetRepository;
-        private readonly IRepositoryUpdate<Room> _roomUpdateRepository;
+        private readonly IRoomRepository _roomRepository;
         private readonly IUnitOfWork _unitOfWork;
 
         public RoomCreateService(
-            IRepositoryCoordsGet<Room> roomCoordsGetRepository,
-            IRepositoryUpdate<Room> roomUpdateRepository,
+            IRoomRepository roomRepository,
             IUnitOfWork unitOfWork)
         {
-            _roomCoordsGetRepository = roomCoordsGetRepository;
-            _roomUpdateRepository = roomUpdateRepository;
+            _roomRepository = roomRepository;
             _unitOfWork = unitOfWork;
         }
 
@@ -51,7 +48,7 @@ namespace ShapeDungeon.Services.Rooms
 
             await _unitOfWork.Commit(() =>
             {
-                _roomUpdateRepository.AddAsync(room);
+                _roomRepository.AddAsync(room);
             });
 
             return room;
@@ -62,10 +59,10 @@ namespace ShapeDungeon.Services.Rooms
         {
             var roomDto = new RoomDetailsDto();
 
-            int coordX = await _roomCoordsGetRepository.GetCoordXByAsync(
+            int coordX = await _roomRepository.GetCoordXByAsync(
                 new RoomEditSpecification());
 
-            int coordY = await _roomCoordsGetRepository.GetCoordYByAsync(
+            int coordY = await _roomRepository.GetCoordYByAsync(
                 new RoomEditSpecification());
 
             switch (roomDirection)
@@ -83,7 +80,7 @@ namespace ShapeDungeon.Services.Rooms
         }
 
         public async Task<bool> AreCoordsInUse(int coordX, int coordY)
-            => await _roomCoordsGetRepository.DoCoordsExistByAsync(
+            => await _roomRepository.DoCoordsExistByAsync(
                 new RoomCoordsSpecification(coordX, coordY));
     }
 }
