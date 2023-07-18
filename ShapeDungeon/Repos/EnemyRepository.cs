@@ -7,7 +7,7 @@ namespace ShapeDungeon.Repos
 {
     public class EnemyRepository : 
         RepositoryBase<Enemy>,
-        IRepositoryGet<Enemy>
+        IEnemyRepository
     {
         public EnemyRepository(IDbContext context) : base(context)
         {
@@ -26,6 +26,17 @@ namespace ShapeDungeon.Repos
 
             return enemyRoomToReturn ?? throw new ArgumentNullException(
                 nameof(enemyRoomToReturn), "No enemy room matches provided specification.");
+        }
+
+        public async Task<bool> IsValidByAsync(ISpecification<Enemy> specification)
+        {
+            var expression = specification.ToExpression();
+            var boolToReturn = await this.Context.Enemies
+                .AsQueryable()
+                .Where(expression)
+                .AnyAsync();
+
+            return boolToReturn;
         }
     }
 }
