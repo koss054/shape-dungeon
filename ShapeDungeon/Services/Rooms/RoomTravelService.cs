@@ -1,4 +1,5 @@
 ﻿using ShapeDungeon.Data;
+using ShapeDungeon.DTOs.Rooms;
 using ShapeDungeon.Entities;
 using ShapeDungeon.Helpers.Enums;
 using ShapeDungeon.Interfaces.Repositories;
@@ -33,81 +34,31 @@ namespace ShapeDungeon.Services.Rooms
 
         public async Task RoomTravelAsync(RoomDirection direction, RoomTravelAction action)
         {
-            var oldRoom = action switch
-            {
-                RoomTravelAction.Move => await _roomGetRepository.GetFirstAsync(
-                    new RoomMoveSpecification()),
-                RoomTravelAction.Scout => await _roomGetRepository.GetFirstAsync(
-                    new RoomScoutSpecification()),
-                _ => throw new ArgumentOutOfRangeException(nameof(action)),
-            };
+            Room oldRoom = await GetOldRoom(action);
 
-            if (oldRoom == null) 
-                throw new ArgumentNullException(nameof(oldRoom));
-
-            var coordX = oldRoom!.CoordX;
-            var coordY = oldRoom!.CoordY;
-
-            switch (direction)
-            {
-                case RoomDirection.Left: 
-                    var isLeftDeadEnd = !(await _roomValidateService
-                        .CanEnterRoomFromDirection(coordX - 1, coordY, RoomDirection.Left));
-
-                    if (oldRoom.CanGoLeft && !isLeftDeadEnd)
-                        coordX--;
-
-                    break;
-                case RoomDirection.Right:
-                    var isRightDeadEnd = !(await _roomValidateService
-                        .CanEnterRoomFromDirection(coordX + 1, coordY, RoomDirection.Right));
-
-                    if (oldRoom.CanGoRight && !isRightDeadEnd) 
-                        coordX++;  
-
-                    break;
-                case RoomDirection.Top: 
-                    var isUpDeadEnd = !(await _roomValidateService
-                        .CanEnterRoomFromDirection(coordX, coordY + 1, RoomDirection.Top));
-
-                    if (oldRoom.CanGoUp && !isUpDeadEnd) 
-                        coordY++; 
-
-                    break;
-                case RoomDirection.Bottom: 
-                    var isDownDeadEnd = !(await _roomValidateService
-                        .CanEnterRoomFromDirection(coordX, coordY - 1, RoomDirection.Bottom));
-
-                    if (oldRoom.CanGoDown && !isDownDeadEnd)
-                        coordY--;  
-
-                    break;
-                default: throw new ArgumentOutOfRangeException(nameof(direction));
-            }
+            var coordsDto = new RoomCoordsDto(oldRoom.CoordX, oldRoom.CoordY);
+            await UpdateCoordsDto(direction, oldRoom, coordsDto);
 
             var newRoom = await _roomGetRepository.GetFirstAsync(
-                new RoomCoordsSpecification(coordX, coordY));
+                new RoomCoordsSpecification(coordsDto.CoordX, coordsDto.CoordY));
 
-            if (newRoom != null)
+            await _unitOfWork.Commit(async () =>
             {
-                await _unitOfWork.Commit(async () =>
+                switch (action)
                 {
-                    switch (action)
-                    {
-                        case RoomTravelAction.Move:
-                            oldRoom.IsActiveForMove = false;
-                            newRoom.IsActiveForMove = true;
-                            await _enemyRepository.ClearActiveForCombat();
-                            await ActivateEnemyForCombat(newRoom);
-                            break;
-                        case RoomTravelAction.Scout:
-                            oldRoom.IsActiveForScout = false;
-                            newRoom.IsActiveForScout = true;
-                            break;
-                        default: throw new ArgumentOutOfRangeException(nameof(action));
-                    }
-                });
-            }
+                    case RoomTravelAction.Move:
+                        oldRoom.IsActiveForMove = false;
+                        newRoom.IsActiveForMove = true;
+                        await _enemyRepository.ClearActiveForCombat();
+                        await ActivateEnemyForCombat(newRoom);
+                        break;
+                    case RoomTravelAction.Scout:
+                        oldRoom.IsActiveForScout = false;
+                        newRoom.IsActiveForScout = true;
+                        break;
+                    default: throw new ArgumentOutOfRangeException(nameof(action));
+                }
+            });
         }
 
         public async Task<bool> IsScoutResetAsync()
@@ -130,6 +81,62 @@ namespace ShapeDungeon.Services.Rooms
             }
 
             return false;
+        }
+
+        private async Task<Room> GetOldRoom(RoomTravelAction action)
+        {
+            return action switch
+            {
+                RoomTravelAction.Move => await _roomGetRepository.GetFirstAsync(
+                    new RoomMoveSpecification()),
+                RoomTravelAction.Scout => await _roomGetRepository.GetFirstAsync(
+                    new RoomScoutSpecification()),
+                _ => throw new ArgumentOutOfRangeException(nameof(action)),
+            };
+        }
+
+        private async Task UpdateCoordsDto(RoomDirection direction, Room oldRoom, RoomCoordsDto coordsDto)
+        {
+            switch (direction)
+            {
+                case RoomDirection.Left:
+                    var isLeftDeadEnd = !(await _roomValidateService
+                        .CanEnterRoomFromDirection(coordsDto.CoordX - 1, coordsDto.CoordY,
+                        RoomDirection.Left));
+
+                    if (oldRoom.CanGoLeft && !isLeftDeadEnd)
+                        coordsDto.CoordX--;
+
+                    break;
+                case RoomDirection.Right:
+                    var isRightDeadEnd = !(await _roomValidateService
+                        .CanEnterRoomFromDirection(coordsDto.CoordX + 1, coordsDto.CoordY,
+                        RoomDirection.Right));
+
+                    if (oldRoom.CanGoRight && !isRightDeadEnd)
+                        coordsDto.CoordX++;
+
+                    break;
+                case RoomDirection.Top:
+                    var isUpDeadEnd = !(await _roomValidateService
+                        .CanEnterRoomFromDirection(coordsDto.CoordX, coordsDto.CoordY + 1,
+                        RoomDirection.Top));
+
+                    if (oldRoom.CanGoUp && !isUpDeadEnd)
+                        coordsDto.CoordY++;
+
+                    break;
+                case RoomDirection.Bottom:
+                    var isDownDeadEnd = !(await _roomValidateService
+                        .CanEnterRoomFromDirection(coordsDto.CoordX, coordsDto.CoordY - 1,
+                        RoomDirection.Bottom));
+
+                    if (oldRoom.CanGoDown && !isDownDeadEnd)
+                        coordsDto.CoordY--;
+
+                    break;
+                default: throw new ArgumentOutOfRangeException(nameof(direction));
+            }
         }
 
         private async Task ActivateEnemyForCombat(Room currRoom) 
