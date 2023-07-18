@@ -53,7 +53,7 @@ namespace Microsoft.Extensions.DependencyInjection
             // Repos
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IRoomRepository, RoomRepositoryOld>();
-            services.AddScoped<IEnemyRepository, EnemyRepositoryOld>();
+            services.AddScoped<IEnemyRepositoryOld, EnemyRepositoryOld>();
             services.AddScoped<IPlayerRepository, PlayerRepository>();
             services.AddScoped<IEnemiesRoomsRepository, EnemiesRoomsRepositoryOld>();
             services.AddScoped<ICombatRepository, CombatRepository>();
@@ -66,6 +66,9 @@ namespace Microsoft.Extensions.DependencyInjection
             // New Enemy Room Repos
             services.AddScoped<IRepositoryGet<EnemyRoom>, EnemyRoomRepository>();
             services.AddScoped<IRepositoryValidate<EnemyRoom>, EnemyRoomRepository>();
+
+            // New Enemy Repo
+            services.AddScoped<IEnemyRepository, EnemyRepository>();
 
             // Combat
             services.AddScoped<ICombatService, CombatService>();
