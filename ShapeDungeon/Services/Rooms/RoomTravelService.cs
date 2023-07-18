@@ -4,7 +4,7 @@ using ShapeDungeon.Entities;
 using ShapeDungeon.Helpers.Enums;
 using ShapeDungeon.Interfaces.Repositories;
 using ShapeDungeon.Interfaces.Services.Rooms;
-using ShapeDungeon.Repos;
+using ShapeDungeon.Specifications.Enemies;
 using ShapeDungeon.Specifications.EnemiesRooms;
 using ShapeDungeon.Specifications.Rooms;
 
@@ -49,7 +49,7 @@ namespace ShapeDungeon.Services.Rooms
                     case RoomTravelAction.Move:
                         oldRoom.IsActiveForMove = false;
                         newRoom.IsActiveForMove = true;
-                        await _enemyRepository.ClearActiveForCombat();
+                        await ClearActiveForCombat();
                         await ActivateEnemyForCombat(newRoom);
                         break;
                     case RoomTravelAction.Scout:
@@ -139,6 +139,21 @@ namespace ShapeDungeon.Services.Rooms
             }
         }
 
+        private async Task ClearActiveForCombat()
+        {
+            var isAlreadyActive = await _enemyRepository.IsValidByAsync(
+                new EnemyActiveForCombatSpecification());
+
+            if (isAlreadyActive)
+            {
+                var oldEnemy = await _enemyRepository.GetFirstAsync(
+                    new EnemyActiveForCombatSpecification());
+
+                oldEnemy.IsActiveForCombat = false;
+                _enemyRepository.Update(oldEnemy);
+            }
+        }
+
         private async Task ActivateEnemyForCombat(Room currRoom) 
         {
             if (currRoom.IsEnemyRoom)
@@ -147,7 +162,11 @@ namespace ShapeDungeon.Services.Rooms
                         new EnemyRoomIdSpecification(currRoom.Id));
 
                 if (!enemyRoom.IsEnemyDefeated)
-                    await _enemyRepository.SetActiveForCombat(enemyRoom.EnemyId);
+                {
+                    var newEnemy = enemyRoom.Enemy;
+                    newEnemy.IsActiveForCombat = true;
+                    _enemyRepository.Update(newEnemy);
+                }
             }
         }
     }
