@@ -17,7 +17,7 @@ namespace ShapeDungeon.Services
         private readonly IEnemiesRoomsRepository _enemiesRoomsRepository;
         private readonly IPlayerRepository _playerRepository;
         private readonly IRoomRepositoryOld _roomRepository;
-        private readonly IRepositoryValidate<EnemyRoom> _enemyRoomValidateRepository;
+        private readonly IEnemyRoomRepository _enemyRoomRepository;
         private readonly IUnitOfWork _unitOfWork;
 
         public CombatService(
@@ -25,8 +25,8 @@ namespace ShapeDungeon.Services
             IEnemyRepositoryOld enemyRepository,
             IEnemiesRoomsRepository enemiesRoomsRepository,
             IPlayerRepository playerRepository,
-            IUnitOfWork unitOfWork, 
-            IRepositoryValidate<EnemyRoom> enemyRoomValidateRepository,
+            IUnitOfWork unitOfWork,
+            IEnemyRoomRepository enemyRoomRepository,
             IRoomRepositoryOld roomRepository)
         {
             _combatRepository = combatRepository;
@@ -34,7 +34,7 @@ namespace ShapeDungeon.Services
             _enemiesRoomsRepository = enemiesRoomsRepository;
             _playerRepository = playerRepository;
             _roomRepository = roomRepository;
-            _enemyRoomValidateRepository = enemyRoomValidateRepository;
+            _enemyRoomRepository = enemyRoomRepository;
             _unitOfWork = unitOfWork;
         }
 
@@ -186,7 +186,7 @@ namespace ShapeDungeon.Services
             if (!activeRoom.IsEnemyRoom) 
                 throw new Exception("NotEnemyRoomException");
 
-            bool isEnemyDefeated = await _enemyRoomValidateRepository.IsValidByAsync(
+            bool isEnemyDefeated = await _enemyRoomRepository.IsValidByAsync(
                 new EnemyRoomDefeatedSpecification(activeRoom.Id));
 
             if (isEnemyDefeated)

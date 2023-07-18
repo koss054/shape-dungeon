@@ -12,20 +12,20 @@ namespace ShapeDungeon.Services.Rooms
 {
     public class RoomTravelService : IRoomTravelService
     {
-        private readonly IRepositoryGet<EnemyRoom> _enemyRoomGetRepository;
+        private readonly IEnemyRoomRepository _enemyRoomRepository;
         private readonly IRoomValidateService _roomValidateService;
         private readonly IRoomRepository _roomRepository;
         private readonly IEnemyRepository _enemyRepository;
         private readonly IUnitOfWork _unitOfWork;
 
         public RoomTravelService(
-            IRepositoryGet<EnemyRoom> enemyRoomGetRepository,
+            IEnemyRoomRepository enemyRoomRepository,
             IRoomValidateService roomValidateService,
             IRoomRepository roomRepository,
             IEnemyRepository enemyRepository,
             IUnitOfWork unitOfWork)
         {
-            _enemyRoomGetRepository = enemyRoomGetRepository;
+            _enemyRoomRepository = enemyRoomRepository;
             _roomValidateService = roomValidateService;
             _roomRepository = roomRepository;
             _enemyRepository = enemyRepository;
@@ -167,7 +167,7 @@ namespace ShapeDungeon.Services.Rooms
         {
             if (currRoom.IsEnemyRoom)
             {
-                var enemyRoom = await _enemyRoomGetRepository.GetFirstAsync(
+                var enemyRoom = await _enemyRoomRepository.GetFirstAsync(
                         new EnemyRoomIdSpecification(currRoom.Id));
 
                 if (!enemyRoom.IsEnemyDefeated)

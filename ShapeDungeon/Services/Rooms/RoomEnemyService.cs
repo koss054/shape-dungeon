@@ -1,5 +1,4 @@
 ﻿using ShapeDungeon.DTOs.Enemies;
-using ShapeDungeon.Entities;
 using ShapeDungeon.Interfaces.Repositories;
 using ShapeDungeon.Interfaces.Services.Rooms;
 using ShapeDungeon.Specifications.EnemiesRooms;
@@ -8,16 +7,16 @@ namespace ShapeDungeon.Services.Rooms
 {
     public class RoomEnemyService : IRoomEnemyService
     {
-        private readonly IRepositoryGet<EnemyRoom> _enemyRoomGetRepository;
+        private readonly IEnemyRoomRepository _enemyRoomRepository;
 
-        public RoomEnemyService(IRepositoryGet<EnemyRoom> enemyRoomGetRepository)
+        public RoomEnemyService(IEnemyRoomRepository enemyRoomRepository)
         {
-            _enemyRoomGetRepository = enemyRoomGetRepository;
+            _enemyRoomRepository = enemyRoomRepository;
         }
 
         public async Task<EnemyDto> GetEnemy(Guid roomId)
         {
-            var enemyRoom = await _enemyRoomGetRepository.GetFirstAsync(
+            var enemyRoom = await _enemyRoomRepository.GetFirstAsync(
                 new EnemyRoomIdSpecification(roomId));
 
             EnemyDto enemyDto = enemyRoom.Enemy;
@@ -26,7 +25,7 @@ namespace ShapeDungeon.Services.Rooms
 
         public async Task<bool> IsEnemyDefeated(Guid roomId)
         {
-            var enemyRoom = await _enemyRoomGetRepository.GetFirstAsync(
+            var enemyRoom = await _enemyRoomRepository.GetFirstAsync(
                 new EnemyRoomIdSpecification(roomId));
 
             if (enemyRoom == null) throw new ArgumentNullException();
