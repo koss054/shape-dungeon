@@ -13,7 +13,7 @@ namespace ShapeDungeon.Services
     public class CombatService : ICombatService
     {
         private readonly ICombatRepository _combatRepository;
-        private readonly IEnemyRepository _enemyRepository;
+        private readonly IEnemyRepositoryOld _enemyRepository;
         private readonly IEnemiesRoomsRepository _enemiesRoomsRepository;
         private readonly IPlayerRepository _playerRepository;
         private readonly IRoomRepository _roomRepository;
@@ -22,7 +22,7 @@ namespace ShapeDungeon.Services
 
         public CombatService(
             ICombatRepository combatRepository,
-            IEnemyRepository enemyRepository,
+            IEnemyRepositoryOld enemyRepository,
             IEnemiesRoomsRepository enemiesRoomsRepository,
             IPlayerRepository playerRepository,
             IUnitOfWork unitOfWork, 
