@@ -17,7 +17,6 @@ namespace ShapeDungeon.Services
     {
         private readonly ICombatRepository _combatRepository;
         private readonly IEnemyRepository _enemyRepository;
-        private readonly IEnemiesRoomsRepository _enemiesRoomsRepository;
         private readonly IPlayerRepository _playerRepository;
         private readonly IRoomRepository _roomRepository;
         private readonly IEnemyRoomRepository _enemyRoomRepository;
@@ -26,7 +25,6 @@ namespace ShapeDungeon.Services
         public CombatService(
             ICombatRepository combatRepository,
             IEnemyRepository enemyRepository,
-            IEnemiesRoomsRepository enemiesRoomsRepository,
             IPlayerRepository playerRepository,
             IUnitOfWork unitOfWork,
             IEnemyRoomRepository enemyRoomRepository,
@@ -34,7 +32,6 @@ namespace ShapeDungeon.Services
         {
             _combatRepository = combatRepository;
             _enemyRepository = enemyRepository;
-            _enemiesRoomsRepository = enemiesRoomsRepository;
             _playerRepository = playerRepository;
             _roomRepository = roomRepository;
             _enemyRoomRepository = enemyRoomRepository;
@@ -93,8 +90,8 @@ namespace ShapeDungeon.Services
             if (activeCombat == null) throw new ArgumentNullException(
                 "IsActive", "NoActiveCombatException");
 
-            var enemyRoom = await _enemiesRoomsRepository
-                .GetEntityByRoomId(activeCombat.CombatRoomId);
+            var enemyRoom = await _enemyRoomRepository.GetFirstAsync(
+                new EnemyRoomIdSpecification(activeCombat.CombatRoomId));
 
             await _unitOfWork.Commit(async () =>
             {
