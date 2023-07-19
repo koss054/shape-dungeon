@@ -1,18 +1,19 @@
 ﻿using ShapeDungeon.Data;
 using ShapeDungeon.DTOs.Players;
 using ShapeDungeon.Entities;
+using ShapeDungeon.Interfaces.Repositories;
 using ShapeDungeon.Interfaces.Services.Players;
-using ShapeDungeon.Repos;
+using ShapeDungeon.Specifications.Players;
 
 namespace ShapeDungeon.Services.Players
 {
     public class PlayerCreateService : IPlayerCreateService
     {
-        private readonly IPlayerRepositoryOld _playerRepository;
+        private readonly IPlayerRepository _playerRepository;
         private readonly IUnitOfWork _unitOfWork;
 
-        public PlayerCreateService( 
-            IPlayerRepositoryOld playerRepository, 
+        public PlayerCreateService(
+            IPlayerRepository playerRepository, 
             IUnitOfWork unitOfWork)
         {
             _playerRepository = playerRepository;
@@ -21,7 +22,8 @@ namespace ShapeDungeon.Services.Players
 
         public async Task<bool> CreatePlayerAsync(PlayerDto pDto)
         {
-            var doesNameExist = await _playerRepository.DoesNameExist(pDto.Name);
+            var doesNameExist = await _playerRepository.IsValidByAsync(
+                new PlayerNameSpecification(pDto.Name));
 
             // If name exists a new player cannot be created.
             if (doesNameExist)
