@@ -1,11 +1,10 @@
 ﻿using ShapeDungeon.Data;
 using ShapeDungeon.DTOs;
 using ShapeDungeon.Entities;
-using ShapeDungeon.Exceptions;
 using ShapeDungeon.Helpers.Enums;
 using ShapeDungeon.Interfaces.Repositories;
 using ShapeDungeon.Interfaces.Services;
-using ShapeDungeon.Repos;
+using ShapeDungeon.Specifications.Combats;
 using ShapeDungeon.Specifications.Enemies;
 using ShapeDungeon.Specifications.EnemiesRooms;
 using ShapeDungeon.Specifications.Players;
@@ -15,7 +14,7 @@ namespace ShapeDungeon.Services
 {
     public class CombatService : ICombatService
     {
-        private readonly ICombatRepositoryOld _combatRepository;
+        private readonly ICombatRepository _combatRepository;
         private readonly IEnemyRepository _enemyRepository;
         private readonly IPlayerRepository _playerRepository;
         private readonly IRoomRepository _roomRepository;
@@ -23,7 +22,7 @@ namespace ShapeDungeon.Services
         private readonly IUnitOfWork _unitOfWork;
 
         public CombatService(
-            ICombatRepositoryOld combatRepository,
+            ICombatRepository combatRepository,
             IEnemyRepository enemyRepository,
             IPlayerRepository playerRepository,
             IUnitOfWork unitOfWork,
@@ -53,20 +52,24 @@ namespace ShapeDungeon.Services
                 var activeEnemy = await _enemyRepository.GetFirstAsync(
                     new EnemyActiveForCombatSpecification());
 
+                var combatToAdd = CreateCombat(activePlayer, activeEnemy, activeRoom.Id);
+
                 await _unitOfWork.Commit(async () =>
                 {
-                    await _combatRepository.CreateCombat(activePlayer, activeEnemy, activeRoom.Id);
+                    await _combatRepository.AddAsync(combatToAdd);
                 });
             }
         }
 
         public async Task<CombatDto> GetActiveCombat()
         {
-            var isThereActiveCombat = await _combatRepository.IsActiveCombatPresent();
+            var isThereActiveCombat = await _combatRepository.IsValidByAsync(
+                new CombatIsActiveSpecification());
+
             if (!isThereActiveCombat) await InitializeCombat();
 
-            var activeCombat = await _combatRepository.GetActiveCombat();
-            if (activeCombat == null) throw new NoActiveCombatException("bruh");
+            var activeCombat = await _combatRepository.GetFirstAsync(
+                new CombatIsActiveSpecification());
 
             var activePlayer = await _playerRepository.GetFirstAsync(
                 new PlayerIsActiveSpecification());
@@ -86,67 +89,76 @@ namespace ShapeDungeon.Services
         // TODO2: Debug here cuz you somehow bugged the player win, lol.
         public async Task<bool> HasPlayerWon()
         {
-            var activeCombat = await _combatRepository.GetActiveCombat();
-            if (activeCombat == null) throw new ArgumentNullException(
-                "IsActive", "NoActiveCombatException");
+            var activeCombat = await _combatRepository.GetFirstAsync(
+                new CombatIsActiveSpecification());
 
             var enemyRoom = await _enemyRoomRepository.GetFirstAsync(
                 new EnemyRoomIdSpecification(activeCombat.CombatRoomId));
 
-            await _unitOfWork.Commit(async () =>
+            activeCombat.IsActive = false;
+            activeCombat.Player.IsInCombat = false;
+
+            if (activeCombat.CurrentEnemyHp <= 0)
             {
-                activeCombat.IsActive = false;
-                activeCombat.Player.IsInCombat = false;
-
-                if (activeCombat.CurrentEnemyHp <= 0)
+                enemyRoom.IsEnemyDefeated = true;
+                await _unitOfWork.Commit(() =>
                 {
-                    enemyRoom.IsEnemyDefeated = true;
-                }
-                else
+                    _enemyRoomRepository.Update(enemyRoom);
+
+                });
+            }
+            else
+            {
+                var combatRoom = await _roomRepository.GetFirstAsync(
+                    new RoomMoveSpecification());
+
+                var prevRoom = await _roomRepository.GetFirstAsync(
+                    new RoomScoutSpecification());
+
+                var startRoom = await _roomRepository.GetFirstAsync(
+                    new RoomCoordsSpecification(0, 0));
+
+                combatRoom.IsActiveForScout = false;
+                combatRoom.IsActiveForMove = false;
+                prevRoom.IsActiveForScout = false;
+                prevRoom.IsActiveForMove = false;
+
+                // Start room always exists - seeded to db with coords x0 y0.
+                startRoom!.IsActiveForScout = true;
+                startRoom!.IsActiveForMove = true;
+
+                activeCombat.Player.CurrentExp = 0;
+
+                await _unitOfWork.Commit(() =>
                 {
-                    var combatRoom = await _roomRepository.GetFirstAsync(
-                        new RoomMoveSpecification());
-
-                    var prevRoom = await _roomRepository.GetFirstAsync(
-                        new RoomScoutSpecification());
-
-                    var startRoom = await _roomRepository.GetFirstAsync(
-                        new RoomCoordsSpecification(0, 0));
-
-                    combatRoom.IsActiveForScout = false;
-                    combatRoom.IsActiveForMove = false;
-                    prevRoom.IsActiveForScout = false;
-                    prevRoom.IsActiveForMove = false;
-
-                    // Start room always exists - seeded to db with coords x0 y0.
-                    startRoom!.IsActiveForScout = true;
-                    startRoom!.IsActiveForMove = true;
-
-                    activeCombat.Player.CurrentExp = 0;
-                }
-            });
+                    _roomRepository.Update(combatRoom);
+                    _roomRepository.Update(prevRoom);
+                    _roomRepository.Update(startRoom);
+                    _combatRepository.Update(activeCombat);
+                });
+            }
 
             return enemyRoom.IsEnemyDefeated;
         }
 
         public async Task<bool> IsPlayerAttackingInActiveCombat()
         {
-            var activeCombat = await _combatRepository.GetActiveCombat();
-            if (activeCombat == null) throw new ArgumentNullException(
-                "IsActive", "NoActiveCombatException");
+            var activeCombat = await _combatRepository.GetFirstAsync(
+                new CombatIsActiveSpecification());
 
             return activeCombat.IsPlayerAttacking;
         }
 
         public async Task ToggleIsPlayerAttackingInActiveCombat()
         {
-            var activeCombat = await _combatRepository.GetActiveCombat();
-            if (activeCombat == null) throw new ArgumentNullException(
-                "IsActive", "NoActiveCombatException");
+            var activeCombat = await _combatRepository.GetFirstAsync(
+                new CombatIsActiveSpecification());
+
+            activeCombat.IsPlayerAttacking = !activeCombat.IsPlayerAttacking;
 
             await _unitOfWork.Commit(() => 
             {
-                activeCombat.IsPlayerAttacking = !activeCombat.IsPlayerAttacking;
+                _combatRepository.Update(activeCombat);
             });
         }
 
@@ -163,20 +175,21 @@ namespace ShapeDungeon.Services
         /// <exception cref="ArgumentOutOfRangeException">Incorrect character type has been passed.</exception>
         public async Task<int> UpdateHealthAfterAttack(int hpToReduce, int characterType)
         {
-            var activeCombat = await _combatRepository.GetActiveCombat();
-            if (activeCombat == null) throw new ArgumentNullException(
-                "IsActive", "NoActiveCombatException");
+            var activeCombat = await _combatRepository.GetFirstAsync(
+                new CombatIsActiveSpecification());
+
+            switch (characterType)
+            {
+                case (int)CombatCharacterType.Player:
+                    activeCombat.CurrentPlayerHp -= hpToReduce; break;
+                case (int)CombatCharacterType.Enemy:
+                    activeCombat.CurrentEnemyHp -= hpToReduce;  break;
+                default: throw new ArgumentOutOfRangeException(nameof(characterType));
+            }
 
             await _unitOfWork.Commit(() =>
             {
-                switch (characterType)
-                {
-                    case (int)CombatCharacterType.Player:
-                        activeCombat.CurrentPlayerHp -= hpToReduce; break;
-                    case (int)CombatCharacterType.Enemy:
-                        activeCombat.CurrentEnemyHp -= hpToReduce;  break;
-                    default: throw new ArgumentOutOfRangeException(nameof(characterType));
-                }
+                _combatRepository.Update(activeCombat);
             });
 
             return characterType == (int)CombatCharacterType.Player
@@ -200,6 +213,26 @@ namespace ShapeDungeon.Services
                 return false;
 
             return true;
+        }
+
+        private Combat CreateCombat(Player player, Enemy enemy, Guid roomId)
+        {
+            var combat = new Combat
+            {
+                IsActive = true,
+                IsPlayerAttacking = player.Agility >= enemy.Agility,
+                PlayerId = player.Id,
+                Player = player,
+                CurrentPlayerHp = player.Vigor * 2,
+                TotalPlayerHp = player.Vigor * 2,
+                EnemyId = enemy.Id,
+                Enemy = enemy,
+                CurrentEnemyHp = enemy.CurrentHp,
+                TotalEnemyHp = enemy.CurrentHp,
+                CombatRoomId = roomId,
+            };
+
+            return combat;
         }
     }
 }
