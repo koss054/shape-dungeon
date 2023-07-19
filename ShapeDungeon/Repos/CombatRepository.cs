@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ShapeDungeon.Entities;
+using ShapeDungeon.Exceptions;
 using ShapeDungeon.Interfaces.Repositories;
 using ShapeDungeon.Specifications;
 
@@ -34,8 +35,7 @@ namespace ShapeDungeon.Repos
                 .Where(expression)
                 .FirstOrDefaultAsync();
 
-            return combatToReturn ?? throw new ArgumentNullException(
-                nameof(combatToReturn), "No enemy matches provided specification.");
+            return combatToReturn ?? throw new NoActiveCombatException("bruh");
         }
 
         public async Task<bool> IsValidByAsync(ISpecification<Combat> specification)
