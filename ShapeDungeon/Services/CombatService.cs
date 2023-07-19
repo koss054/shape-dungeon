@@ -7,6 +7,7 @@ using ShapeDungeon.Interfaces.Repositories;
 using ShapeDungeon.Interfaces.Services;
 using ShapeDungeon.Repos;
 using ShapeDungeon.Specifications.EnemiesRooms;
+using ShapeDungeon.Specifications.Players;
 
 namespace ShapeDungeon.Services
 {
@@ -15,7 +16,7 @@ namespace ShapeDungeon.Services
         private readonly ICombatRepository _combatRepository;
         private readonly IEnemyRepositoryOld _enemyRepository;
         private readonly IEnemiesRoomsRepository _enemiesRoomsRepository;
-        private readonly IPlayerRepositoryOld _playerRepository;
+        private readonly IPlayerRepository _playerRepository;
         private readonly IRoomRepositoryOld _roomRepository;
         private readonly IEnemyRoomRepository _enemyRoomRepository;
         private readonly IUnitOfWork _unitOfWork;
@@ -24,7 +25,7 @@ namespace ShapeDungeon.Services
             ICombatRepository combatRepository,
             IEnemyRepositoryOld enemyRepository,
             IEnemiesRoomsRepository enemiesRoomsRepository,
-            IPlayerRepositoryOld playerRepository,
+            IPlayerRepository playerRepository,
             IUnitOfWork unitOfWork,
             IEnemyRoomRepository enemyRoomRepository,
             IRoomRepositoryOld roomRepository)
@@ -45,8 +46,8 @@ namespace ShapeDungeon.Services
 
             if (isActiveRoomValid)
             {
-                var activePlayer = await _playerRepository.GetActive();
-                if (activePlayer == null) throw new ArgumentNullException(nameof(activePlayer));
+                var activePlayer = await _playerRepository.GetFirstAsync(
+                    new PlayerIsActiveSpecification());
 
                 var activeEnemy = await _enemyRepository.GetActiveForCombat();
                 if (activeEnemy == null) throw new ArgumentNullException(nameof(activeEnemy));
@@ -66,8 +67,8 @@ namespace ShapeDungeon.Services
             var activeCombat = await _combatRepository.GetActiveCombat();
             if (activeCombat == null) throw new NoActiveCombatException("bruh");
 
-            var activePlayer = await _playerRepository.GetActive();
-            if (activePlayer == null) throw new ArgumentNullException(nameof(activeCombat));
+            var activePlayer = await _playerRepository.GetFirstAsync(
+                new PlayerIsActiveSpecification());
 
             var activeEnemy = await _enemyRepository.GetActiveForCombat();
             if (activeEnemy == null) throw new ArgumentNullException(nameof(activeCombat));
