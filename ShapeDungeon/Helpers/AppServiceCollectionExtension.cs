@@ -56,7 +56,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddScoped<IEnemyRepositoryOld, EnemyRepositoryOld>();
             services.AddScoped<IPlayerRepositoryOld, PlayerRepositoryOld>();
             services.AddScoped<IEnemiesRoomsRepository, EnemiesRoomsRepositoryOld>();
-            services.AddScoped<ICombatRepository, CombatRepository>();
+            services.AddScoped<ICombatRepositoryOld, CombatRepositoryOld>();
 
             // New Repositories
             services.AddScoped<IEnemyRepository, EnemyRepository>();

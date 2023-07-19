@@ -3,7 +3,7 @@ using ShapeDungeon.Entities;
 
 namespace ShapeDungeon.Repos
 {
-    public interface ICombatRepository
+    public interface ICombatRepositoryOld
     {
         Task<Combat?> GetActiveCombat();
         Task CreateCombat(Player player, Enemy enemy, Guid roomId);
