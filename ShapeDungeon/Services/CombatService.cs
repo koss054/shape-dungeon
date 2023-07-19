@@ -9,6 +9,7 @@ using ShapeDungeon.Repos;
 using ShapeDungeon.Specifications.Enemies;
 using ShapeDungeon.Specifications.EnemiesRooms;
 using ShapeDungeon.Specifications.Players;
+using ShapeDungeon.Specifications.Rooms;
 
 namespace ShapeDungeon.Services
 {
@@ -18,7 +19,7 @@ namespace ShapeDungeon.Services
         private readonly IEnemyRepository _enemyRepository;
         private readonly IEnemiesRoomsRepository _enemiesRoomsRepository;
         private readonly IPlayerRepository _playerRepository;
-        private readonly IRoomRepositoryOld _roomRepository;
+        private readonly IRoomRepository _roomRepository;
         private readonly IEnemyRoomRepository _enemyRoomRepository;
         private readonly IUnitOfWork _unitOfWork;
 
@@ -29,7 +30,7 @@ namespace ShapeDungeon.Services
             IPlayerRepository playerRepository,
             IUnitOfWork unitOfWork,
             IEnemyRoomRepository enemyRoomRepository,
-            IRoomRepositoryOld roomRepository)
+            IRoomRepository roomRepository)
         {
             _combatRepository = combatRepository;
             _enemyRepository = enemyRepository;
@@ -42,7 +43,9 @@ namespace ShapeDungeon.Services
 
         public async Task InitializeCombat()
         {
-            var activeRoom = await _roomRepository.GetActiveForMove();
+            var activeRoom = await _roomRepository.GetFirstAsync(
+                new RoomMoveSpecification());
+
             var isActiveRoomValid = await IsActiveRoomValidForCombat(activeRoom);
 
             if (isActiveRoomValid)
@@ -104,9 +107,14 @@ namespace ShapeDungeon.Services
                 }
                 else
                 {
-                    var combatRoom = await _roomRepository.GetActiveForMove();
-                    var prevRoom = await _roomRepository.GetActiveForScout();
-                    var startRoom = await _roomRepository.GetByCoords(0, 0);
+                    var combatRoom = await _roomRepository.GetFirstAsync(
+                        new RoomMoveSpecification());
+
+                    var prevRoom = await _roomRepository.GetFirstAsync(
+                        new RoomScoutSpecification());
+
+                    var startRoom = await _roomRepository.GetFirstAsync(
+                        new RoomCoordsSpecification(0, 0));
 
                     combatRoom.IsActiveForScout = false;
                     combatRoom.IsActiveForMove = false;
