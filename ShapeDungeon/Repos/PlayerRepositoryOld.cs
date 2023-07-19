@@ -4,9 +4,9 @@ using ShapeDungeon.Interfaces.Repositories;
 
 namespace ShapeDungeon.Repos
 {
-    public class PlayerRepository : RepositoryBase<Player>, IPlayerRepository
+    public class PlayerRepositoryOld : RepositoryBase<Player>, IPlayerRepositoryOld
     {
-        public PlayerRepository(IDbContext context) : base(context)
+        public PlayerRepositoryOld(IDbContext context) : base(context)
         {
         }
 

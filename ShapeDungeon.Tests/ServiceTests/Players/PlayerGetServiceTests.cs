@@ -13,13 +13,13 @@ namespace ShapeDungeon.Tests.ServiceTests.Players
 {
     internal class PlayerGetServiceTests
     {
-        private Mock<IPlayerRepository> _repoMock;
+        private Mock<IPlayerRepositoryOld> _repoMock;
         private IPlayerGetService _service;
 
         [SetUp]
         public void Test_Initialize()
         {
-            _repoMock = new Mock<IPlayerRepository>();
+            _repoMock = new Mock<IPlayerRepositoryOld>();
             _service = new PlayerGetService(_repoMock.Object);
         }
 

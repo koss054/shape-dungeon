@@ -2,7 +2,7 @@
 
 namespace ShapeDungeon.Repos
 {
-    public interface IPlayerRepository
+    public interface IPlayerRepositoryOld
     {
         /// <summary>
         /// Players need scout energy in order to scout adjacent rooms.

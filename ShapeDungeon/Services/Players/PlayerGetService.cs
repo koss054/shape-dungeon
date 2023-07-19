@@ -7,9 +7,9 @@ namespace ShapeDungeon.Services.Players
 {
     public class PlayerGetService : IPlayerGetService
     {
-        private readonly IPlayerRepository _playerRepository;
+        private readonly IPlayerRepositoryOld _playerRepository;
 
-        public PlayerGetService(IPlayerRepository playerRepository)
+        public PlayerGetService(IPlayerRepositoryOld playerRepository)
         {
             _playerRepository = playerRepository;
         }

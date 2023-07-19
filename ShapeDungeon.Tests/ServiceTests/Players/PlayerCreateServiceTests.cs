@@ -12,14 +12,14 @@ namespace ShapeDungeon.Tests.ServiceTests.Players
 {
     internal class PlayerCreateServiceTests
     {
-        private Mock<IPlayerRepository> _repoMock;
+        private Mock<IPlayerRepositoryOld> _repoMock;
         private Mock<IUnitOfWork> _unitOfWorkMock;
         private IPlayerCreateService _service;
 
         [SetUp]
         public void Test_Initialize()
         {
-            _repoMock = new Mock<IPlayerRepository>();
+            _repoMock = new Mock<IPlayerRepositoryOld>();
             _unitOfWorkMock = new Mock<IUnitOfWork>();
             _service = new PlayerCreateService(_repoMock.Object, _unitOfWorkMock.Object);
         }

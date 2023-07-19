@@ -15,7 +15,7 @@ namespace ShapeDungeon.Services
         private readonly ICombatRepository _combatRepository;
         private readonly IEnemyRepositoryOld _enemyRepository;
         private readonly IEnemiesRoomsRepository _enemiesRoomsRepository;
-        private readonly IPlayerRepository _playerRepository;
+        private readonly IPlayerRepositoryOld _playerRepository;
         private readonly IRoomRepositoryOld _roomRepository;
         private readonly IEnemyRoomRepository _enemyRoomRepository;
         private readonly IUnitOfWork _unitOfWork;
@@ -24,7 +24,7 @@ namespace ShapeDungeon.Services
             ICombatRepository combatRepository,
             IEnemyRepositoryOld enemyRepository,
             IEnemiesRoomsRepository enemiesRoomsRepository,
-            IPlayerRepository playerRepository,
+            IPlayerRepositoryOld playerRepository,
             IUnitOfWork unitOfWork,
             IEnemyRoomRepository enemyRoomRepository,
             IRoomRepositoryOld roomRepository)

@@ -8,11 +8,11 @@ namespace ShapeDungeon.Services.Players
 {
     public class PlayerCreateService : IPlayerCreateService
     {
-        private readonly IPlayerRepository _playerRepository;
+        private readonly IPlayerRepositoryOld _playerRepository;
         private readonly IUnitOfWork _unitOfWork;
 
         public PlayerCreateService( 
-            IPlayerRepository playerRepository, 
+            IPlayerRepositoryOld playerRepository, 
             IUnitOfWork unitOfWork)
         {
             _playerRepository = playerRepository;
