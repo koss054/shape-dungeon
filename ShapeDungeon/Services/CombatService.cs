@@ -6,6 +6,7 @@ using ShapeDungeon.Helpers.Enums;
 using ShapeDungeon.Interfaces.Repositories;
 using ShapeDungeon.Interfaces.Services;
 using ShapeDungeon.Repos;
+using ShapeDungeon.Specifications.Enemies;
 using ShapeDungeon.Specifications.EnemiesRooms;
 using ShapeDungeon.Specifications.Players;
 
@@ -14,7 +15,7 @@ namespace ShapeDungeon.Services
     public class CombatService : ICombatService
     {
         private readonly ICombatRepository _combatRepository;
-        private readonly IEnemyRepositoryOld _enemyRepository;
+        private readonly IEnemyRepository _enemyRepository;
         private readonly IEnemiesRoomsRepository _enemiesRoomsRepository;
         private readonly IPlayerRepository _playerRepository;
         private readonly IRoomRepositoryOld _roomRepository;
@@ -23,7 +24,7 @@ namespace ShapeDungeon.Services
 
         public CombatService(
             ICombatRepository combatRepository,
-            IEnemyRepositoryOld enemyRepository,
+            IEnemyRepository enemyRepository,
             IEnemiesRoomsRepository enemiesRoomsRepository,
             IPlayerRepository playerRepository,
             IUnitOfWork unitOfWork,
@@ -49,8 +50,8 @@ namespace ShapeDungeon.Services
                 var activePlayer = await _playerRepository.GetFirstAsync(
                     new PlayerIsActiveSpecification());
 
-                var activeEnemy = await _enemyRepository.GetActiveForCombat();
-                if (activeEnemy == null) throw new ArgumentNullException(nameof(activeEnemy));
+                var activeEnemy = await _enemyRepository.GetFirstAsync(
+                    new EnemyActiveForCombatSpecification());
 
                 await _unitOfWork.Commit(async () =>
                 {
@@ -70,8 +71,8 @@ namespace ShapeDungeon.Services
             var activePlayer = await _playerRepository.GetFirstAsync(
                 new PlayerIsActiveSpecification());
 
-            var activeEnemy = await _enemyRepository.GetActiveForCombat();
-            if (activeEnemy == null) throw new ArgumentNullException(nameof(activeCombat));
+            var activeEnemy = await _enemyRepository.GetFirstAsync(
+                    new EnemyActiveForCombatSpecification());
 
             activeCombat.Player = activePlayer;
             activeCombat.Enemy = activeEnemy;
