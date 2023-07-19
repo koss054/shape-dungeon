@@ -49,15 +49,8 @@ namespace Microsoft.Extensions.DependencyInjection
             // Enemy Room mapping entity
             services.AddScoped<IEnemiesRoomsService, EnemiesRoomsService>();
 
-            // Repos
-            services.AddScoped<IUnitOfWork, UnitOfWork>();
-            services.AddScoped<IRoomRepositoryOld, RoomRepositoryOld>();
-            services.AddScoped<IEnemyRepositoryOld, EnemyRepositoryOld>();
-            services.AddScoped<IPlayerRepositoryOld, PlayerRepositoryOld>();
-            services.AddScoped<IEnemiesRoomsRepository, EnemiesRoomsRepositoryOld>();
-            services.AddScoped<ICombatRepositoryOld, CombatRepositoryOld>();
-
             // New Repositories
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<ICombatRepository, CombatRepository>();
             services.AddScoped<IEnemyRepository, EnemyRepository>();
             services.AddScoped<IEnemyRoomRepository, EnemyRoomRepository>();
