@@ -1,4 +1,5 @@
-﻿using ShapeDungeon.Interfaces.Strategies;
+﻿#nullable disable
+using ShapeDungeon.Interfaces.Strategies;
 
 namespace ShapeDungeon.Strategies.Creational
 {   
@@ -7,6 +8,10 @@ namespace ShapeDungeon.Strategies.Creational
         where YDto : class
     {
         private ICreateStrategy<TEntity, YDto> _strategy;
+
+        public CreateContext()
+        {
+        }
 
         public CreateContext(ICreateStrategy<TEntity, YDto> strategy)
         {
