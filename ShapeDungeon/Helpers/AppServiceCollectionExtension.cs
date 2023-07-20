@@ -1,10 +1,13 @@
 ﻿using ShapeDungeon.Data;
+using ShapeDungeon.DTOs.Enemies;
+using ShapeDungeon.Entities;
 using ShapeDungeon.Interfaces.Repositories;
 using ShapeDungeon.Interfaces.Services;
 using ShapeDungeon.Interfaces.Services.Enemies;
 using ShapeDungeon.Interfaces.Services.EnemiesRooms;
 using ShapeDungeon.Interfaces.Services.Players;
 using ShapeDungeon.Interfaces.Services.Rooms;
+using ShapeDungeon.Interfaces.Strategies;
 using ShapeDungeon.Middlewares;
 using ShapeDungeon.Repos;
 using ShapeDungeon.Services;
@@ -12,6 +15,7 @@ using ShapeDungeon.Services.Enemies;
 using ShapeDungeon.Services.EnemiesRooms;
 using ShapeDungeon.Services.Players;
 using ShapeDungeon.Services.Rooms;
+using ShapeDungeon.Strategies.Creational;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -66,6 +70,7 @@ namespace Microsoft.Extensions.DependencyInjection
             // Custom Middleware
             services.AddTransient<GlobalExceptionHandlingMiddleware>();
 
+            // Bruh, no idea if what I've done below is remotely correct.
             return services;
         }
     }
