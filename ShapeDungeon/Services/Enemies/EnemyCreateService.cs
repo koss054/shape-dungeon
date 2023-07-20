@@ -25,7 +25,7 @@ namespace ShapeDungeon.Services.Enemies
             var enemyCreateContext = new CreateContext<Enemy, EnemyDto>(
                 new EnemyCreateStrategy(eDto));
 
-            var enemy = enemyCreateContext.ExecuteStrategy(eDto);
+            var enemy = enemyCreateContext.ExecuteStrategy();
 
             await _unitOfWork.Commit(() =>
             {

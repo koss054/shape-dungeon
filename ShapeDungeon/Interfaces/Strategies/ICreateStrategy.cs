@@ -4,6 +4,6 @@
         where TEntity : class
         where YDto : class
     {
-        TEntity CreateObject(YDto dto);
+        TEntity CreateObject();
     }
 }

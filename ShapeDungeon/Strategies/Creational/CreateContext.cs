@@ -16,7 +16,7 @@ namespace ShapeDungeon.Strategies.Creational
         public void SetStrategy(ICreateStrategy<TEntity, YDto> strategy)
             => _strategy = strategy;
 
-        public TEntity ExecuteStrategy(YDto dto)
-            => _strategy.CreateObject(dto);
+        public TEntity ExecuteStrategy()
+            => _strategy.CreateObject();
     }
 }

@@ -13,19 +13,19 @@ namespace ShapeDungeon.Strategies.Creational
             _enemyDto = enemyDto;
         }
 
-        public Enemy CreateObject(EnemyDto eDto)
+        public Enemy CreateObject()
         {
             var enemy = new Enemy()
             {
                 IsActiveForCombat = false,
-                Name = $"{eDto.Name} Lvl.{eDto.Level}",
-                Strength = eDto.Strength,
-                Vigor = eDto.Vigor,
-                Agility = eDto.Agility,
-                Level = eDto.Level,
-                DroppedExp = eDto.Level * 10,
-                CurrentHp = eDto.Vigor + eDto.Strength,
-                Shape = eDto.Shape,
+                Name = $"{_enemyDto.Name} Lvl.{_enemyDto.Level}",
+                Strength = _enemyDto.Strength,
+                Vigor = _enemyDto.Vigor,
+                Agility = _enemyDto.Agility,
+                Level = _enemyDto.Level,
+                DroppedExp = _enemyDto.Level * 10,
+                CurrentHp = _enemyDto.Vigor + _enemyDto.Strength,
+                Shape = _enemyDto.Shape,
             };
 
             return enemy;
