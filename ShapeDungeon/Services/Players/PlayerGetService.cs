@@ -41,9 +41,6 @@ namespace ShapeDungeon.Services.Players
             => await _playerRepository.GetFirstAsync(
                 new PlayerIsActiveSpecification());
 
-        // After reworking this with the new repo, this method seems pointless.
-        // It's basically the same as the one above.
-        // May combine them.
         public async Task<PlayerStatsResponse> GetActivePlayerStats()
             => await _playerRepository.GetFirstAsync(
                 new PlayerIsActiveSpecification());
