@@ -5,6 +5,7 @@ using ShapeDungeon.Helpers.Enums;
 using ShapeDungeon.Interfaces.Repositories;
 using ShapeDungeon.Interfaces.Services.Rooms;
 using ShapeDungeon.Specifications.Rooms;
+using ShapeDungeon.Strategies.Creational;
 
 namespace ShapeDungeon.Services.Rooms
 {
@@ -23,22 +24,10 @@ namespace ShapeDungeon.Services.Rooms
 
         public async Task<Room> CreateAsync(RoomDetailsDto roomDto)
         {
-            Room room = new()
-            {
-                IsActiveForMove = false,
-                IsActiveForScout = false,
-                IsActiveForEdit = roomDto.IsStartRoom,
-                CanGoLeft = roomDto.CanGoLeft,
-                CanGoRight = roomDto.CanGoRight,
-                CanGoUp = roomDto.CanGoUp,
-                CanGoDown = roomDto.CanGoDown,
-                IsStartRoom = roomDto.IsStartRoom,
-                IsSafeRoom = roomDto.IsSafeRoom,
-                IsEnemyRoom = roomDto.IsEnemyRoom,
-                IsEndRoom = roomDto.IsEndRoom,
-                CoordX = roomDto.CoordX,
-                CoordY = roomDto.CoordY,
-            };
+            var roomCreateContext = new CreateContext<Room, RoomDetailsDto>(
+                new RoomCreateStrategy(roomDto));
+
+            var room = roomCreateContext.ExecuteStrategy();
 
             if (room.IsStartRoom)
             {
