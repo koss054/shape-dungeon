@@ -6,6 +6,7 @@ using ShapeDungeon.Interfaces.Repositories;
 using ShapeDungeon.Interfaces.Services.Rooms;
 using ShapeDungeon.Specifications.Rooms;
 using ShapeDungeon.Strategies.Creational;
+using ShapeDungeon.Strategies.Updates;
 
 namespace ShapeDungeon.Services.Rooms
 {
@@ -46,26 +47,16 @@ namespace ShapeDungeon.Services.Rooms
         // There's always going to be an IsActiveForEditRoom == true.
         public async Task<RoomDetailsDto> InitializeRoomAsync(RoomDirection roomDirection)
         {
-            var roomDto = new RoomDetailsDto();
-
             int coordX = await _roomRepository.GetCoordXByAsync(
                 new RoomEditSpecification());
 
             int coordY = await _roomRepository.GetCoordYByAsync(
                 new RoomEditSpecification());
 
-            switch (roomDirection)
-            {
-                case RoomDirection.Left: coordX--; roomDto.CanGoRight = true; break;
-                case RoomDirection.Right: coordX++; roomDto.CanGoLeft = true;  break;
-                case RoomDirection.Top: coordY++; roomDto.CanGoDown = true; break;
-                case RoomDirection.Bottom: coordY--; roomDto.CanGoUp = true; break;
-                default: throw new ArgumentOutOfRangeException(nameof(roomDirection));
-            }
+            var roomUpdateContext = new UpdateContext<RoomDetailsDto>(
+                new RoomDirectionUpdateStrategy(coordX, coordY, roomDirection));
 
-            roomDto.CoordX = coordX;
-            roomDto.CoordY = coordY;
-            return roomDto;
+            return roomUpdateContext.ExecuteStrategy();
         }
 
         public async Task<bool> AreCoordsInUse(int coordX, int coordY)
