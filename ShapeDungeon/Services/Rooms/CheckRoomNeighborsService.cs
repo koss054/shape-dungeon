@@ -19,7 +19,7 @@ namespace ShapeDungeon.Services.Rooms
             _roomValidateService = roomValidateService;
         }
 
-        public async Task<RoomNavDto?> SetDtoNeighborsAsync(int coordX, int coordY)
+        public async Task<RoomNavDto> SetDtoNeighborsAsync(int coordX, int coordY)
         {
             var currRoom = await InitializeCheckRoomAsync(coordX, coordY);
 
