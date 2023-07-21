@@ -47,7 +47,9 @@ namespace ShapeDungeon.Controllers
         public async Task<IActionResult> Create()
         {
             var roomDetails = await _getRoomService.GetActiveForEditAsync();
-            var roomNav = await _checkRoomNeighborsService.SetDtoNeighborsAsync(roomDetails!.CoordX, roomDetails!.CoordY);
+            var roomNav = await _checkRoomNeighborsService
+                .SetDtoNeighborsAsync(roomDetails!.CoordX, roomDetails!.CoordY);
+
             var room = new RoomCreateDto() { Details = roomDetails, Nav = roomNav };
 
             if (roomDetails.IsEnemyRoom)
@@ -80,6 +82,7 @@ namespace ShapeDungeon.Controllers
         public async Task<IActionResult> Directional(RoomDirection direction)
         {
             var roomDetails = await _roomCreateService.InitializeRoomAsync(direction);
+
             if (await _roomCreateService.AreCoordsInUse(roomDetails.CoordX, roomDetails.CoordY))
             {
                 TempData["error"] = "bruh, there's already a room with these coords";
