@@ -5,9 +5,6 @@ using ShapeDungeon.Helpers.Enums;
 using ShapeDungeon.Interfaces.Repositories;
 using ShapeDungeon.Interfaces.Services.Rooms;
 using ShapeDungeon.Specifications.Rooms;
-using ShapeDungeon.Strategies.Creational;
-using ShapeDungeon.Strategies.Updates;
-using ShapeDungeon.Strategies.Updates.Rooms;
 
 namespace ShapeDungeon.Services.Rooms
 {
@@ -24,12 +21,24 @@ namespace ShapeDungeon.Services.Rooms
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<Room> CreateAsync(RoomDetailsDto roomDto)
+        public async Task<Room> CreateAsync(RoomDetailsDto rDto)
         {
-            var roomCreateContext = new CreateContext<Room, RoomDetailsDto>(
-                new RoomCreateStrategy(roomDto));
-
-            var room = roomCreateContext.ExecuteStrategy();
+            Room room = new()
+            {
+                IsActiveForMove = false,
+                IsActiveForScout = false,
+                IsActiveForEdit = rDto.IsStartRoom,
+                CanGoLeft = rDto.CanGoLeft,
+                CanGoRight = rDto.CanGoRight,
+                CanGoUp = rDto.CanGoUp,
+                CanGoDown = rDto.CanGoDown,
+                IsStartRoom = rDto.IsStartRoom,
+                IsSafeRoom = rDto.IsSafeRoom,
+                IsEnemyRoom = rDto.IsEnemyRoom,
+                IsEndRoom = rDto.IsEndRoom,
+                CoordX = rDto.CoordX,
+                CoordY = rDto.CoordY,
+            };
 
             if (room.IsStartRoom)
             {
@@ -54,10 +63,20 @@ namespace ShapeDungeon.Services.Rooms
             int coordY = await _roomRepository.GetCoordYByAsync(
                 new RoomEditSpecification());
 
-            var roomUpdateContext = new UpdateContext<RoomDetailsDto>(
-                new RoomDirectionUpdateStrategy(coordX, coordY, roomDirection));
+            var rDto = new RoomDetailsDto();
 
-            return roomUpdateContext.ExecuteStrategy();
+            switch (roomDirection)
+            {
+                case RoomDirection.Left: coordX--; rDto.CanGoRight = true; break;
+                case RoomDirection.Right: coordX++; rDto.CanGoLeft = true; break;
+                case RoomDirection.Top: coordY++; rDto.CanGoDown = true; break;
+                case RoomDirection.Bottom: coordY--; rDto.CanGoUp = true; break;
+                default: throw new ArgumentOutOfRangeException(nameof(roomDirection));
+            }
+
+            rDto.CoordX = coordX;
+            rDto.CoordY = coordY;
+            return rDto;
         }
 
         public async Task<bool> AreCoordsInUse(int coordX, int coordY)

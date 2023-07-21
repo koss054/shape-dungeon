@@ -4,7 +4,6 @@ using ShapeDungeon.Entities;
 using ShapeDungeon.Interfaces.Repositories;
 using ShapeDungeon.Interfaces.Services.Players;
 using ShapeDungeon.Specifications.Players;
-using ShapeDungeon.Strategies.Creational;
 
 namespace ShapeDungeon.Services.Players
 {
@@ -30,10 +29,21 @@ namespace ShapeDungeon.Services.Players
             if (doesNameExist)
                 return false;
 
-            var playerCreateContext = new CreateContext<Player, PlayerDto>(
-                new PlayerCreateStrategy(pDto));
-
-            var player = playerCreateContext.ExecuteStrategy();
+            var player = new Player()
+            {
+                IsActive = false,
+                IsInCombat = false,
+                Name = pDto.Name,
+                Strength = pDto.Strength,
+                Vigor = pDto.Vigor,
+                Agility = pDto.Agility,
+                Level = pDto.Strength + pDto.Vigor + pDto.Agility,
+                CurrentExp = 0,
+                ExpToNextLevel = 100,
+                CurrentSkillpoints = 0,
+                CurrentScoutEnergy = pDto.Agility,
+                Shape = pDto.Shape
+            };
 
             await _unitOfWork.Commit(() =>
             {

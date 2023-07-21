@@ -3,7 +3,6 @@ using ShapeDungeon.DTOs.Enemies;
 using ShapeDungeon.Entities;
 using ShapeDungeon.Interfaces.Repositories;
 using ShapeDungeon.Interfaces.Services.Enemies;
-using ShapeDungeon.Strategies.Creational;
 
 namespace ShapeDungeon.Services.Enemies
 {
@@ -22,10 +21,18 @@ namespace ShapeDungeon.Services.Enemies
 
         public async Task CreateAsync(EnemyDto eDto)
         {
-            var enemyCreateContext = new CreateContext<Enemy, EnemyDto>(
-                new EnemyCreateStrategy(eDto));
-
-            var enemy = enemyCreateContext.ExecuteStrategy();
+            var enemy = new Enemy()
+            {
+                IsActiveForCombat = false,
+                Name = $"{eDto.Name} Lvl.{eDto.Level}",
+                Strength = eDto.Strength,
+                Vigor = eDto.Vigor,
+                Agility = eDto.Agility,
+                Level = eDto.Level,
+                DroppedExp = eDto.Level * 10,
+                CurrentHp = eDto.Vigor + eDto.Strength,
+                Shape = eDto.Shape,
+            };
 
             await _unitOfWork.Commit(() =>
             {

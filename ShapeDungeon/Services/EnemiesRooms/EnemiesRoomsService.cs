@@ -1,9 +1,7 @@
 ﻿using ShapeDungeon.Data;
-using ShapeDungeon.DTOs.EnemiesRooms;
 using ShapeDungeon.Entities;
 using ShapeDungeon.Interfaces.Repositories;
 using ShapeDungeon.Interfaces.Services.EnemiesRooms;
-using ShapeDungeon.Strategies.Creational;
 
 namespace ShapeDungeon.Services.EnemiesRooms
 {
@@ -22,10 +20,14 @@ namespace ShapeDungeon.Services.EnemiesRooms
 
         public async Task AddEnemyToRoom(Room room, Enemy enemy)
         {
-            var enemyRoomCreateContext = new CreateContext<EnemyRoom, EnemyRoomDto>(
-                new EnemyRoomCreateStrategy(new EnemyRoomDto(enemy, room)));
-
-            var enemyRoom = enemyRoomCreateContext.ExecuteStrategy();
+            var enemyRoom = new EnemyRoom()
+            {
+                EnemyId = enemy.Id,
+                Enemy = enemy,
+                RoomId = room.Id,
+                Room = room,
+                IsEnemyDefeated = false,
+            };
 
             await _unitOfWork.Commit(() =>
             {
