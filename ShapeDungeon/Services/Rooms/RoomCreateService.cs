@@ -7,6 +7,7 @@ using ShapeDungeon.Interfaces.Services.Rooms;
 using ShapeDungeon.Specifications.Rooms;
 using ShapeDungeon.Strategies.Creational;
 using ShapeDungeon.Strategies.Updates;
+using ShapeDungeon.Strategies.Updates.Rooms;
 
 namespace ShapeDungeon.Services.Rooms
 {

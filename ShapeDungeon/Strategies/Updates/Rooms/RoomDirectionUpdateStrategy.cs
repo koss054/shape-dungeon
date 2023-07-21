@@ -2,7 +2,7 @@
 using ShapeDungeon.Helpers.Enums;
 using ShapeDungeon.Interfaces.Strategies;
 
-namespace ShapeDungeon.Strategies.Updates
+namespace ShapeDungeon.Strategies.Updates.Rooms
 {
     public class RoomDirectionUpdateStrategy : IUpdateStrategy<RoomDetailsDto>
     {
@@ -11,8 +11,8 @@ namespace ShapeDungeon.Strategies.Updates
         private readonly RoomDirection _direction;
 
         public RoomDirectionUpdateStrategy(
-            int coordX, 
-            int coordY, 
+            int coordX,
+            int coordY,
             RoomDirection direction)
         {
             _coordX = coordX;
