@@ -71,10 +71,13 @@ namespace ShapeDungeon.Services.Rooms
 
             if (activeForScoutRoom != null && activeForMoveRoom != null)
             {
+                activeForScoutRoom.IsActiveForScout = false;
+                activeForMoveRoom.IsActiveForScout = true;
+
                 await _unitOfWork.Commit(() =>
                 {
-                    activeForScoutRoom.IsActiveForScout = false;
-                    activeForMoveRoom.IsActiveForScout = true;
+                    _roomRepository.Update(activeForScoutRoom);
+                    _roomRepository.Update(activeForMoveRoom);
                 });
 
                 return true;
