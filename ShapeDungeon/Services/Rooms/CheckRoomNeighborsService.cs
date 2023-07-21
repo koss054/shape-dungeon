@@ -23,35 +23,32 @@ namespace ShapeDungeon.Services.Rooms
         {
             var currRoom = await InitializeCheckRoomAsync(coordX, coordY);
 
-            if (currRoom != null)
+            if (currRoom.CanGoLeft)
             {
-                if (currRoom.CanGoLeft)
-                {
-                    currRoom.HasLeftNeighbor = await IsRoomWithCoordsValidAsync(coordX - 1, coordY);
-                    currRoom.IsLeftDeadEnd = !(await _roomValidateService
-                        .CanEnterRoomFromDirection(coordX - 1, coordY, RoomDirection.Left));
-                }
+                currRoom.HasLeftNeighbor = await IsRoomWithCoordsValidAsync(coordX - 1, coordY);
+                currRoom.IsLeftDeadEnd = !(await _roomValidateService
+                    .CanEnterRoomFromDirection(coordX - 1, coordY, RoomDirection.Left));
+            }
 
-                if (currRoom.CanGoRight)
-                {
-                    currRoom.HasRightNeighbor = await IsRoomWithCoordsValidAsync(coordX + 1, coordY);
-                    currRoom.IsRightDeadEnd = !(await _roomValidateService
-                        .CanEnterRoomFromDirection(coordX + 1, coordY, RoomDirection.Right));
-                }
+            if (currRoom.CanGoRight)
+            {
+                currRoom.HasRightNeighbor = await IsRoomWithCoordsValidAsync(coordX + 1, coordY);
+                currRoom.IsRightDeadEnd = !(await _roomValidateService
+                    .CanEnterRoomFromDirection(coordX + 1, coordY, RoomDirection.Right));
+            }
 
-                if (currRoom.CanGoUp)
-                {
-                    currRoom.HasUpNeighbor = await IsRoomWithCoordsValidAsync(coordX, coordY + 1);
-                    currRoom.IsUpDeadEnd = !(await _roomValidateService
-                        .CanEnterRoomFromDirection(coordX, coordY + 1, RoomDirection.Top));
-                }
+            if (currRoom.CanGoUp)
+            {
+                currRoom.HasUpNeighbor = await IsRoomWithCoordsValidAsync(coordX, coordY + 1);
+                currRoom.IsUpDeadEnd = !(await _roomValidateService
+                    .CanEnterRoomFromDirection(coordX, coordY + 1, RoomDirection.Top));
+            }
 
-                if (currRoom.CanGoDown)
-                {
-                    currRoom.HasDownNeighbor = await IsRoomWithCoordsValidAsync(coordX, coordY - 1);
-                    currRoom.IsDownDeadEnd = !(await _roomValidateService
-                        .CanEnterRoomFromDirection(coordX, coordY - 1, RoomDirection.Bottom));
-                }
+            if (currRoom.CanGoDown)
+            {
+                currRoom.HasDownNeighbor = await IsRoomWithCoordsValidAsync(coordX, coordY - 1);
+                currRoom.IsDownDeadEnd = !(await _roomValidateService
+                    .CanEnterRoomFromDirection(coordX, coordY - 1, RoomDirection.Bottom));
             }
 
             return currRoom;
@@ -70,20 +67,16 @@ namespace ShapeDungeon.Services.Rooms
             return room;
         }
 
-        private async Task<RoomNavDto?> InitializeCheckRoomAsync(int coordX, int coordY)
+        private async Task<RoomNavDto> InitializeCheckRoomAsync(int coordX, int coordY)
         {
             var room = await _roomRepository.GetFirstAsync(
                 new RoomCoordsSpecification(coordX, coordY));
 
-            var roomDto = new RoomNavDto();
-            if (room != null)
-            {
-                roomDto = room;
-                roomDto.HasLeftNeighbor = false;
-                roomDto.HasRightNeighbor = false;
-                roomDto.HasUpNeighbor = false;
-                roomDto.HasDownNeighbor = false;
-            }
+            RoomNavDto roomDto = room;
+            roomDto.HasLeftNeighbor = false;
+            roomDto.HasRightNeighbor = false;
+            roomDto.HasUpNeighbor = false;
+            roomDto.HasDownNeighbor = false;
 
             return roomDto;
         }
