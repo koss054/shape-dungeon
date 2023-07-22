@@ -2,7 +2,6 @@
 using ShapeDungeon.Entities;
 using ShapeDungeon.Interfaces.Repositories;
 using ShapeDungeon.Interfaces.Services.Enemies;
-using ShapeDungeon.Repos;
 using ShapeDungeon.Specifications.Enemies;
 
 namespace ShapeDungeon.Services.Enemies
