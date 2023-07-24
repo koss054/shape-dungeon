@@ -77,10 +77,10 @@ namespace ShapeDungeon.Tests.RepositoryTests
             await _context.SaveChangesAsync();
 
             // Act
-            var actualEnemies = await _sut.GetMultipleByAsync(specification);
+            var actualCombats = await _sut.GetMultipleByAsync(specification);
 
             // Assert
-            actualEnemies.Count().Should().Be(0);
+            actualCombats.Count().Should().Be(0);
         }
 
         [Theory]

@@ -69,10 +69,10 @@ namespace ShapeDungeon.Tests.RepositoryTests
             await _context.SaveChangesAsync();
 
             // Act
-            var actualCombats = await _sut.GetMultipleByAsync(specification);
+            var actualEnemiesRooms = await _sut.GetMultipleByAsync(specification);
 
             // Assert
-            actualCombats.Count().Should().Be(expectedCount);
+            actualEnemiesRooms.Count().Should().Be(expectedCount);
         }
 
         [Theory]
@@ -110,10 +110,10 @@ namespace ShapeDungeon.Tests.RepositoryTests
             await _context.SaveChangesAsync();
 
             // Act
-            var actualEnemies = await _sut.GetMultipleByAsync(specification);
+            var actualEnemiesRooms = await _sut.GetMultipleByAsync(specification);
 
             // Assert
-            actualEnemies.Count().Should().Be(0);
+            actualEnemiesRooms.Count().Should().Be(0);
         }
 
         [Theory]
