@@ -4,7 +4,7 @@ using System.Linq.Expressions;
 namespace ShapeDungeon.Specifications.Players
 {
     /// <summary>
-    /// Too lazy to make a repo update that gets all entities.
+    /// Too lazy to make a repo update that gets all entities without a specification.
     /// Will eventually update if any other repo needs all entities with no specification.
     /// </summary>
     public class PlayerAllSpecification : Specification<Player>
