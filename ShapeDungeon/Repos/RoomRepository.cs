@@ -12,7 +12,15 @@ namespace ShapeDungeon.Repos
         }
 
         public async Task<IEnumerable<Room>> GetMultipleByAsync(ISpecification<Room> specification)
-            => await Context.Rooms.ToListAsync();
+        {
+            var expression = specification.ToExpression();
+            var roomsToReturn = await this.Context.Rooms
+                .AsQueryable()
+                .Where(expression)
+                .ToListAsync();
+
+            return roomsToReturn;
+        }
 
         public async Task<Room> GetFirstAsync(ISpecification<Room> specification)
         {
