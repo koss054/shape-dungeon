@@ -12,7 +12,17 @@ namespace ShapeDungeon.Repos
         }
 
         public async Task<IEnumerable<EnemyRoom>> GetMultipleByAsync(ISpecification<EnemyRoom> specification)
-            => throw new NotImplementedException();
+        {
+            var expression = specification.ToExpression();
+            var enemiesRoomsToReturn = await this.Context.EnemiesRooms
+                .Include(x => x.Enemy)
+                .Include(x => x.Room)
+                .AsQueryable()
+                .Where(expression)
+                .ToListAsync();
+
+            return enemiesRoomsToReturn;
+        }
 
         public async Task<EnemyRoom> GetFirstAsync(ISpecification<EnemyRoom> specification)
         {
