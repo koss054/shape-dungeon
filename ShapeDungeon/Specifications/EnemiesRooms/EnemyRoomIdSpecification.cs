@@ -8,17 +8,17 @@ namespace ShapeDungeon.Specifications.EnemiesRooms
     /// </summary>
     public class EnemyRoomIdSpecification : Specification<EnemyRoom>
     {
-        private readonly Guid _id;
+        private readonly Guid _roomId;
 
-        public EnemyRoomIdSpecification(Guid id)
+        public EnemyRoomIdSpecification(Guid roomId)
         {
-            _id = id;
+            _roomId = roomId;
         }
 
         public override bool IsSatisfiedBy(EnemyRoom enemyRoom)
-            => enemyRoom.RoomId.Equals(_id);
+            => enemyRoom.RoomId.Equals(_roomId);
 
         public override Expression<Func<EnemyRoom, bool>> ToExpression()
-            => enemyRoom => enemyRoom.RoomId.Equals(_id);
+            => enemyRoom => enemyRoom.RoomId.Equals(_roomId);
     }
 }
