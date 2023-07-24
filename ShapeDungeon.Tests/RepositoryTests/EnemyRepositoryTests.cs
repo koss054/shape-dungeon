@@ -34,22 +34,22 @@ namespace ShapeDungeon.Tests.RepositoryTests
             int expectedCount, Guid predefinedId, int[] levels, bool[] areActiveForCombat, ISpecification<Enemy> specification)
         {
             // Arrange
-            var expectedEnemies = new List<Enemy>();
+            var enemies = new List<Enemy>();
             for (int i = 0; i < levels.Length; i++)
             {
                 var id = Guid.NewGuid();
                 if (i == 0) id = predefinedId;
                 
-                var expectedEnemy = _fixture.Build<Enemy>()
+                var enemy = _fixture.Build<Enemy>()
                     .With(x => x.Id, id)
                     .With(x => x.Level, levels[i])
                     .With(x => x.IsActiveForCombat, areActiveForCombat[i])
                     .Create();
 
-                expectedEnemies.Add(expectedEnemy);
+                enemies.Add(enemy);
             }
 
-            await _context.Enemies.AddRangeAsync(expectedEnemies);
+            await _context.Enemies.AddRangeAsync(enemies);
             await _context.SaveChangesAsync();
 
             // Act
@@ -65,21 +65,21 @@ namespace ShapeDungeon.Tests.RepositoryTests
             int[] levels, bool[] areActiveForCombat, ISpecification<Enemy> specification)
         {
             // Arrange
-            var expectedEnemies = new List<Enemy>();
+            var enemies = new List<Enemy>();
             for (int i = 0; i < levels.Length; i++)
             {
                 var id = Guid.NewGuid();
 
-                var expectedEnemy = _fixture.Build<Enemy>()
+                var enemy = _fixture.Build<Enemy>()
                     .With(x => x.Id, id)
                     .With(x => x.Level, levels[i])
                     .With(x => x.IsActiveForCombat, areActiveForCombat[i])
                     .Create();
 
-                expectedEnemies.Add(expectedEnemy);
+                enemies.Add(enemy);
             }
 
-            await _context.Enemies.AddRangeAsync(expectedEnemies);
+            await _context.Enemies.AddRangeAsync(enemies);
             await _context.SaveChangesAsync();
 
             // Act
