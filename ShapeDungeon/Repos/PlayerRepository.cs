@@ -31,7 +31,7 @@ namespace ShapeDungeon.Repos
                 .FirstOrDefaultAsync();
 
             return playerToReturn ?? throw new ArgumentNullException(
-                nameof(playerToReturn), "No enemy matches provided specification.");
+                nameof(playerToReturn), "No player matches provided specification.");
         }
 
         public async Task<bool> IsValidByAsync(ISpecification<Player> specification)
