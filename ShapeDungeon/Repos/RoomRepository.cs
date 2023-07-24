@@ -41,7 +41,7 @@ namespace ShapeDungeon.Repos
                 .AsQueryable()
                 .Where(expression)
                 .Select(x => x.CoordX)
-                .FirstOrDefaultAsync();
+                .FirstAsync();
 
             return coordToReturn;
         }
@@ -53,7 +53,7 @@ namespace ShapeDungeon.Repos
                 .AsQueryable()
                 .Where(expression)
                 .Select(x => x.CoordY)
-                .FirstOrDefaultAsync();
+                .FirstAsync();
 
             return coordToReturn;
         }
