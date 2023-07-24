@@ -141,13 +141,13 @@ namespace ShapeDungeon.Tests.RepositoryTests
             Guid id, int level, bool isActiveForCombat, ISpecification<Enemy> specification)
         {
             // Arrange
-            var mockEnemy = _fixture.Build<Enemy>()
+            var enemy = _fixture.Build<Enemy>()
                 .With(x => x.Id, id)
                 .With(x => x.Level, level)
                 .With(x => x.IsActiveForCombat, isActiveForCombat)
                 .Create();
 
-            await _context.Enemies.AddAsync(mockEnemy);
+            await _context.Enemies.AddAsync(enemy);
             await _context.SaveChangesAsync();
 
             // Act
@@ -163,13 +163,13 @@ namespace ShapeDungeon.Tests.RepositoryTests
             Guid id, int level, bool isActiveForCombat, ISpecification<Enemy> specification)
         {
             // Arrange
-            var mockEnemy = _fixture.Build<Enemy>()
+            var enemy = _fixture.Build<Enemy>()
                 .With(x => x.Id, id)
                 .With(x => x.Level, level)
                 .With(x => x.IsActiveForCombat, isActiveForCombat)
                 .Create();
 
-            await _context.Enemies.AddAsync(mockEnemy);
+            await _context.Enemies.AddAsync(enemy);
             await _context.SaveChangesAsync();
 
             // Act
