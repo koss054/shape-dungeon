@@ -200,8 +200,8 @@ namespace ShapeDungeon.Tests.ServiceTests.Players
                 },
                 new object[]
                 {
-                    5,              // Expected Count
-                    new List<Player> // Expected Players
+                    5,                  // Expected Count
+                    new List<Player>    // Expected Players
                     {
                         new Player{ Name = "Incredibleu", IsActive = true },
                         new Player{ Name = "Neveroqtno", IsActive = false },
