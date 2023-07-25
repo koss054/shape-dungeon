@@ -2,7 +2,7 @@
 
 namespace ShapeDungeon.Data
 {
-    public class UnitOfWork : IUnitOfWork
+    internal class UnitOfWork : IUnitOfWork
     {
         private readonly IDbContext _context;
 
