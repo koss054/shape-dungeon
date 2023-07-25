@@ -23,8 +23,6 @@ namespace ShapeDungeon.Services.Enemies
             var enemy = await _enemyRepository.GetFirstAsync(
                 new EnemyActiveForCombatSpecification());
 
-            if (enemy is null) throw new ArgumentNullException(nameof(enemy));
-
             await _unitOfWork.Commit(() =>
             {
                 enemy.IsActiveForCombat = false;
