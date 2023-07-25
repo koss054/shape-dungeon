@@ -23,9 +23,11 @@ namespace ShapeDungeon.Services.Enemies
             var enemy = await _enemyRepository.GetFirstAsync(
                 new EnemyActiveForCombatSpecification());
 
+            enemy.IsActiveForCombat = false;
+
             await _unitOfWork.Commit(() =>
             {
-                enemy.IsActiveForCombat = false;
+                _enemyRepository.Update(enemy);
             });
         }
     }
