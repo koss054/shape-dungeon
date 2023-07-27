@@ -117,14 +117,14 @@ namespace ShapeDungeon.Tests.ServiceTests.Rooms
             // Arrange
             _repoMock
                 .Setup(x => x.GetFirstAsync(It.IsAny<RoomCoordsSpecification>()))
-                .ThrowsAsync(new ArgumentNullException("roomToReturn", "No player matches provided specification."));
+                .ThrowsAsync(new ArgumentNullException("roomToReturn", "No room matches provided specification."));
 
             // Act
             var action = async () => await _sut.SetDtoNeighborsAsync(It.IsAny<int>(), It.IsAny<int>());
 
             // Assert
             await action.Should().ThrowAsync<ArgumentNullException>()
-                .WithMessage("No player matches provided specification. (Parameter 'roomToReturn')");
+                .WithMessage("No room matches provided specification. (Parameter 'roomToReturn')");
         }
 
         [Fact]
