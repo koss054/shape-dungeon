@@ -1129,7 +1129,7 @@ namespace ShapeDungeon.Tests.ServiceTests.Rooms
                     true,                       // Expected New Room IsActiveForScoutValue
                 },
                 #endregion
-                #region NewRoom_NotEnemyRoom_UnsuccessfulMove_DueToDeadEndOrVoid
+                #region NewRoom_UnsuccessfulScout_DueToDeadEndOrVoid
                 // Move to the left from the first room.
                 new object[]
                 {
