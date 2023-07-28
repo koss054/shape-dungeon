@@ -37,7 +37,10 @@ namespace ShapeDungeon.Services.Rooms
             Room oldRoom = await GetOldRoom(action);
 
             var coordsDto = new RoomCoordsDto(oldRoom.CoordX, oldRoom.CoordY);
-            await UpdateCoordsDto(direction, oldRoom, coordsDto);
+            var areCoordsUpdated = await AreCoordsUpdatedDto(direction, oldRoom, coordsDto);
+
+            if (!areCoordsUpdated)
+                return;
 
             var newRoom = await _roomRepository.GetFirstAsync(
                 new RoomCoordsSpecification(coordsDto.CoordX, coordsDto.CoordY));
@@ -94,8 +97,10 @@ namespace ShapeDungeon.Services.Rooms
             };
         }
 
-        private async Task UpdateCoordsDto(RoomDirection direction, Room oldRoom, RoomCoordsDto coordsDto)
+        private async Task<bool> AreCoordsUpdatedDto(RoomDirection direction, Room oldRoom, RoomCoordsDto coordsDto)
         {
+            var areCoordsUpdated = false;
+
             switch (direction)
             {
                 case RoomDirection.Left:
@@ -104,7 +109,10 @@ namespace ShapeDungeon.Services.Rooms
                         RoomDirection.Left));
 
                     if (oldRoom.CanGoLeft && !isLeftDeadEnd)
+                    {
                         coordsDto.CoordX--;
+                        areCoordsUpdated = true;
+                    }
 
                     break;
                 case RoomDirection.Right:
@@ -113,7 +121,10 @@ namespace ShapeDungeon.Services.Rooms
                         RoomDirection.Right));
 
                     if (oldRoom.CanGoRight && !isRightDeadEnd)
+                    {
                         coordsDto.CoordX++;
+                        areCoordsUpdated = true;
+                    }
 
                     break;
                 case RoomDirection.Top:
@@ -122,7 +133,10 @@ namespace ShapeDungeon.Services.Rooms
                         RoomDirection.Top));
 
                     if (oldRoom.CanGoUp && !isUpDeadEnd)
+                    {
                         coordsDto.CoordY++;
+                        areCoordsUpdated = true;
+                    }
 
                     break;
                 case RoomDirection.Bottom:
@@ -131,11 +145,16 @@ namespace ShapeDungeon.Services.Rooms
                         RoomDirection.Bottom));
 
                     if (oldRoom.CanGoDown && !isDownDeadEnd)
+                    {
                         coordsDto.CoordY--;
+                        areCoordsUpdated = true;
+                    }
 
                     break;
                 default: throw new ArgumentOutOfRangeException(nameof(direction));
             }
+
+            return areCoordsUpdated;
         }
 
         /// <summary>
