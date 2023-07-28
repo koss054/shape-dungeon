@@ -28,7 +28,6 @@ namespace ShapeDungeon.Services.Rooms
             var enemyRoom = await _enemyRoomRepository.GetFirstAsync(
                 new EnemyRoomIdSpecification(roomId));
 
-            if (enemyRoom == null) throw new ArgumentNullException();
             return enemyRoom.IsEnemyDefeated;
         }
     }
