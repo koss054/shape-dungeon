@@ -165,7 +165,7 @@ namespace ShapeDungeon.Services.Rooms
         /// Use only in Unit of Work block.
         /// </summary>
         /// <param name="currRoom">The room that the player is in.</param>
-        /// <returns>No return value - adds active for combat enemy if comat room and enemy undefeated.</returns>
+        /// <returns>No return value - adds active for combat enemy if combat room and enemy undefeated.</returns>
         private async Task ActivateEnemyForCombat(Room currRoom) 
         {
             if (currRoom.IsEnemyRoom)
