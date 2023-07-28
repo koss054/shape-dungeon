@@ -73,21 +73,16 @@ namespace ShapeDungeon.Services.Rooms
             var activeForMoveRoom = await _roomRepository.GetFirstAsync(
                 new RoomMoveSpecification());
 
-            if (activeForScoutRoom != null && activeForMoveRoom != null)
+            activeForScoutRoom.IsActiveForScout = false;
+            activeForMoveRoom.IsActiveForScout = true;
+
+            await _unitOfWork.Commit(() =>
             {
-                activeForScoutRoom.IsActiveForScout = false;
-                activeForMoveRoom.IsActiveForScout = true;
+                _roomRepository.Update(activeForScoutRoom);
+                _roomRepository.Update(activeForMoveRoom);
+            });
 
-                await _unitOfWork.Commit(() =>
-                {
-                    _roomRepository.Update(activeForScoutRoom);
-                    _roomRepository.Update(activeForMoveRoom);
-                });
-
-                return true;
-            }
-
-            return false;
+            return true;
         }
 
         private async Task<Room> GetOldRoom(RoomTravelAction action)
