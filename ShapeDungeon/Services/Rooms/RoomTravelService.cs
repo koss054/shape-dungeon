@@ -47,15 +47,20 @@ namespace ShapeDungeon.Services.Rooms
 
             ToggleRoomIsActiveProperties(oldRoom, newRoom, action);
 
-            await _unitOfWork.Commit(async () =>
+            var oldEnemy = await ClearOldEnemyActiveForCombat();
+            var newEnemy = await ActivateNewEnemyForCombat(newRoom);
+
+            await _unitOfWork.Commit(() =>
             {
                 _roomRepository.Update(oldRoom);
                 _roomRepository.Update(newRoom);
 
-                if (action == RoomTravelAction.Move)
+                if (action == RoomTravelAction.Move 
+                    && oldEnemy is not null 
+                    && newEnemy is not null)
                 {
-                    await ClearActiveForCombat();
-                    await ActivateEnemyForCombat(newRoom);
+                    _enemyRepository.Update(oldEnemy);
+                    _enemyRepository.Update(newEnemy);
                 }
             });
         }
@@ -158,43 +163,46 @@ namespace ShapeDungeon.Services.Rooms
         }
 
         /// <summary>
-        /// Use only in Unit of Work block.
+        /// Gets the currently active for combat enemy 
+        /// and changes it's IsActiveForCombat property from true to false.
         /// </summary>
-        /// <returns>No return value - removes active for combat enemy.</returns>
-        private async Task ClearActiveForCombat()
+        /// <returns>Returns old active for combat enemy if there was one, otherwise null.</returns>
+        private async Task<Enemy?> ClearOldEnemyActiveForCombat()
         {
             var isAlreadyActive = await _enemyRepository.IsValidByAsync(
                 new EnemyActiveForCombatSpecification());
 
-            if (isAlreadyActive)
-            {
-                var oldEnemy = await _enemyRepository.GetFirstAsync(
-                    new EnemyActiveForCombatSpecification());
+            if (!isAlreadyActive)
+                return null;
 
-                oldEnemy.IsActiveForCombat = false;
-                _enemyRepository.Update(oldEnemy);
-            }
+            var oldEnemy = await _enemyRepository.GetFirstAsync(
+                new EnemyActiveForCombatSpecification());
+
+            oldEnemy.IsActiveForCombat = false;
+            return oldEnemy;
         }
 
         /// <summary>
-        /// Use only in Unit of Work block.
+        /// Gets the enemy in the room the player is in if the room is an enemy room 
+        /// and if the enemy in it hasn't been defeated yet. Sets it's IsActiveForCombat property
+        /// to true if the previously mentioned requirements are met.
         /// </summary>
         /// <param name="currRoom">The room that the player is in.</param>
-        /// <returns>No return value - adds active for combat enemy if combat room and enemy undefeated.</returns>
-        private async Task ActivateEnemyForCombat(Room currRoom) 
+        /// <returns>Returns new active for combat enemy if requirements are met, otherwise null.</returns>
+        private async Task<Enemy?> ActivateNewEnemyForCombat(Room currRoom)
         {
-            if (currRoom.IsEnemyRoom)
-            {
-                var enemyRoom = await _enemyRoomRepository.GetFirstAsync(
-                        new EnemyRoomIdSpecification(currRoom.Id));
+            if (!currRoom.IsEnemyRoom)
+                return null;
 
-                if (!enemyRoom.IsEnemyDefeated)
-                {
-                    var newEnemy = enemyRoom.Enemy;
-                    newEnemy.IsActiveForCombat = true;
-                    _enemyRepository.Update(newEnemy);
-                }
-            }
+            var enemyRoom = await _enemyRoomRepository.GetFirstAsync(
+                    new EnemyRoomIdSpecification(currRoom.Id));
+
+            if (enemyRoom.IsEnemyDefeated)
+                return null;
+
+            var newEnemy = enemyRoom.Enemy;
+            newEnemy.IsActiveForCombat = true;
+            return newEnemy;
         }
 
         private void ToggleRoomIsActiveProperties(Room oldRoom, Room newRoom, RoomTravelAction action)
