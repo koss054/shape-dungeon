@@ -42,21 +42,17 @@ namespace ShapeDungeon.Services.Rooms
             var newRoom = await _roomRepository.GetFirstAsync(
                 new RoomCoordsSpecification(coordsDto.CoordX, coordsDto.CoordY));
 
+            ToggleRoomIsActiveProperties(oldRoom, newRoom, action);
+
             await _unitOfWork.Commit(async () =>
             {
-                switch (action)
+                _roomRepository.Update(oldRoom);
+                _roomRepository.Update(newRoom);
+
+                if (action == RoomTravelAction.Move)
                 {
-                    case RoomTravelAction.Move:
-                        oldRoom.IsActiveForMove = false;
-                        newRoom.IsActiveForMove = true;
-                        await ClearActiveForCombat();
-                        await ActivateEnemyForCombat(newRoom);
-                        break;
-                    case RoomTravelAction.Scout:
-                        oldRoom.IsActiveForScout = false;
-                        newRoom.IsActiveForScout = true;
-                        break;
-                    default: throw new ArgumentOutOfRangeException(nameof(action));
+                    await ClearActiveForCombat();
+                    await ActivateEnemyForCombat(newRoom);
                 }
             });
         }
@@ -179,6 +175,22 @@ namespace ShapeDungeon.Services.Rooms
                     newEnemy.IsActiveForCombat = true;
                     _enemyRepository.Update(newEnemy);
                 }
+            }
+        }
+
+        private void ToggleRoomIsActiveProperties(Room oldRoom, Room newRoom, RoomTravelAction action)
+        {
+            switch (action)
+            {
+                case RoomTravelAction.Move:
+                    oldRoom.IsActiveForMove = false;
+                    newRoom.IsActiveForMove = true;
+                    break;
+                case RoomTravelAction.Scout:
+                    oldRoom.IsActiveForScout = false;
+                    newRoom.IsActiveForScout = true;
+                    break;
+                default: throw new ArgumentOutOfRangeException(nameof(action));
             }
         }
     }
