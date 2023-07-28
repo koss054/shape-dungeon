@@ -55,7 +55,7 @@ namespace ShapeDungeon.Services.Rooms
             if (currRoom.CanGoDown)
             {
                 currRoom.HasDownNeighbor = await IsRoomWithCoordsValidAsync(
-                    new RoomCoordsSpecification(coordX, coordY + 1));
+                    new RoomCoordsSpecification(coordX, coordY - 1));
 
                 currRoom.IsDownDeadEnd = !(await _roomValidateService
                     .CanEnterRoomFromDirection(coordX, coordY - 1, RoomDirection.Bottom));
