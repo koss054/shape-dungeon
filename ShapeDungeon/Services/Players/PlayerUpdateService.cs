@@ -1,8 +1,9 @@
 ﻿using ShapeDungeon.Data;
 using ShapeDungeon.Entities;
 using ShapeDungeon.Helpers.Enums;
+using ShapeDungeon.Interfaces.Repositories;
 using ShapeDungeon.Interfaces.Services.Players;
-using ShapeDungeon.Repos;
+using ShapeDungeon.Specifications.Players;
 
 namespace ShapeDungeon.Services.Players
 {
@@ -24,18 +25,20 @@ namespace ShapeDungeon.Services.Players
             var activePlayer = await GetActivePlayer();
             if (activePlayer.CurrentSkillpoints > 0)
             {
+                switch (statToIncrease)
+                {
+                    case CharacterStat.Strength: activePlayer.Strength++; break;
+                    case CharacterStat.Vigor: activePlayer.Vigor++; break;
+                    case CharacterStat.Agility: activePlayer.Agility++; break;
+                    default: throw new ArgumentOutOfRangeException(statToIncrease.ToString());
+                }
+
+                activePlayer.CurrentSkillpoints--;
+                activePlayer.Level++;
+
                 await _unitOfWork.Commit(() =>
                 {
-                    switch (statToIncrease)
-                    {
-                        case CharacterStat.Strength: activePlayer.Strength++; break;
-                        case CharacterStat.Vigor: activePlayer.Vigor++; break;
-                        case CharacterStat.Agility: activePlayer.Agility++; break;
-                        default: throw new ArgumentOutOfRangeException(statToIncrease.ToString());
-                    }
-
-                    activePlayer.CurrentSkillpoints--;
-                    activePlayer.Level++;
+                    _playerRepository.Update(activePlayer);
                 });
             }
         }
@@ -44,20 +47,23 @@ namespace ShapeDungeon.Services.Players
         public async Task EnterCombat()
         {
             var activePlayer = await GetActivePlayer();
+            activePlayer.IsInCombat = true;
+
             await _unitOfWork.Commit(() =>
             {
-                activePlayer.IsInCombat = true;
+                _playerRepository.Update(activePlayer);
             });
         }
 
         public async Task LoseCombat()
         {
             var activePlayer = await GetActivePlayer();
+            activePlayer.IsInCombat = false;
+            activePlayer.CurrentExp = 0;
 
             await _unitOfWork.Commit(() =>
             {
-                activePlayer.IsInCombat = false;
-                activePlayer.CurrentExp = 0;
+                _playerRepository.Update(activePlayer);
             });
         }
 
@@ -66,23 +72,19 @@ namespace ShapeDungeon.Services.Players
             var activePlayer = await GetActivePlayer();
             while (activePlayer.CurrentExp >= activePlayer.ExpToNextLevel)
             {
-                await _unitOfWork.Commit(() =>
-                {
-                    activePlayer.CurrentExp -= activePlayer.ExpToNextLevel;
-                    activePlayer.CurrentSkillpoints++;
-                    activePlayer.ExpToNextLevel += 50;
-                });
+                activePlayer.CurrentExp -= activePlayer.ExpToNextLevel;
+                activePlayer.CurrentSkillpoints++;
+                activePlayer.ExpToNextLevel += 50;
             }
+
+            await _unitOfWork.Commit(() =>
+            {
+                _playerRepository.Update(activePlayer);
+            });
         }
 
         private async Task<Player> GetActivePlayer()
-        {
-            var player = await _playerRepository.GetActive();
-
-            if (player == null)
-                throw new ArgumentNullException(nameof(player));
-
-            return player;
-        }
+            => await _playerRepository.GetFirstAsync(
+                new PlayerIsActiveSpecification());
     }
 }

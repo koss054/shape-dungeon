@@ -1,63 +1,81 @@
-﻿#nullable disable
+﻿using AutoFixture;
+using FluentAssertions;
 using Moq;
-using NUnit.Framework;
 using ShapeDungeon.Data;
 using ShapeDungeon.DTOs.Players;
+using ShapeDungeon.Entities;
+using ShapeDungeon.Interfaces.Repositories;
 using ShapeDungeon.Interfaces.Services.Players;
-using ShapeDungeon.Repos;
 using ShapeDungeon.Services.Players;
+using ShapeDungeon.Specifications.Players;
 using System.Threading.Tasks;
+using Xunit;
 
 namespace ShapeDungeon.Tests.ServiceTests.Players
 {
-    internal class PlayerCreateServiceTests
+    public class PlayerCreateServiceTests
     {
-        private Mock<IPlayerRepository> _repoMock;
-        private Mock<IUnitOfWork> _unitOfWorkMock;
-        private IPlayerCreateService _service;
+        private readonly Mock<IPlayerRepository> _repoMock;
+        private readonly Mock<IUnitOfWork> _unitOfWorkMock;
+        private readonly IPlayerCreateService _sut;
+        private readonly IFixture _fixture;
 
-        [SetUp]
-        public void Test_Initialize()
+        public PlayerCreateServiceTests()
         {
             _repoMock = new Mock<IPlayerRepository>();
             _unitOfWorkMock = new Mock<IUnitOfWork>();
-            _service = new PlayerCreateService(_repoMock.Object, _unitOfWorkMock.Object);
+            _sut = new PlayerCreateService(_repoMock.Object, _unitOfWorkMock.Object);
+            _fixture = new Fixture();
         }
 
-        [Test]
-        public async Task CreatePlayer_WithUniqueName_CreatesNewPlayer()
+        [Fact]
+        public async Task CreatePlayerAsync_ShouldReturnTrue_WhenPlayerCreatedSuccessfully()
         {
             // Arrange
-            var uniqueName = "Minecraft Steve Lvl.64";
-            var playerDto = new PlayerDto { Name = uniqueName };
+            var uniqueName = "Minecraft Steve";
+
+            var playerDto = _fixture.Build<PlayerDto>()
+                .With(x => x.Name, uniqueName)
+                .Create();
+
+            var expectedPlayer = _fixture.Build<Player>()
+                .With(x => x.Name, uniqueName)
+                .Create();
 
             _repoMock
-                .Setup(x => x.DoesNameExist(playerDto.Name))
+                .Setup(x => x.IsValidByAsync(It.IsAny<PlayerNameSpecification>()))
                 .ReturnsAsync(false);
 
+            await _repoMock.Object.AddAsync(expectedPlayer);
+
             // Act
-            var isCreated = await _service.CreatePlayerAsync(playerDto);
+            var actualBool = await _sut.CreatePlayerAsync(playerDto);
 
             // Assert
-            Assert.IsTrue(isCreated);
+            _repoMock.Verify(x => x.AddAsync(It.IsAny<Player>()), Times.Once());
+            actualBool.Should().BeTrue();
         }
 
-        [Test]
-        public async Task CreatePlayer_WithExistingName_DoesNotCreateNewPlayer()
+        [Fact]
+        public async Task CreatePlayerAsync_ShouldReturnFalse_WhenNewPlayerNameAlreadyExistsInDb()
         {
             // Arrange
-            var existingName = "Minecraft Steve Lvl.64";
-            var playerDto = new PlayerDto { Name = existingName };
+            var duplicateName = "Steve";
+
+            var playerDto = _fixture.Build<PlayerDto>()
+                .With(x => x.Name, duplicateName)
+                .Create();
 
             _repoMock
-                .Setup(x => x.DoesNameExist(playerDto.Name))
+                .Setup(x => x.IsValidByAsync(It.IsAny<PlayerNameSpecification>()))
                 .ReturnsAsync(true);
 
             // Act
-            var isCreated = await _service.CreatePlayerAsync(playerDto);
+            var actualBool = await _sut.CreatePlayerAsync(playerDto);
 
             // Assert
-            Assert.IsFalse(isCreated);
+            _repoMock.Verify(x => x.AddAsync(It.IsAny<Player>()), Times.Never());
+            actualBool.Should().BeFalse();
         }
     }
 }

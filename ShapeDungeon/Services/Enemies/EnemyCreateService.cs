@@ -1,8 +1,8 @@
 ﻿using ShapeDungeon.Data;
 using ShapeDungeon.DTOs.Enemies;
 using ShapeDungeon.Entities;
+using ShapeDungeon.Interfaces.Repositories;
 using ShapeDungeon.Interfaces.Services.Enemies;
-using ShapeDungeon.Repos;
 
 namespace ShapeDungeon.Services.Enemies
 {

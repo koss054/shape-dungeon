@@ -1,98 +1,215 @@
-﻿#nullable disable
+﻿using AutoFixture;
+using FluentAssertions;
 using Moq;
-using NUnit.Framework;
+using ShapeDungeon.DTOs.Players;
 using ShapeDungeon.Entities;
+using ShapeDungeon.Interfaces.Repositories;
 using ShapeDungeon.Interfaces.Services.Players;
-using ShapeDungeon.Repos;
+using ShapeDungeon.Responses.Players;
 using ShapeDungeon.Services.Players;
+using ShapeDungeon.Specifications.Players;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Xunit;
 
 namespace ShapeDungeon.Tests.ServiceTests.Players
 {
-    internal class PlayerGetServiceTests
+    public class PlayerGetServiceTests
     {
-        private Mock<IPlayerRepository> _repoMock;
-        private IPlayerGetService _service;
+        private readonly Mock<IPlayerRepository> _repoMock;
+        private readonly IPlayerGetService _sut;
+        private readonly IFixture _fixture;
 
-        [SetUp]
-        public void Test_Initialize()
+        public PlayerGetServiceTests()
         {
             _repoMock = new Mock<IPlayerRepository>();
-            _service = new PlayerGetService(_repoMock.Object);
+            _sut = new PlayerGetService(_repoMock.Object);
+            _fixture = new Fixture();
         }
 
-        [Test]
-        public async Task GetAllPlayers_WithPlayersInDb_ReturnsAllPlayers()
+        [Theory]
+        [MemberData(nameof(GetAllPlayersAsync_ValidItemsData))]
+        public async Task GetAllPlayersAsync_ShouldReturnExpectedPlayersAsPlayerGridDto_WhenThereArePlayersInDb(
+            int expectedCount, List<Player> expectedPlayers)
         {
             // Arrange
-            var playerList = new List<Player>();
-            var firstName = "ThaSkull";
-            var secondName = "ThaMami";
-            var thirdName = "vanki4a";
-            var fourthName = "Umfri";
-            playerList.Add(new Player { Name = firstName });
-            playerList.Add(new Player { Name = secondName });
-            playerList.Add(new Player { Name = thirdName });
-            playerList.Add(new Player { Name = fourthName });
+            _repoMock
+                .Setup(x => x.GetMultipleByAsync(It.IsAny<PlayerAllSpecification>()))
+                .ReturnsAsync(expectedPlayers);
+
+            // Act
+            var actualPlayers = await _sut.GetAllPlayersAsync();
+
+            // Assert
+            actualPlayers.Count().Should().Be(expectedCount);
+            actualPlayers.FirstOrDefault().Should().BeOfType<PlayerGridDto>();
+        }
+
+        [Fact]
+        public async Task GetAllPlayersAsync_ShouldReturnEmptyPlayerGridDtoList_WhenThereAreNoPlayersInDb()
+        {
+            // Arrange
+            _repoMock
+                .Setup(x => x.GetMultipleByAsync(It.IsAny<PlayerAllSpecification>()))
+                .ReturnsAsync(new List<Player>());
+
+            // Act
+            var actualPlayers = await _sut.GetAllPlayersAsync();
+
+            // Assert
+            actualPlayers.Count().Should().Be(0);
+            actualPlayers.FirstOrDefault().Should().BeNull();
+        }
+
+        [Fact]
+        public async Task GetPlayerAsync_ShouldReturnExpectedPlayerDto_WhenPlayerWithNameExistsInDb()
+        {
+            // Arrange
+            var expectedName = "Eileen The Hoonter";
+
+            var expectedPlayer = _fixture.Build<Player>()
+                .With(x => x.Name, expectedName)
+                .Create();
 
             _repoMock
-                .Setup(x => x.GetAll())
-                .ReturnsAsync(playerList);
+                .Setup(x => x.GetFirstAsync(It.IsAny<PlayerNameSpecification>()))
+                .ReturnsAsync(expectedPlayer);
 
             // Act
-            var playerDtoList = await _service.GetAllPlayersAsync();
+            var actualPlayer = await _sut.GetPlayerAsync(expectedName);
 
             // Assert
-            Assert.IsNotNull(playerDtoList.FirstOrDefault(x => x.Name == firstName));
-            Assert.IsNotNull(playerDtoList.FirstOrDefault(x => x.Name == secondName));
-            Assert.IsNotNull(playerDtoList.FirstOrDefault(x => x.Name == thirdName));
-            Assert.IsNotNull(playerDtoList.FirstOrDefault(x => x.Name == fourthName));
+            actualPlayer.Should().NotBeNull();
+            actualPlayer.Should().BeOfType<PlayerDto>();
+            actualPlayer.Name.Should().Be(expectedName);
         }
 
-        [Test]
-        public async Task GetAllPlayers_WithNoPlayersInDb_ReturnsEmptyDtoList()
+        [Fact]
+        public async Task GetPlayerAsync_ShouldThrowException_WhenNoPlayerMatchesProvidedNameInDb()
         {
             // Arrange
-
-            // Act
-            var playerDtoList = await _service.GetAllPlayersAsync();
-
-            // Assert
-            Assert.IsNull(playerDtoList.FirstOrDefault());
-        }
-
-        [Test]
-        public async Task GetPlayer_WithExistingName_ReturnsExpectedPlayerDto()
-        {
-            // Arrange
-            var existingName = "Skull054";
-            var player = new Player { Name = existingName };
+            var expectedName = "The Dude That Has a Katana in the Church and Can Teleport";
 
             _repoMock
-                .Setup(x => x.GetByName(existingName))
-                .ReturnsAsync(player);
+                .Setup(x => x.GetFirstAsync(It.IsAny<PlayerNameSpecification>()))
+                .ThrowsAsync(new ArgumentNullException("playerToReturn", "No player matches provided specification."));
 
             // Act
-            var playerDto = await _service.GetPlayerAsync(existingName);
+            var action = async () => await _sut.GetPlayerAsync(expectedName);
 
             // Assert
-            Assert.IsNotNull(playerDto);
-            Assert.AreEqual(playerDto.Name, existingName);
+            await action.Should().ThrowAsync<ArgumentNullException>()
+                .WithMessage("No player matches provided specification. (Parameter 'playerToReturn')");
         }
 
-        [Test]
-        public async Task GetPlayer_WithMissingName_ReturnsEmptyPlayerDto()
+        [Fact]
+        public async Task GetActivePlayer_ShouldReturnPlayerDto_WhenThereIsAnActivePlayerInDb()
         {
             // Arrange
-            var missingName = "Skull055";
+            var expectedPlayer = _fixture.Build<Player>()
+                .With(x => x.IsActive, true)
+                .Create();
+
+            _repoMock
+                .Setup(x => x.GetFirstAsync(It.IsAny<PlayerIsActiveSpecification>()))
+                .ReturnsAsync(expectedPlayer);
 
             // Act
-            var playerDto = await _service.GetPlayerAsync(missingName);
+            var actualPlayer = await _sut.GetActivePlayer();
 
             // Assert
-            Assert.IsNull(playerDto.Name);
+            actualPlayer.Should().BeOfType<PlayerDto>();
+            actualPlayer.IsActive.Should().BeTrue();
         }
+
+        [Fact]
+        public async Task GetActivePlayer_ShouldThrowException_WhenNoActivePlayerInDb()
+        {
+            // Arrange
+            _repoMock
+                .Setup(x => x.GetFirstAsync(It.IsAny<PlayerIsActiveSpecification>()))
+                .ThrowsAsync(new ArgumentNullException("playerToReturn", "No player matches provided specification."));
+
+            // Act
+            var action = async () => await _sut.GetActivePlayer();
+
+            // Assert
+            await action.Should().ThrowAsync<ArgumentNullException>()
+                .WithMessage("No player matches provided specification. (Parameter 'playerToReturn')");
+        }
+
+        [Fact]
+        public async Task GetActivePlayerStats_ShouldReturnPlayerStatsResponse_WhenThereIsAnActivePlayerInDb()
+        {
+            // Arrange
+            var expectedStrength = 10;
+            var expectedVigor = 20;
+            var expectedAgility = 30;
+
+            var expectedPlayer = _fixture.Build<Player>()
+                .With(x => x.IsActive, true)
+                .With(x => x.Strength, expectedStrength)
+                .With(x => x.Vigor, expectedVigor)
+                .With(x => x.Agility, expectedAgility)
+                .Create();
+
+            _repoMock
+                .Setup(x => x.GetFirstAsync(It.IsAny<PlayerIsActiveSpecification>()))
+                .ReturnsAsync(expectedPlayer);
+
+            // Act
+            var actualPlayer = await _sut.GetActivePlayerStats();
+
+            // Assert
+            actualPlayer.Should().BeOfType<PlayerStatsResponse>();
+            actualPlayer.Strength.Should().Be(expectedStrength);
+            actualPlayer.Vigor.Should().Be(expectedVigor);
+            actualPlayer.Agility.Should().Be(expectedAgility);
+        }
+
+        [Fact]
+        public async Task GetActivePlayerStats_ShouldThrowException_WhenNoActivePlayerInDb()
+        {
+            // Arrange
+            _repoMock
+                .Setup(x => x.GetFirstAsync(It.IsAny<PlayerIsActiveSpecification>()))
+                .ThrowsAsync(new ArgumentNullException("playerToReturn", "No player matches provided specification."));
+
+            // Act
+            var action = async () => await _sut.GetActivePlayerStats();
+
+            // Assert
+            await action.Should().ThrowAsync<ArgumentNullException>()
+                .WithMessage("No player matches provided specification. (Parameter 'playerToReturn')");
+        }
+
+        public static IEnumerable<object[]> GetAllPlayersAsync_ValidItemsData
+            => new List<object[]>
+            {
+                new object[]
+                {
+                    3,                  // Expected Count
+                    new List<Player>    // Expected Players
+                    {
+                        new Player{ Name = "Lol", IsActive = true },
+                        new Player{ Name = "Bruh", IsActive = false },
+                        new Player{ Name = "LolBruh", IsActive = false },
+                    },
+                },
+                new object[]
+                {
+                    5,                  // Expected Count
+                    new List<Player>    // Expected Players
+                    {
+                        new Player{ Name = "Incredibleu", IsActive = true },
+                        new Player{ Name = "Neveroqtno", IsActive = false },
+                        new Player{ Name = "Wunderbar", IsActive = true },
+                        new Player{ Name = "Wunderbar", IsActive = true },
+                        new Player{ Name = "Wunderbar", IsActive = false },
+                    },
+                }
+            };
     }
 }

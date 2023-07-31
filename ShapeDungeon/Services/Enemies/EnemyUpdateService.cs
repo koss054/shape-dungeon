@@ -1,6 +1,7 @@
 ﻿using ShapeDungeon.Data;
+using ShapeDungeon.Interfaces.Repositories;
 using ShapeDungeon.Interfaces.Services.Enemies;
-using ShapeDungeon.Repos;
+using ShapeDungeon.Specifications.Enemies;
 
 namespace ShapeDungeon.Services.Enemies
 {
@@ -19,12 +20,14 @@ namespace ShapeDungeon.Services.Enemies
 
         public async Task RemoveActiveForCombat()
         {
-            var enemy = await _enemyRepository.GetActiveForCombat();
-            if (enemy is null) throw new ArgumentNullException(nameof(enemy));
+            var enemy = await _enemyRepository.GetFirstAsync(
+                new EnemyActiveForCombatSpecification());
+
+            enemy.IsActiveForCombat = false;
 
             await _unitOfWork.Commit(() =>
             {
-                enemy.IsActiveForCombat = false;
+                _enemyRepository.Update(enemy);
             });
         }
     }

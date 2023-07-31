@@ -1,103 +1,192 @@
-﻿#nullable disable
+﻿using AutoFixture;
+using FluentAssertions;
 using Moq;
-using NUnit.Framework;
+using ShapeDungeon.DTOs.Rooms;
 using ShapeDungeon.Entities;
+using ShapeDungeon.Interfaces.Repositories;
 using ShapeDungeon.Interfaces.Services.Rooms;
-using ShapeDungeon.Repos;
 using ShapeDungeon.Services.Rooms;
+using ShapeDungeon.Specifications.Rooms;
+using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using Xunit;
 
 namespace ShapeDungeon.Tests.ServiceTests.Rooms
 {
-    internal class GetRoomServiceTests
+    public class GetRoomServiceTests
     {
-        private Mock<IRoomRepository> _repoMock;
-        private IGetRoomService _service;
+        private readonly Mock<IRoomRepository> _repoMock;
+        private readonly IGetRoomService _sut;
+        private readonly IFixture _fixture;
 
-        [SetUp]
-        public void Test_Initialize()
+        public GetRoomServiceTests()
         {
             _repoMock = new Mock<IRoomRepository>();
-            _service = new GetRoomService(_repoMock.Object);
+            _sut = new GetRoomService(_repoMock.Object);
+            _fixture = new Fixture();
         }
 
-        // These tests can't return an empty room.
-        // The start room will have the Move, Scout, Edit props set to true - DB is seeded with it.
-        // Existing room properties cannot be updated.
-
-        [Test]
-        public async Task GetActiveForMove_HasMandatoryStartRoom_ReturnsActiveForMoveDto()
+        [Fact]
+        public async Task GetActiveForMoveAsync_ShouldReturnRoomDto_WhenActiveForMoveRoomisInDb()
         {
             // Arrange
-            var expectedCoordX = 10;
-            var expectedCoordY = 123091;
+            var expectedRoom = _fixture.Build<Room>()
+                .With(x => x.IsActiveForMove, true)
+                .Create();
 
             _repoMock
-                .Setup(x => x.GetActiveForMove())
-                .ReturnsAsync(new Room()
-                {
-                    IsActiveForMove = true,
-                    CoordX = expectedCoordX,
-                    CoordY = expectedCoordY
-                });
+                .Setup(x => x.GetFirstAsync(It.IsAny<RoomMoveSpecification>()))
+                .ReturnsAsync(expectedRoom);
 
             // Act
-            var roomDto = await _service.GetActiveForMoveAsync();
+            var actualRoomDto = await _sut.GetActiveForMoveAsync();
 
             // Assert
-            Assert.IsTrue(roomDto.IsActiveForMove);
-            Assert.AreEqual(roomDto.CoordX, expectedCoordX);
-            Assert.AreEqual(roomDto.CoordY, roomDto.CoordY);
+            actualRoomDto.Should().BeOfType<RoomDto>();
+            actualRoomDto.IsActiveForMove.Should().BeTrue();
+            actualRoomDto.CoordX.Should().Be(expectedRoom.CoordX);
+            actualRoomDto.CoordY.Should().Be(expectedRoom.CoordY);
         }
 
-        [Test]
-        public async Task GetActiveForScout_HasMandatoryStartRoom_ReturnsActiveForMoveDto()
+        [Fact]
+        public async Task GetActiveForMoveAsync_ShouldThrowException_WhenNoActiveForMoveRoomInDb()
         {
             // Arrange
-            var expectedCoordX = 45645645;
-            var expectedCoordY = -444456386;
-
             _repoMock
-                .Setup(x => x.GetActiveForScout())
-                .ReturnsAsync(new Room()
-                {
-                    IsActiveForScout = true,
-                    CoordX = expectedCoordX,
-                    CoordY = expectedCoordY
-                });
+                .Setup(x => x.GetFirstAsync(It.IsAny<RoomMoveSpecification>()))
+                .ThrowsAsync(new ArgumentNullException("roomToReturn", "No room matches provided specification."));
 
             // Act
-            var roomDto = await _service.GetActiveForScoutAsync();
+            var action = async () => await _sut.GetActiveForMoveAsync();
 
             // Assert
-            Assert.IsTrue(roomDto.IsActiveForScout);
-            Assert.AreEqual(roomDto.CoordX, expectedCoordX);
-            Assert.AreEqual(roomDto.CoordY, roomDto.CoordY);
+            await action.Should().ThrowAsync<ArgumentNullException>()
+                .WithMessage("No room matches provided specification. (Parameter 'roomToReturn')");
         }
 
-        [Test]
-        public async Task GetActiveForEdit_HasMandatoryStartRoom_ReturnsActiveForMoveDto()
+        [Fact]
+        public async Task GetActiveForScoutAsync_ShouldReturnRoomDto_WhenActiveForScoutRoomInDb()
         {
             // Arrange
-            var expectedCoordX = 4444;
-            var expectedCoordY = 54;
+            var expectedRoom = _fixture.Build<Room>()
+                .With(x => x.IsActiveForScout, true)
+                .Create();
 
             _repoMock
-                .Setup(x => x.GetActiveForEdit())
-                .ReturnsAsync(new Room()
-                {
-                    IsActiveForEdit = true,
-                    CoordX = expectedCoordX,
-                    CoordY = expectedCoordY
-                });
+                .Setup(x => x.GetFirstAsync(It.IsAny<RoomScoutSpecification>()))
+                .ReturnsAsync(expectedRoom);
 
             // Act
-            var roomDto = await _service.GetActiveForEditAsync();
+            var actualRoomDto = await _sut.GetActiveForScoutAsync();
 
             // Assert
-            Assert.IsTrue(roomDto.IsActiveForEdit);
-            Assert.AreEqual(roomDto.CoordX, expectedCoordX);
-            Assert.AreEqual(roomDto.CoordY, roomDto.CoordY);
+            actualRoomDto.Should().BeOfType<RoomDto>();
+            actualRoomDto.IsActiveForScout.Should().BeTrue();
+            actualRoomDto.CoordX.Should().Be(expectedRoom.CoordX);
+            actualRoomDto.CoordY.Should().Be(expectedRoom.CoordY);
+        }
+
+        [Fact]
+        public async Task GetActiveForScoutAsync_ShouldThrowException_WhenNoActiveForScoutRoomInDb()
+        {
+            // Arrange
+            _repoMock
+                .Setup(x => x.GetFirstAsync(It.IsAny<RoomScoutSpecification>()))
+                .ThrowsAsync(new ArgumentNullException("roomToReturn", "No room matches provided specification."));
+
+            // Act
+            var action = async () => await _sut.GetActiveForScoutAsync();
+
+            // Assert
+            await action.Should().ThrowAsync<ArgumentNullException>()
+                .WithMessage("No room matches provided specification. (Parameter 'roomToReturn')");
+        }
+
+        [Fact]
+        public async Task GetActiveForEditAsync_ShouldReturnRoomDto_WhenActiveForEditRoomInDb()
+        {
+            // Arrange
+            var expectedRoom = _fixture.Build<Room>()
+                .With(x => x.IsActiveForEdit, true)
+                .Create();
+
+            _repoMock
+                .Setup(x => x.GetFirstAsync(It.IsAny<RoomEditSpecification>()))
+                .ReturnsAsync(expectedRoom);
+
+            // Act
+            var actualRoomDto = await _sut.GetActiveForEditAsync();
+
+            // Assert
+            actualRoomDto.Should().BeOfType<RoomDetailsDto>();
+            actualRoomDto.IsActiveForEdit.Should().BeTrue();
+            actualRoomDto.CoordX.Should().Be(expectedRoom.CoordX);
+            actualRoomDto.CoordY.Should().Be(expectedRoom.CoordY);
+        }
+
+        [Fact]
+        public async Task GetActiveForEditAsync_ShouldThrowException_WhenNoActiveForEditRoomInDb()
+        {
+            // Arrange
+            _repoMock
+                .Setup(x => x.GetFirstAsync(It.IsAny<RoomEditSpecification>()))
+                .ThrowsAsync(new ArgumentNullException("roomToReturn", "No room matches provided specification."));
+
+            // Act
+            var action = async () => await _sut.GetActiveForEditAsync();
+
+            // Assert
+            await action.Should().ThrowAsync<ArgumentNullException>()
+                .WithMessage("No room matches provided specification. (Parameter 'roomToReturn')");
+        }
+
+        [Fact]
+        public async Task GetActiveForMoveId_ShouldThrowException_WhenNoActiveForMoveRoomInDb()
+        {
+            // Arrange
+            _repoMock
+                .Setup(x => x.GetFirstAsync(It.IsAny<RoomMoveSpecification>()))
+                .ThrowsAsync(new ArgumentNullException("roomToReturn", "No room matches provided specification."));
+
+            // Act
+            var action = async () => await _sut.GetActiveForMoveId();
+
+            // Assert
+            await action.Should().ThrowAsync<ArgumentNullException>()
+                .WithMessage("No room matches provided specification. (Parameter 'roomToReturn')");
+        }
+
+        [Fact]
+        public async Task GetActiveForScoutId_ShouldThrowException_WhenNoActiveForScoutRoomInDb()
+        {
+            // Arrange
+            _repoMock
+                .Setup(x => x.GetFirstAsync(It.IsAny<RoomScoutSpecification>()))
+                .ThrowsAsync(new ArgumentNullException("roomToReturn", "No room matches provided specification."));
+
+            // Act
+            var action = async () => await _sut.GetActiveForScoutId();
+
+            // Assert
+            await action.Should().ThrowAsync<ArgumentNullException>()
+                .WithMessage("No room matches provided specification. (Parameter 'roomToReturn')");
+        }
+
+        [Fact]
+        public async Task GetActiveForEditId_ShouldThrowException_WhenNoActiveForEditRoomInDb()
+        {
+            // Arrange
+            _repoMock
+                .Setup(x => x.GetFirstAsync(It.IsAny<RoomEditSpecification>()))
+                .ThrowsAsync(new ArgumentNullException("roomToReturn", "No room matches provided specification."));
+
+            // Act
+            var action = async () => await _sut.GetActiveForEditId();
+
+            // Assert
+            await action.Should().ThrowAsync<ArgumentNullException>()
+                .WithMessage("No room matches provided specification. (Parameter 'roomToReturn')");
         }
     }
 }

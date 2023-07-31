@@ -1,30 +1,33 @@
 ﻿using ShapeDungeon.DTOs.Enemies;
-using ShapeDungeon.Interfaces.Services.EnemiesRooms;
+using ShapeDungeon.Interfaces.Repositories;
 using ShapeDungeon.Interfaces.Services.Rooms;
-using ShapeDungeon.Repos;
+using ShapeDungeon.Specifications.EnemiesRooms;
 
 namespace ShapeDungeon.Services.Rooms
 {
     public class RoomEnemyService : IRoomEnemyService
     {
-        private readonly IEnemiesRoomsRepository _enemiesRoomsRepository;
+        private readonly IEnemyRoomRepository _enemyRoomRepository;
 
-        public RoomEnemyService(IEnemiesRoomsRepository enemiesRoomsRepository)
+        public RoomEnemyService(IEnemyRoomRepository enemyRoomRepository)
         {
-            _enemiesRoomsRepository = enemiesRoomsRepository;
+            _enemyRoomRepository = enemyRoomRepository;
         }
 
         public async Task<EnemyDto> GetEnemy(Guid roomId)
         {
-            var enemy = await _enemiesRoomsRepository.GetEnemyByRoomId(roomId);
-            EnemyDto enemyDto = enemy;
+            var enemyRoom = await _enemyRoomRepository.GetFirstAsync(
+                new EnemyRoomIdSpecification(roomId));
+
+            EnemyDto enemyDto = enemyRoom.Enemy;
             return enemyDto;
         }
 
         public async Task<bool> IsEnemyDefeated(Guid roomId)
         {
-            var enemyRoom = await _enemiesRoomsRepository.GetEntityByRoomId(roomId);
-            if (enemyRoom == null) throw new ArgumentNullException();
+            var enemyRoom = await _enemyRoomRepository.GetFirstAsync(
+                new EnemyRoomIdSpecification(roomId));
+
             return enemyRoom.IsEnemyDefeated;
         }
     }

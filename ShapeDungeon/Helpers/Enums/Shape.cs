@@ -1,4 +1,4 @@
-﻿namespace ShapeDungeon.Entities.Enums
+﻿namespace ShapeDungeon.Helpers.Enums
 {
     public enum Shape
     {

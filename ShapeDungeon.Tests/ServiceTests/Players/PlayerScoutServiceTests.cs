@@ -1,152 +1,201 @@
-﻿#nullable disable
+﻿using AutoFixture;
+using FluentAssertions;
 using Moq;
-using NUnit.Framework;
 using ShapeDungeon.Data;
-using ShapeDungeon.DTOs.Players;
 using ShapeDungeon.Entities;
 using ShapeDungeon.Helpers.Enums;
+using ShapeDungeon.Interfaces.Repositories;
 using ShapeDungeon.Interfaces.Services.Players;
-using ShapeDungeon.Repos;
 using ShapeDungeon.Services.Players;
+using ShapeDungeon.Specifications.Players;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
+using Xunit;
 
 namespace ShapeDungeon.Tests.ServiceTests.Players
 {
-    internal class PlayerScoutServiceTests
+    public class PlayerScoutServiceTests
     {
-        private Mock<IPlayerRepository> _repoMock;
-        private Mock<IUnitOfWork> _unitOfWorkMock;
-        private IPlayerScoutService _service;
+        private readonly Mock<IPlayerRepository> _repoMock;
+        private readonly Mock<IUnitOfWork> _unitOfWorkMock;
+        private readonly IPlayerScoutService _sut;
+        private readonly IFixture _fixture;
 
-        [SetUp]
-        public void Test_Initialize()
+        public PlayerScoutServiceTests()
         {
             _repoMock = new Mock<IPlayerRepository>();
             _unitOfWorkMock = new Mock<IUnitOfWork>();
-            _service = new PlayerScoutService(_repoMock.Object, _unitOfWorkMock.Object);
+            _sut = new PlayerScoutService(_repoMock.Object, _unitOfWorkMock.Object);
+            _fixture = new Fixture();
         }
 
-        [Test]
-        public async Task GetActiveScoutEnergy_WithActivePlayer_ReturnsCurrentScoutEnergy()
+        [Fact]
+        public async Task GetActiveScoutEnergyAsync_ShouldReturnActiveScoutEnergy_WhenThereIsAnActivePlayerInDb()
         {
             // Arrange
             var expectedScoutEnergy = 5;
+            var expectedPlayer = _fixture.Build<Player>()
+                .With(x => x.IsActive, true)
+                .With(x => x.CurrentScoutEnergy, expectedScoutEnergy)
+                .Create();
 
             _repoMock
-                .Setup(x => x.GetActiveScoutEnergy())
-                .ReturnsAsync(expectedScoutEnergy);
+                .Setup(x => x.GetFirstAsync(It.IsAny<PlayerIsActiveSpecification>()))
+                .ReturnsAsync(expectedPlayer);
 
             // Act
-            var returnedScoutEnergy = await _service.GetActiveScoutEnergyAsync();
+            var actualScoutEnergy = await _sut.GetActiveScoutEnergyAsync();
 
             // Assert
-            Assert.AreEqual(expectedScoutEnergy, returnedScoutEnergy);
+            actualScoutEnergy.Should().Be(expectedScoutEnergy);
         }
 
-        [Test]
-        public async Task GetActiveScoutEnergy_WithNoActivePlayer_ReturnsZeroScoutEnergy()
+        [Fact]
+        public async Task GetActiveScoutEnergyAsync_ShouldThrowException_WhenThereIsNoActivePlayerInDb()
         {
             // Arrange
-            var expectedScoutEnergy = 0;
-
-            // Act
-            var returnedScoutEnergy = await _service.GetActiveScoutEnergyAsync();
-
-            // Assert
-            Assert.AreEqual(expectedScoutEnergy, returnedScoutEnergy);
-        }
-
-        [Test]
-        public async Task UpdateActiveScoutEnergy_ValidInfoReduceAction_ReturnsUpdatedActiveScoutEnergy()
-        {
-            // Arrange
-            var initialScoutEnergy = 3;
-            var expectedScoutEnergy = 2;
-            var scoutAction = PlayerScoutAction.Reduce;
-            var activePlayer = new Player
-            {
-                IsActive = true,
-                CurrentScoutEnergy = initialScoutEnergy,
-            };
-
             _repoMock
-                .Setup(x => x.GetActive())
-                .ReturnsAsync(activePlayer);
+                .Setup(x => x.GetFirstAsync(It.IsAny<PlayerIsActiveSpecification>()))
+                .ThrowsAsync(new ArgumentNullException("playerToReturn", "No player matches provided specification."));
 
             // Act
-            var updatedScoutEnergy = await _service.UpdateActiveScoutEnergyAsync(scoutAction);
+            var action = async () => await _sut.GetActiveScoutEnergyAsync();
 
             // Assert
-            Assert.AreEqual(updatedScoutEnergy, expectedScoutEnergy);
+            await action.Should().ThrowAsync<ArgumentNullException>()
+                .WithMessage("No player matches provided specification. (Parameter 'playerToReturn')");
         }
 
-        [Test]
-        public async Task UpdateActiveScoutEnergy_ValidInfoRefillAction_ReturnsUpdatedActiveScoutEnergy()
+        [Theory]
+        [MemberData(nameof(UpdateActiveScoutEnergyAsync_ValidItemsData))]
+        public async Task UpdateActiveScoutEnergyAsync_ShouldReturnExpectedUpdatedScoutEnergy_WhenAnActivePlayerIsInDb(
+            int expectedScoutEnergy, Player expectedPlayer, PlayerScoutAction scoutAction)
         {
             // Arrange
-            var playerAgility = 5;
-            var initialScoutEnergy = 3;
-            var expectedScoutEnergy = 5;
-            var scoutAction = PlayerScoutAction.Refill;
-            var activePlayer = new Player
-            {
-                IsActive = true,
-                CurrentScoutEnergy = initialScoutEnergy,
-                Agility = playerAgility,
-            };
-
             _repoMock
-                .Setup(x => x.GetActive())
-                .ReturnsAsync(activePlayer);
+                .Setup(x => x.GetFirstAsync(It.IsAny<PlayerIsActiveSpecification>()))
+                .ReturnsAsync(expectedPlayer);
+
+            _repoMock.Object.Update(expectedPlayer);
 
             // Act
-            var updatedScoutEnergy = await _service.UpdateActiveScoutEnergyAsync(scoutAction);
+            var actualScoutEnergy = await _sut.UpdateActiveScoutEnergyAsync(scoutAction);
 
             // Assert
-            Assert.AreEqual(updatedScoutEnergy, expectedScoutEnergy);
+            _repoMock.Verify(x => x.Update(expectedPlayer), Times.Once());
+            actualScoutEnergy.Should().Be(expectedScoutEnergy);
+            expectedPlayer.CurrentScoutEnergy.Should().Be(expectedScoutEnergy);
         }
 
-        [Test]
-        public async Task UpdateActiveScountEnergy_InvalidScoutAction_ReturnsMinusOne()
+        [Fact]
+        public async Task UpdateActiveScoutEnergyAsync_ShouldReturnMinusOne_WhenInvalidPlayerScoutActionIsPassed()
         {
             // Arrange
-            var playerAgility = 5;
-            var initialScoutEnergy = 3;
             var expectedResult = -1;
-            var scoutAction = 54;
-            var activePlayer = new Player
-            {
-                IsActive = true,
-                CurrentScoutEnergy = initialScoutEnergy,
-                Agility = playerAgility,
-            };
+            var expectedAgility = 5;
+            var expectedScoutEnergy = 5;
+            var expectedScoutAction = (PlayerScoutAction)5;
+
+            var expectedPlayer = _fixture.Build<Player>()
+                .With(x => x.Agility, expectedAgility)
+                .With(x => x.IsActive, true)
+                .With(x => x.CurrentScoutEnergy, expectedScoutEnergy)
+                .Create();
 
             _repoMock
-                .Setup(x => x.GetActive())
-                .ReturnsAsync(activePlayer);
+                .Setup(x => x.GetFirstAsync(It.IsAny<PlayerIsActiveSpecification>()))
+                .ReturnsAsync(expectedPlayer);
 
             // Act
-            var returnValue = await _service.UpdateActiveScoutEnergyAsync((PlayerScoutAction)scoutAction);
+            var actualResult = await _sut.UpdateActiveScoutEnergyAsync(expectedScoutAction);
 
             // Assert
-            Assert.AreEqual(expectedResult, returnValue);
+            actualResult.Should().Be(expectedResult);
         }
 
-        [Test]
-        public void UpdateActiveScoutEnergy_WithNoActivePlayer_ThrowsNullReferenceException()
+        [Fact]
+        public async Task UpdateActiveScoutEnergyAsync_ShouldReturnMinusOne_WhenReducingPlayerWithZeroCurrentScoutEnergy()
         {
             // Arrange
-            var scoutAction = PlayerScoutAction.Refill;
+            var expectedResult = -1;
+            var expectedAgility = 5;
+            var expectedScoutEnergy = 0;
+            var expectedScoutAction = PlayerScoutAction.Reduce;
+
+            var expectedPlayer = _fixture.Build<Player>()
+                .With(x => x.Agility, expectedAgility)
+                .With(x => x.IsActive, true)
+                .With(x => x.CurrentScoutEnergy, expectedScoutEnergy)
+                .Create();
+
+            _repoMock
+                .Setup(x => x.GetFirstAsync(It.IsAny<PlayerIsActiveSpecification>()))
+                .ReturnsAsync(expectedPlayer);
 
             // Act
-            var updateScountEnergyTask = _service.UpdateActiveScoutEnergyAsync(scoutAction);
+            var actualResult = await _sut.UpdateActiveScoutEnergyAsync(expectedScoutAction);
 
             // Assert
-            Assert.That(async () => await updateScountEnergyTask,
-                                    Throws.TypeOf<NullReferenceException>());
+            actualResult.Should().Be(expectedResult);
         }
+
+        [Theory]
+        [MemberData(nameof(UpdateActiveScoutEnergyAsync_ExceptionItemsData))]
+        public async Task UpdateActiveScoutEnergyAsync_ShouldThrowException_WhenNoActivePlayerInDb(
+            PlayerScoutAction scoutAction)
+        {
+            // Arrange
+            _repoMock
+                .Setup(x => x.GetFirstAsync(It.IsAny<PlayerIsActiveSpecification>()))
+                .ThrowsAsync(new ArgumentNullException("playerToReturn", "No player matches provided specification."));
+
+            // Act
+            var action = async () => await _sut.UpdateActiveScoutEnergyAsync(scoutAction);
+
+            // Assert
+            await action.Should().ThrowAsync<ArgumentNullException>()
+                .WithMessage("No player matches provided specification. (Parameter 'playerToReturn')");
+        }
+
+        public static IEnumerable<object[]> UpdateActiveScoutEnergyAsync_ValidItemsData
+            => new List<object[]>
+            {
+                new object[]
+                {
+                    5,                              // Expected Scout Energy
+                    new Player                      // Player to Update
+                    { 
+                        IsActive = true, 
+                        Agility = 5, 
+                        CurrentScoutEnergy = 0,
+                    },
+                    PlayerScoutAction.Refill,       // Scout Update Action
+                },
+                new object[]
+                {
+                    4,                              // Expected Scout Energy
+                    new Player                      // Player to Update
+                    {
+                        IsActive = true,
+                        Agility = 10,
+                        CurrentScoutEnergy = 5,
+                    },
+                    PlayerScoutAction.Reduce,       // Scout Update Action
+                }
+            };
+
+        public static IEnumerable<object[]> UpdateActiveScoutEnergyAsync_ExceptionItemsData
+            => new List<object[]>
+            {
+                new object[]
+                {
+                    PlayerScoutAction.Refill,       // Scout Update Action
+                },
+                new object[]
+                {
+                    PlayerScoutAction.Reduce,       // Scout Update Action
+                }
+            };
     }
 }

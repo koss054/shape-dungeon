@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ShapeDungeon.Entities;
-using ShapeDungeon.Helpers.Enums;
 using ShapeDungeon.Interfaces.Repositories;
+using ShapeDungeon.Specifications;
 
 namespace ShapeDungeon.Repos
 {
@@ -11,104 +11,70 @@ namespace ShapeDungeon.Repos
         {
         }
 
-        #region Get methods
-        /// <summary>
-        /// </summary>
-        /// <param name="id">Guid for the room's id.</param>
-        /// <returns>Room with matching id.</returns>
-        public async Task<Room?> GetById(Guid id)
-            => await this.Context.Rooms.FirstOrDefaultAsync(x => x.Id == id);
+        public async Task<IEnumerable<Room>> GetMultipleByAsync(ISpecification<Room> specification)
+        {
+            var expression = specification.ToExpression();
+            var roomsToReturn = await this.Context.Rooms
+                .AsQueryable()
+                .Where(expression)
+                .ToListAsync();
 
-        /// <summary>
-        /// </summary>
-        /// <param name="coordX">CoordX of the Room.</param>
-        /// <param name="coordY">CoordY of the ROom.</param>
-        /// <returns>Room with matching coords or null.</returns>
-        public async Task<Room?> GetByCoords(int coordX, int coordY) 
-            => await this.Context.Rooms.SingleOrDefaultAsync(x => x.CoordX == coordX && x.CoordY == coordY);
+            return roomsToReturn;
+        }
 
-        /// <summary>
-        /// Not possible for the room to be null.
-        /// Start room will always exist, and it'll have this property set to true.
-        /// SingleAsync used since only one room can have this property set to true at a time.
-        /// </summary>
-        /// <returns>The room in which the player currently is and can move from.</returns>
-        public async Task<Room> GetActiveForMove()
-            => await this.Context.Rooms.SingleAsync(x => x.IsActiveForMove);
+        public async Task<Room> GetFirstAsync(ISpecification<Room> specification)
+        {
+            var expression = specification.ToExpression();
+            var roomToReturn = await this.Context.Rooms
+                .AsQueryable()
+                .Where(expression)
+                .FirstOrDefaultAsync();
 
-        /// <summary>
-        /// Not possible for the room to be null.
-        /// Start room will always exist, and it'll have this property set to true.
-        /// SingleAsync used since only one room can have this property set to true at a time.
-        /// </summary>
-        /// <returns>The room in which the player currently is or is scouting from.</returns>
-        public async Task<Room> GetActiveForScout()
-            => await this.Context.Rooms.SingleAsync(x => x.IsActiveForScout);
+            return roomToReturn ?? throw new ArgumentNullException(
+                nameof(roomToReturn), "No room matches provided specification.");
+        }
 
-        /// <summary>
-        /// Not possible for the room to be null.
-        /// Start room will always exist, and it'll have this property set to true.
-        /// SingleAsync used since only one room can have this property set to true at a time.
-        /// </summary>
-        /// <returns>The room that is currently active in edit mode.</returns>
-        public async Task<Room> GetActiveForEdit()
-            => await this.Context.Rooms.SingleAsync(x => x.IsActiveForEdit);
-
-        /// <summary>
-        /// Rooms are placed on a coordinate system done with integers.
-        /// Only one room can have the property IsActiveForEdit set to true.
-        /// </summary>
-        /// <returns>Coord X of the room that has IsActiveForEdit == true.</returns>
-        public async Task<int> GetActiveForEditCoordX()
-            => await this.Context.Rooms
-                .Where(x => x.IsActiveForEdit)
+        public async Task<int> GetCoordXByAsync(ISpecification<Room> specification)
+        {
+            var expression = specification.ToExpression();
+            var coordToReturn = await this.Context.Rooms
+                .AsQueryable()
+                .Where(expression)
                 .Select(x => x.CoordX)
-                .SingleOrDefaultAsync();
+                .FirstAsync();
 
-        /// <summary>
-        /// Rooms are placed on a coordinate system done with integers.
-        /// Only one room can have the property IsActiveForEdit set to true.
-        /// </summary>
-        /// <returns>Coord Y of the room that has IsActiveForEdit == true.</returns>
-        public async Task<int> GetActiveForEditCoordY()
-            => await this.Context.Rooms
-                .Where(x => x.IsActiveForEdit)
+            return coordToReturn;
+        }
+
+        public async Task<int> GetCoordYByAsync(ISpecification<Room> specification)
+        {
+            var expression = specification.ToExpression();
+            var coordToReturn = await this.Context.Rooms
+                .AsQueryable()
+                .Where(expression)
                 .Select(x => x.CoordY)
-                .SingleOrDefaultAsync();
-        #endregion
+                .FirstAsync();
+
+            return coordToReturn;
+        }
+
+        public async Task<bool> DoCoordsExistByAsync(ISpecification<Room> specification)
+        {
+            var expression = specification.ToExpression();
+            var doCoordsExist = await this.Context.Rooms
+                .AsQueryable()
+                .Where(expression)
+                .AnyAsync();
+
+            return doCoordsExist;
+        }
+
+        public void Update(Room room)
+        {
+            this.Context.Rooms.Update(room);
+        }
 
         public async Task AddAsync(Room room)
             => await this.Context.Rooms.AddAsync(room);
-
-        public void Update(Room room)
-            => this.Context.Rooms.Update(room);
-
-        /// <summary>
-        /// Checks if the player can enter a room with provided coords from provided direction.
-        /// </summary>
-        /// <param name="coordX">The X coordinate of the room that is being checked.</param>
-        /// <param name="coordY">The Y coordinate of the room that is being checked.</param>
-        /// <param name="direction">The direction from which the player will be leaving their current room.</param>
-        /// <returns>True, if there's no dead end. False, if it's a dead end.</returns>
-        /// <exception cref="ArgumentOutOfRangeException">If incorrect direction enum is provided exception is thrown.</exception>
-        public async Task<bool> CanEnterRoomFromDirection(int coordX, int coordY, RoomDirection direction)
-        {
-            var room = await this.GetByCoords(coordX, coordY);
-            var canGo = false;
-
-            if (room != null)
-            {
-                canGo = direction switch
-                {
-                    RoomDirection.Left => room.CanGoRight,
-                    RoomDirection.Right => room.CanGoLeft,
-                    RoomDirection.Top => room.CanGoDown,
-                    RoomDirection.Bottom => room.CanGoUp,
-                    _ => throw new ArgumentOutOfRangeException(nameof(direction)),
-                };
-            }
-
-            return canGo;
-        }
     }
 }

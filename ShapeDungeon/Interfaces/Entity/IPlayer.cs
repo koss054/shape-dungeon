@@ -1,4 +1,4 @@
-﻿using ShapeDungeon.Entities.Enums;
+﻿using ShapeDungeon.Helpers.Enums;
 
 namespace ShapeDungeon.Interfaces.Entity
 {

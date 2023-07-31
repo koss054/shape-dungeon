@@ -1,7 +1,8 @@
 ﻿using ShapeDungeon.Data;
 using ShapeDungeon.Entities;
+using ShapeDungeon.Interfaces.Repositories;
 using ShapeDungeon.Interfaces.Services.Rooms;
-using ShapeDungeon.Repos;
+using ShapeDungeon.Specifications.Rooms;
 
 namespace ShapeDungeon.Services.Rooms
 {
@@ -10,8 +11,8 @@ namespace ShapeDungeon.Services.Rooms
         private readonly IRoomRepository _roomRepository;
         private readonly IUnitOfWork _unitOfWork;
 
-        public RoomActiveForEditService
-            (IRoomRepository roomRepository, 
+        public RoomActiveForEditService(
+            IRoomRepository roomRepository,
             IUnitOfWork unitOfWork)
         {
             _roomRepository = roomRepository;
@@ -20,10 +21,14 @@ namespace ShapeDungeon.Services.Rooms
 
         public async Task ApplyActiveForEditAsync(Guid roomId)
         {
-            var oldRoom = await _roomRepository.GetActiveForEdit();
+            var oldRoom = await _roomRepository.GetFirstAsync(
+                new RoomEditSpecification());
+
             if (oldRoom != null)
             {
-                var newRoom = await _roomRepository.GetById(roomId);
+                var newRoom = await _roomRepository.GetFirstAsync(
+                    new RoomIdSpecification(roomId));
+
                 if (newRoom != null)
                     await ToggleActiveForEdit(oldRoom, newRoom);
             }
@@ -31,10 +36,14 @@ namespace ShapeDungeon.Services.Rooms
 
         public async Task MoveActiveForEditAsync(int coordX, int coordY)
         {
-            var oldRoom = await _roomRepository.GetActiveForEdit();
+            var oldRoom = await _roomRepository.GetFirstAsync(
+                new RoomEditSpecification());
+
             if (oldRoom != null)
             {
-                var newRoom = await _roomRepository.GetByCoords(coordX, coordY);
+                var newRoom = await _roomRepository.GetFirstAsync(
+                    new RoomCoordsSpecification(coordX, coordY));
+
                 if (newRoom != null)
                     await ToggleActiveForEdit(oldRoom, newRoom);
             }

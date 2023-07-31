@@ -34,6 +34,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddScoped<IEnemyCreateService, EnemyCreateService>();
             services.AddScoped<IEnemyGetService, EnemyGetService>();
             services.AddScoped<IEnemyUpdateService, EnemyUpdateService>();
+            services.AddScoped<IEnemyCombatService, EnemyCombatService>();
 
             // Room
             services.AddScoped<IGetRoomService, GetRoomService>();
@@ -43,17 +44,18 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddScoped<IRoomActiveForEditService, RoomActiveForEditService>();
             services.AddScoped<ICheckRoomNeighborsService, CheckRoomNeighborsService>();
             services.AddScoped<IRoomConditionService, RoomConditionService>();
+            services.AddScoped<IRoomValidateService, RoomValidateService>();
 
             // Enemy Room mapping entity
             services.AddScoped<IEnemiesRoomsService, EnemiesRoomsService>();
 
-            // Repos
+            // New Repositories
             services.AddScoped<IUnitOfWork, UnitOfWork>();
-            services.AddScoped<IRoomRepository, RoomRepository>();
-            services.AddScoped<IEnemyRepository, EnemyRepository>();
-            services.AddScoped<IPlayerRepository, PlayerRepository>();
-            services.AddScoped<IEnemiesRoomsRepository, EnemiesRoomsRepository>();
             services.AddScoped<ICombatRepository, CombatRepository>();
+            services.AddScoped<IEnemyRepository, EnemyRepository>();
+            services.AddScoped<IEnemyRoomRepository, EnemyRoomRepository>();
+            services.AddScoped<IRoomRepository, RoomRepository>();
+            services.AddScoped<IPlayerRepository, PlayerRepository>();
 
             // Combat
             services.AddScoped<ICombatService, CombatService>();
@@ -64,6 +66,7 @@ namespace Microsoft.Extensions.DependencyInjection
             // Custom Middleware
             services.AddTransient<GlobalExceptionHandlingMiddleware>();
 
+            // Bruh, no idea if what I've done below is remotely correct.
             return services;
         }
     }

@@ -49,25 +49,14 @@ namespace ShapeDungeon.Controllers
             await _playerScoutService.UpdateActiveScoutEnergyAsync(PlayerScoutAction.Refill);
 
             var player = await _playerGetService.GetActivePlayer();
-            if (player == null)
-            {
-            }
-
-            if (player!.IsInCombat)
+            if (player.IsInCombat)
                 return RedirectToAction("Action", "Combat");
 
             var room = await _getRoomService.GetActiveForMoveAsync();
-            if (room == null)
-            {
-            }
+            var roomNav = await _checkRoomNeighborsService
+                .SetDtoNeighborsAsync(room.CoordX, room.CoordY);
 
-            var roomNav = await _checkRoomNeighborsService.SetDtoNeighborsAsync(room!.CoordX, room!.CoordY);
-            if (roomNav == null)
-            {
-            }
-
-            room = _checkRoomNeighborsService.SetHasNeighborsProperties(room, roomNav!);
-
+            room = _checkRoomNeighborsService.SetHasNeighborsProperties(room, roomNav);
             if (room.IsEnemyRoom)
             {
                 var roomId = await _getRoomService.GetActiveForMoveId();
@@ -75,7 +64,7 @@ namespace ShapeDungeon.Controllers
                 room.IsEnemyDefeated = await _roomEnemyService.IsEnemyDefeated(roomId);
             }
 
-            var game = new GameDto() { Player = player!, Room = room! };
+            var game = new GameDto() { Player = player, Room = room };
             return View(game);
         }
 
@@ -83,27 +72,17 @@ namespace ShapeDungeon.Controllers
         public async Task<IActionResult> Scouting()
         {
             var player = await _playerGetService.GetActivePlayer();
-            if (player == null)
-            {
-            }
-
-            if (player!.IsInCombat)
+            if (player.IsInCombat)
                 return RedirectToAction("Action", "Combat");
 
             var room = await _getRoomService.GetActiveForScoutAsync();
-            if (room == null)
-            {
-            }
-            else if (room!.IsActiveForMove)
+            if (room.IsActiveForMove)
                 return RedirectToAction("Active");
 
-            var roomNav = await _checkRoomNeighborsService.SetDtoNeighborsAsync(room!.CoordX, room!.CoordY);
-            if (roomNav == null)
-            {
-            }
+            var roomNav = await _checkRoomNeighborsService
+                .SetDtoNeighborsAsync(room.CoordX, room.CoordY);
 
-            room = _checkRoomNeighborsService.SetHasNeighborsProperties(room, roomNav!);
-
+            room = _checkRoomNeighborsService.SetHasNeighborsProperties(room, roomNav);
             if (room.IsEnemyRoom)
             {
                 var roomId = await _getRoomService.GetActiveForScoutId();
@@ -111,7 +90,7 @@ namespace ShapeDungeon.Controllers
                 room.IsEnemyDefeated = await _roomEnemyService.IsEnemyDefeated(roomId);
             }
 
-            var game = new GameDto() { Player = player!, Room = room! };
+            var game = new GameDto() { Player = player, Room = room };
             return View(game);
         }
 
@@ -141,7 +120,8 @@ namespace ShapeDungeon.Controllers
             if (activePlayer.IsInCombat)
                 return RedirectToAction("Action", "Combat");
 
-            var energyLeft = await _playerScoutService.UpdateActiveScoutEnergyAsync(PlayerScoutAction.Reduce);
+            var energyLeft = await _playerScoutService
+                .UpdateActiveScoutEnergyAsync(PlayerScoutAction.Reduce);
 
             if (energyLeft != -1)
                 await _roomTravelService.RoomTravelAsync(direction, RoomTravelAction.Scout);

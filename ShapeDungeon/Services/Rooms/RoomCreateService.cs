@@ -2,8 +2,9 @@
 using ShapeDungeon.DTOs.Rooms;
 using ShapeDungeon.Entities;
 using ShapeDungeon.Helpers.Enums;
+using ShapeDungeon.Interfaces.Repositories;
 using ShapeDungeon.Interfaces.Services.Rooms;
-using ShapeDungeon.Repos;
+using ShapeDungeon.Specifications.Rooms;
 
 namespace ShapeDungeon.Services.Rooms
 {
@@ -13,30 +14,30 @@ namespace ShapeDungeon.Services.Rooms
         private readonly IUnitOfWork _unitOfWork;
 
         public RoomCreateService(
-            IRoomRepository roomRepository, 
+            IRoomRepository roomRepository,
             IUnitOfWork unitOfWork)
         {
             _roomRepository = roomRepository;
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<Room> CreateAsync(RoomDetailsDto roomDto)
+        public async Task<Room> CreateAsync(RoomDetailsDto rDto)
         {
             Room room = new()
             {
                 IsActiveForMove = false,
                 IsActiveForScout = false,
-                IsActiveForEdit = roomDto.IsStartRoom,
-                CanGoLeft = roomDto.CanGoLeft,
-                CanGoRight = roomDto.CanGoRight,
-                CanGoUp = roomDto.CanGoUp,
-                CanGoDown = roomDto.CanGoDown,
-                IsStartRoom = roomDto.IsStartRoom,
-                IsSafeRoom = roomDto.IsSafeRoom,
-                IsEnemyRoom = roomDto.IsEnemyRoom,
-                IsEndRoom = roomDto.IsEndRoom,
-                CoordX = roomDto.CoordX,
-                CoordY = roomDto.CoordY,
+                IsActiveForEdit = rDto.IsStartRoom,
+                CanGoLeft = rDto.CanGoLeft,
+                CanGoRight = rDto.CanGoRight,
+                CanGoUp = rDto.CanGoUp,
+                CanGoDown = rDto.CanGoDown,
+                IsStartRoom = rDto.IsStartRoom,
+                IsSafeRoom = rDto.IsSafeRoom,
+                IsEnemyRoom = rDto.IsEnemyRoom,
+                IsEndRoom = rDto.IsEndRoom,
+                CoordX = rDto.CoordX,
+                CoordY = rDto.CoordY,
             };
 
             if (room.IsStartRoom)
@@ -56,25 +57,30 @@ namespace ShapeDungeon.Services.Rooms
         // There's always going to be an IsActiveForEditRoom == true.
         public async Task<RoomDetailsDto> InitializeRoomAsync(RoomDirection roomDirection)
         {
-            var roomDto = new RoomDetailsDto();
-            int coordX = await _roomRepository.GetActiveForEditCoordX();
-            int coordY = await _roomRepository.GetActiveForEditCoordY();
+            int coordX = await _roomRepository.GetCoordXByAsync(
+                new RoomEditSpecification());
+
+            int coordY = await _roomRepository.GetCoordYByAsync(
+                new RoomEditSpecification());
+
+            var rDto = new RoomDetailsDto();
 
             switch (roomDirection)
             {
-                case RoomDirection.Left: coordX--; roomDto.CanGoRight = true; break;
-                case RoomDirection.Right: coordX++; roomDto.CanGoLeft = true;  break;
-                case RoomDirection.Top: coordY++; roomDto.CanGoDown = true; break;
-                case RoomDirection.Bottom: coordY--; roomDto.CanGoUp = true; break;
+                case RoomDirection.Left: coordX--; rDto.CanGoRight = true; break;
+                case RoomDirection.Right: coordX++; rDto.CanGoLeft = true; break;
+                case RoomDirection.Top: coordY++; rDto.CanGoDown = true; break;
+                case RoomDirection.Bottom: coordY--; rDto.CanGoUp = true; break;
                 default: throw new ArgumentOutOfRangeException(nameof(roomDirection));
             }
 
-            roomDto.CoordX = coordX;
-            roomDto.CoordY = coordY;
-            return roomDto;
+            rDto.CoordX = coordX;
+            rDto.CoordY = coordY;
+            return rDto;
         }
 
         public async Task<bool> AreCoordsInUse(int coordX, int coordY)
-            => await _roomRepository.GetByCoords(coordX, coordY) != null;
+            => await _roomRepository.DoCoordsExistByAsync(
+                new RoomCoordsSpecification(coordX, coordY));
     }
 }

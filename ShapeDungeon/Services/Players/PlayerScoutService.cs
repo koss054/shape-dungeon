@@ -1,7 +1,8 @@
 ﻿using ShapeDungeon.Data;
 using ShapeDungeon.Helpers.Enums;
+using ShapeDungeon.Interfaces.Repositories;
 using ShapeDungeon.Interfaces.Services.Players;
-using ShapeDungeon.Repos;
+using ShapeDungeon.Specifications.Players;
 
 namespace ShapeDungeon.Services.Players
 {
@@ -10,7 +11,7 @@ namespace ShapeDungeon.Services.Players
         private readonly IPlayerRepository _playerRepository;
         private readonly IUnitOfWork _unitOfWork;
 
-        public PlayerScoutService( 
+        public PlayerScoutService(
             IPlayerRepository playerRepository, 
             IUnitOfWork unitOfWork)
         {
@@ -20,15 +21,16 @@ namespace ShapeDungeon.Services.Players
 
         public async Task<int> GetActiveScoutEnergyAsync()
         {
-            var currScoutEnergy = await _playerRepository.GetActiveScoutEnergy();
-            return currScoutEnergy ?? 0;
+            var activePlayer = await _playerRepository.GetFirstAsync(
+                new PlayerIsActiveSpecification());
+
+            return activePlayer.CurrentScoutEnergy;
         }
 
         public async Task<int> UpdateActiveScoutEnergyAsync(PlayerScoutAction action)
         {
-            var currActivePlayer = await _playerRepository.GetActive();
-            if (currActivePlayer == null)
-                throw new NullReferenceException(nameof(currActivePlayer));
+            var currActivePlayer = await _playerRepository.GetFirstAsync(
+                new PlayerIsActiveSpecification());
 
             var currScoutEnergy = currActivePlayer.CurrentScoutEnergy;
 
@@ -39,9 +41,11 @@ namespace ShapeDungeon.Services.Players
             else
                 return -1;
 
+            currActivePlayer.CurrentScoutEnergy = currScoutEnergy;
+
             await _unitOfWork.Commit(() =>
             {
-                currActivePlayer.CurrentScoutEnergy = currScoutEnergy;
+                _playerRepository.Update(currActivePlayer);
             });
 
             return currScoutEnergy;

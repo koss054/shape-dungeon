@@ -1,166 +1,222 @@
-﻿#nullable disable
+﻿using AutoFixture;
+using FluentAssertions;
 using Moq;
-using NUnit.Framework;
 using ShapeDungeon.Data;
 using ShapeDungeon.Entities;
+using ShapeDungeon.Interfaces.Repositories;
 using ShapeDungeon.Interfaces.Services.Rooms;
-using ShapeDungeon.Repos;
 using ShapeDungeon.Services.Rooms;
+using ShapeDungeon.Specifications.Rooms;
 using System;
 using System.Threading.Tasks;
+using Xunit;
 
 namespace ShapeDungeon.Tests.ServiceTests.Rooms
 {
-    internal class RoomActiveForEditServiceTests
+    public class RoomActiveForEditServiceTests
     {
-        private Mock<IRoomRepository> _repoMock;
-        private Mock<IUnitOfWork> _unitOfWorkMock;
-        private IRoomActiveForEditService _service;
+        private readonly Mock<IRoomRepository> _repoMock;
+        private readonly Mock<IUnitOfWork> _unitOfWorkMock;
+        private readonly IRoomActiveForEditService _sut;
+        private readonly IFixture _fixture;
 
-        [SetUp]
-        public void Test_Initialize()
+        public RoomActiveForEditServiceTests()
         {
             _repoMock = new Mock<IRoomRepository>();
             _unitOfWorkMock = new Mock<IUnitOfWork>();
-            _service = new RoomActiveForEditService(_repoMock.Object, _unitOfWorkMock.Object);
+            _sut = new RoomActiveForEditService(_repoMock.Object, _unitOfWorkMock.Object);
+            _fixture = new Fixture();
         }
 
-        [Test]
-        public async Task ApplyActiveForEdit_WithValidRooms_TogglesActiveForEditBetweenRooms()
+        [Fact]
+        public async Task ApplyActiveForEditAsync_ShouldToggleRoomsActiveForEditProperty_WhenThereIsActiveAndMatchingIdRoomsInDb()
         {
             // Arrange
-            var guid = new Guid("9c77d525-85c8-4a6c-98fd-45c5f2039cdc");
-            var newRoom = new Room { Id = guid, IsActiveForEdit = false };
-            var oldRoom = new Room { IsActiveForEdit = true };
+            var expectedNewRoomId = Guid.NewGuid();
+
+            var expectedOldRoom = _fixture.Build<Room>()
+                .With(x => x.IsActiveForEdit, true)
+                .Create();
+
+            var expectedNewRoom = _fixture.Build<Room>()
+                .With(x => x.Id, expectedNewRoomId)
+                .With(x => x.IsActiveForEdit, false)
+                .Create();
 
             _repoMock
-                .Setup(x => x.GetActiveForEdit())
-                .ReturnsAsync(oldRoom);
+                .Setup(x => x.GetFirstAsync(It.IsAny<RoomEditSpecification>()))
+                .ReturnsAsync(expectedOldRoom);
 
             _repoMock
-                .Setup(x => x.GetById(guid))
-                .ReturnsAsync(newRoom);
+                .Setup(x => x.GetFirstAsync(It.IsAny<RoomIdSpecification>()))
+                .ReturnsAsync(expectedNewRoom);
+
+            _repoMock.Object.Update(expectedOldRoom);
+            _repoMock.Object.Update(expectedNewRoom);
 
             // Act
-            await _service.ApplyActiveForEditAsync(guid);
+            await _sut.ApplyActiveForEditAsync(expectedNewRoomId);
+
+            var actualOldRoomStatus = expectedOldRoom.IsActiveForEdit;
+            var actualNewRoomStatus = expectedNewRoom.IsActiveForEdit;
+            var actualNewRoomId = expectedNewRoom.Id;
 
             // Assert
-            Assert.IsFalse(oldRoom.IsActiveForEdit);
-            Assert.IsTrue(newRoom.IsActiveForEdit);
+            _repoMock.Verify(x => x.Update(expectedOldRoom), Times.Once);
+            _repoMock.Verify(x => x.Update(expectedNewRoom), Times.Once);
+            actualOldRoomStatus.Should().BeFalse();
+            actualNewRoomStatus.Should().BeTrue();
+            actualNewRoomId.Should().Be(expectedNewRoomId);
         }
 
-        [Test]
-        public async Task ApplyActiveForEdit_WithInvalidNewRoom_SkipsActiveForEditToggle()
+        [Fact]
+        public async Task ApplyActiveForEditAsync_ShouldThrowException_WhenNoActiveForEditRoomInDb()
         {
             // Arrange
-            var guid = new Guid("9c77d525-85c8-4a6c-98fd-45c5f2039cdc");
-            var oldRoom = new Room { IsActiveForEdit = true };
+            var expectedNewRoomId = Guid.NewGuid();
+            var expectedNewRoom = _fixture.Build<Room>()
+                .With(x => x.Id, expectedNewRoomId)
+                .With(x => x.IsActiveForEdit, false)
+                .Create();
 
             _repoMock
-                .Setup(x => x.GetActiveForEdit())
-                .ReturnsAsync(oldRoom);
+                .Setup(x => x.GetFirstAsync(It.IsAny<RoomEditSpecification>()))
+                .ThrowsAsync(new ArgumentNullException("roomToReturn", "No room matches provided specification."));
+
+            _repoMock
+                .Setup(x => x.GetFirstAsync(It.IsAny<RoomIdSpecification>()))
+                .ReturnsAsync(expectedNewRoom);
 
             // Act
-            await _service.ApplyActiveForEditAsync(guid);
+            var action = async () => await _sut.ApplyActiveForEditAsync(expectedNewRoomId);
 
             // Assert
-            Assert.IsTrue(oldRoom.IsActiveForEdit);
+            await action.Should().ThrowAsync<ArgumentNullException>()
+                .WithMessage("No room matches provided specification. (Parameter 'roomToReturn')");
+            _repoMock.Verify(x => x.Update(expectedNewRoom), Times.Never);
         }
 
-        [Test]
-        public async Task ApplyActiveForEdit_WithInvalidOldRoom_SkipsActiveForEditToggle()
+        [Fact]
+        public async Task ApplyActiveForEditAsync_ShouldThrowException_WhenNoRoomWithProvidedIdInDb()
         {
             // Arrange
-            var guid = new Guid("9c77d525-85c8-4a6c-98fd-45c5f2039cdc");
-            var newRoom = new Room { Id = guid, IsActiveForEdit = false };
+            var expectedOldRoom = _fixture.Build<Room>()
+                .With(x => x.IsActiveForEdit, true)
+                .Create();
 
             _repoMock
-                .Setup(x => x.GetById(guid))
-                .ReturnsAsync(newRoom);
+                .Setup(x => x.GetFirstAsync(It.IsAny<RoomEditSpecification>()))
+                .ReturnsAsync(expectedOldRoom);
 
+            _repoMock
+                .Setup(x => x.GetFirstAsync(It.IsAny<RoomIdSpecification>()))
+                .ThrowsAsync(new ArgumentNullException("roomToReturn", "No room matches provided specification."));
             // Act
-            await _service.ApplyActiveForEditAsync(guid);
+            var action = async () => await _sut.ApplyActiveForEditAsync(It.IsAny<Guid>());
 
             // Assert
-            Assert.IsFalse(newRoom.IsActiveForEdit);
+            await action.Should().ThrowAsync<ArgumentNullException>()
+                .WithMessage("No room matches provided specification. (Parameter 'roomToReturn')");
+            _repoMock.Verify(x => x.Update(expectedOldRoom), Times.Never);
         }
 
-        [Test]
-        public async Task MoveActiveForEdit_WithValidRooms_TogglesActiveForEditBetweenRooms()
+        [Fact]
+        public async Task MoveActiveForEditAsync_ShouldToggleRoomsActiveForEditProperty_WhenThereIsActiveAndMatchingCoordsRoomsInDb()
         {
             // Arrange
-            var coordX = 1;
-            var coordY = 2;
-            var guid = new Guid("9c77d525-85c8-4a6c-98fd-45c5f2039cdc");
-            var oldRoom = new Room { IsActiveForEdit = true };
-            var newRoom = new Room
-            {
-                Id = guid,
-                IsActiveForEdit = false,
-                CoordX = coordX,
-                CoordY = coordY
-            };
+            var expectedCoordX = 54;
+            var expectedCoordY = 64;
+
+            var expectedOldRoom = _fixture.Build<Room>()
+                .With(x => x.IsActiveForEdit, true)
+                .Create();
+
+            var expectedNewRoom = _fixture.Build<Room>()
+                .With(x => x.CoordX, expectedCoordX)
+                .With(x => x.CoordY, expectedCoordY)
+                .With(x => x.IsActiveForEdit, false)
+                .Create();
 
             _repoMock
-                .Setup(x => x.GetActiveForEdit())
-                .ReturnsAsync(oldRoom);
+                .Setup(x => x.GetFirstAsync(It.IsAny<RoomEditSpecification>()))
+                .ReturnsAsync(expectedOldRoom);
 
             _repoMock
-                .Setup(x => x.GetByCoords(coordX, coordY))
-                .ReturnsAsync(newRoom);
+                .Setup(x => x.GetFirstAsync(It.IsAny<RoomCoordsSpecification>()))
+                .ReturnsAsync(expectedNewRoom);
+
+            _repoMock.Object.Update(expectedOldRoom);
+            _repoMock.Object.Update(expectedNewRoom);
 
             // Act
-            await _service.MoveActiveForEditAsync(coordX, coordY);
+            await _sut.MoveActiveForEditAsync(expectedCoordX, expectedCoordY);
+
+            var actualOldRoomStatus = expectedOldRoom.IsActiveForEdit;
+            var actualNewRoomStatus = expectedNewRoom.IsActiveForEdit;
+            var actualNewRoomCoordX = expectedNewRoom.CoordX;
+            var actualNewRoomCoordY = expectedNewRoom.CoordY;
 
             // Assert
-            Assert.IsFalse(oldRoom.IsActiveForEdit);
-            Assert.IsTrue(newRoom.IsActiveForEdit);
+            _repoMock.Verify(x => x.Update(expectedOldRoom), Times.Once);
+            _repoMock.Verify(x => x.Update(expectedNewRoom), Times.Once);
+            actualOldRoomStatus.Should().BeFalse();
+            actualNewRoomStatus.Should().BeTrue();
+            actualNewRoomCoordX.Should().Be(expectedCoordX);
+            actualNewRoomCoordY.Should().Be(expectedCoordY);
         }
 
-        [Test]
-        public async Task MoveActiveForEdit_WithInvalidNewRoom_SkipsActiveForEditToggle()
+        [Fact]
+        public async Task MoveActiveForEditAsync_ShouldThrowException_WhenNoActiveForEditRoomInDb()
         {
             // Arrange
-            var coordX = 1;
-            var coordY = 2;
-            var guid = new Guid("9c77d525-85c8-4a6c-98fd-45c5f2039cdc");
-            var oldRoom = new Room { IsActiveForEdit = true };
+            var expectedCoordX = 10;
+            var expectedCoordY = 10;
+
+            var expectedNewRoom = _fixture.Build<Room>()
+                .With(x => x.CoordX, expectedCoordX)
+                .With(x => x.CoordY, expectedCoordY)
+                .With(x => x.IsActiveForEdit, false)
+                .Create();
 
             _repoMock
-                .Setup(x => x.GetActiveForEdit())
-                .ReturnsAsync(oldRoom);
+                .Setup(x => x.GetFirstAsync(It.IsAny<RoomEditSpecification>()))
+                .ThrowsAsync(new ArgumentNullException("roomToReturn", "No room matches provided specification."));
+
+            _repoMock
+                .Setup(x => x.GetFirstAsync(It.IsAny<RoomIdSpecification>()))
+                .ReturnsAsync(expectedNewRoom);
 
             // Act
-            await _service.MoveActiveForEditAsync(coordX, coordY);
+            var action = async () => await _sut.MoveActiveForEditAsync(expectedCoordX, expectedCoordY);
 
             // Assert
-            Assert.IsTrue(oldRoom.IsActiveForEdit);
+            await action.Should().ThrowAsync<ArgumentNullException>()
+                .WithMessage("No room matches provided specification. (Parameter 'roomToReturn')");
+            _repoMock.Verify(x => x.Update(expectedNewRoom), Times.Never);
         }
 
-        [Test]
-        public async Task MoveActiveForEdit_WithInvalidOldRoom_SkipsActiveForEditToggle()
+        [Fact]
+        public async Task MoveActiveForEditAsync_ShouldThrowException_WhenNoRoomWithProvidedCoordsInDb()
         {
             // Arrange
-            var coordX = 1;
-            var coordY = 2;
-            var guid = new Guid("9c77d525-85c8-4a6c-98fd-45c5f2039cdc");
-            var newRoom = new Room
-            {
-                Id = guid,
-                IsActiveForEdit = false,
-                CoordX = coordX,
-                CoordY = coordY
-            };
+            var expectedOldRoom = _fixture.Build<Room>()
+                .With(x => x.IsActiveForEdit, true)
+                .Create();
 
             _repoMock
-                .Setup(x => x.GetByCoords(coordX, coordY))
-                .ReturnsAsync(newRoom);
+                .Setup(x => x.GetFirstAsync(It.IsAny<RoomEditSpecification>()))
+                .ReturnsAsync(expectedOldRoom);
 
+            _repoMock
+                .Setup(x => x.GetFirstAsync(It.IsAny<RoomCoordsSpecification>()))
+                .ThrowsAsync(new ArgumentNullException("roomToReturn", "No room matches provided specification."));
             // Act
-            await _service.MoveActiveForEditAsync(coordX, coordY);
+            var action = async () => await _sut.MoveActiveForEditAsync(It.IsAny<int>(), It.IsAny<int>());
 
             // Assert
-            Assert.IsFalse(newRoom.IsActiveForEdit);
+            await action.Should().ThrowAsync<ArgumentNullException>()
+                .WithMessage("No room matches provided specification. (Parameter 'roomToReturn')");
+            _repoMock.Verify(x => x.Update(expectedOldRoom), Times.Never);
         }
     }
 }

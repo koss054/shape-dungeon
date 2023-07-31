@@ -1,7 +1,8 @@
 ﻿using ShapeDungeon.DTOs.Players;
+using ShapeDungeon.Interfaces.Repositories;
 using ShapeDungeon.Interfaces.Services.Players;
-using ShapeDungeon.Repos;
 using ShapeDungeon.Responses.Players;
+using ShapeDungeon.Specifications.Players;
 
 namespace ShapeDungeon.Services.Players
 {
@@ -16,7 +17,9 @@ namespace ShapeDungeon.Services.Players
 
         public async Task<IEnumerable<PlayerGridDto>> GetAllPlayersAsync()
         {
-            var players = await _playerRepository.GetAll();
+            var players = await _playerRepository.GetMultipleByAsync(
+                new PlayerAllSpecification());
+
             var playersDto = new List<PlayerGridDto>();
 
             foreach (var player in players) 
@@ -27,23 +30,19 @@ namespace ShapeDungeon.Services.Players
 
         public async Task<PlayerDto> GetPlayerAsync(string name)
         {
-            var player = await _playerRepository.GetByName(name);
-            var playerDto = new PlayerDto();
+            var player = await _playerRepository.GetFirstAsync(
+                new PlayerNameSpecification(name));
 
-            if (player != null)
-               playerDto = player;
-
+            var playerDto = player;
             return playerDto;
         }
 
         public async Task<PlayerDto> GetActivePlayer()
-            => await _playerRepository.GetActive();
+            => await _playerRepository.GetFirstAsync(
+                new PlayerIsActiveSpecification());
 
         public async Task<PlayerStatsResponse> GetActivePlayerStats()
-        {
-            var player = await _playerRepository.GetActive();
-            if (player == null) throw new ArgumentNullException(nameof(player));
-            return player;
-        }
+            => await _playerRepository.GetFirstAsync(
+                new PlayerIsActiveSpecification());
     }
 }

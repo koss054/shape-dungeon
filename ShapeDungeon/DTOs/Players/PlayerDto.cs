@@ -1,5 +1,5 @@
 ﻿using ShapeDungeon.Entities;
-using ShapeDungeon.Entities.Enums;
+using ShapeDungeon.Helpers.Enums;
 
 namespace ShapeDungeon.DTOs.Players
 {

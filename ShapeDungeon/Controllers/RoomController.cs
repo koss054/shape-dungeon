@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using ShapeDungeon.DTOs.Enemies;
 using ShapeDungeon.DTOs.Rooms;
-using ShapeDungeon.Entities;
 using ShapeDungeon.Helpers.Enums;
 using ShapeDungeon.Interfaces.Services.Enemies;
 using ShapeDungeon.Interfaces.Services.Rooms;
@@ -11,7 +9,6 @@ namespace ShapeDungeon.Controllers
 {
     public class RoomController : Controller
     {
-        private readonly IEnemyCreateService _enemyCreateService;
         private readonly IEnemyGetService _enemyGetService;
         private readonly IGetRoomService _getRoomService;
         private readonly IRoomEnemyService _roomEnemyService;
@@ -22,7 +19,6 @@ namespace ShapeDungeon.Controllers
         private readonly ICheckRoomNeighborsService _checkRoomNeighborsService;
 
         public RoomController(
-            IEnemyCreateService enemyCreateService,
             IEnemyGetService enemyGetService,
             IGetRoomService getRoomService, 
             IRoomEnemyService roomEnemyService, 
@@ -32,7 +28,6 @@ namespace ShapeDungeon.Controllers
             IRoomActiveForEditService roomActiveForEditService, 
             ICheckRoomNeighborsService checkRoomNeighborsService)
         {
-            _enemyCreateService = enemyCreateService;
             _enemyGetService = enemyGetService;
             _getRoomService = getRoomService;
             _roomEnemyService = roomEnemyService;
@@ -47,7 +42,9 @@ namespace ShapeDungeon.Controllers
         public async Task<IActionResult> Create()
         {
             var roomDetails = await _getRoomService.GetActiveForEditAsync();
-            var roomNav = await _checkRoomNeighborsService.SetDtoNeighborsAsync(roomDetails!.CoordX, roomDetails!.CoordY);
+            var roomNav = await _checkRoomNeighborsService
+                .SetDtoNeighborsAsync(roomDetails!.CoordX, roomDetails!.CoordY);
+
             var room = new RoomCreateDto() { Details = roomDetails, Nav = roomNav };
 
             if (roomDetails.IsEnemyRoom)
@@ -80,6 +77,7 @@ namespace ShapeDungeon.Controllers
         public async Task<IActionResult> Directional(RoomDirection direction)
         {
             var roomDetails = await _roomCreateService.InitializeRoomAsync(direction);
+
             if (await _roomCreateService.AreCoordsInUse(roomDetails.CoordX, roomDetails.CoordY))
             {
                 TempData["error"] = "bruh, there's already a room with these coords";

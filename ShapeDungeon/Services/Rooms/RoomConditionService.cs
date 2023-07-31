@@ -1,19 +1,21 @@
-﻿using ShapeDungeon.Interfaces.Services.Rooms;
-using ShapeDungeon.Repos;
+﻿using ShapeDungeon.Interfaces.Repositories;
+using ShapeDungeon.Interfaces.Services.Rooms;
+using ShapeDungeon.Specifications.EnemiesRooms;
+using ShapeDungeon.Specifications.Rooms;
 
 namespace ShapeDungeon.Services.Rooms
 {
     public class RoomConditionService : IRoomConditionService
     {
         private readonly IRoomRepository _roomRepository;
-        private readonly IEnemiesRoomsRepository _enemiesRoomsRepository;
+        private readonly IEnemyRoomRepository _enemyRoomRepository;
 
         public RoomConditionService(
             IRoomRepository roomRepository,
-            IEnemiesRoomsRepository enemiesRoomsRepository)
+            IEnemyRoomRepository enemyRoomRepository)
         {
             _roomRepository = roomRepository;
-            _enemiesRoomsRepository = enemiesRoomsRepository;
+            _enemyRoomRepository = enemyRoomRepository;
         }
 
         /// <summary>
@@ -23,10 +25,15 @@ namespace ShapeDungeon.Services.Rooms
         /// <returns>True, if enemy room has an active enemy. Otherwise, false.</returns>
         public async Task<bool> IsCurrentRoomActiveEnemyRoom()
         {
-            var currRoom = await _roomRepository.GetActiveForMove();
-            var isEnemyDefeated = await _enemiesRoomsRepository.IsRoomEnemyDefeated(currRoom.Id);
+            var currRoom = await _roomRepository.GetFirstAsync(
+                new RoomMoveSpecification());
 
-            if (currRoom.IsEnemyRoom && !isEnemyDefeated) return true;
+            var isEnemyDefeated = await _enemyRoomRepository.IsValidByAsync(
+                new EnemyRoomDefeatedSpecification(currRoom.Id));
+
+            if (currRoom.IsEnemyRoom && !isEnemyDefeated) 
+                return true;
+
             return false;
         }
     }

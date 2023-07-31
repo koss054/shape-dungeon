@@ -1,28 +1,37 @@
 ﻿using ShapeDungeon.Data;
 using ShapeDungeon.Entities;
+using ShapeDungeon.Interfaces.Repositories;
 using ShapeDungeon.Interfaces.Services.EnemiesRooms;
-using ShapeDungeon.Repos;
 
 namespace ShapeDungeon.Services.EnemiesRooms
 {
     public class EnemiesRoomsService : IEnemiesRoomsService
     {
-        private readonly IEnemiesRoomsRepository _enemiesRoomsRepository;
+        private readonly IEnemyRoomRepository _enemyRoomRepository;
         private readonly IUnitOfWork _unitOfWork;
 
         public EnemiesRoomsService(
-            IEnemiesRoomsRepository enemiesRoomsRepository,
+            IEnemyRoomRepository enemyRoomRepository,
             IUnitOfWork unitOfWork)
         {
-            _enemiesRoomsRepository = enemiesRoomsRepository;
+            _enemyRoomRepository = enemyRoomRepository;
             _unitOfWork = unitOfWork;
         }
 
         public async Task AddEnemyToRoom(Room room, Enemy enemy)
         {
+            var enemyRoom = new EnemyRoom()
+            {
+                EnemyId = enemy.Id,
+                Enemy = enemy,
+                RoomId = room.Id,
+                Room = room,
+                IsEnemyDefeated = false,
+            };
+
             await _unitOfWork.Commit(() =>
             {
-                _enemiesRoomsRepository.AddAsync(room, enemy);
+                _enemyRoomRepository.AddAsync(enemyRoom);
             });
         }
     }

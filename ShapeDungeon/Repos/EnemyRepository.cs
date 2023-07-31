@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ShapeDungeon.Entities;
 using ShapeDungeon.Interfaces.Repositories;
+using ShapeDungeon.Specifications;
 
 namespace ShapeDungeon.Repos
 {
@@ -10,39 +11,46 @@ namespace ShapeDungeon.Repos
         {
         }
 
-        public async Task AddAsync(Enemy enemy)
-            => await this.Context.Enemies.AddAsync(enemy);
-
-        public async Task<IEnumerable<Enemy>> GetRangeAsync(int minLevel, int maxLevel)
-            => await this.Context.Enemies
-                .Where(x => x.Level >= minLevel && x.Level <= maxLevel)
-                .OrderBy(x => x.Level)
+        public async Task<IEnumerable<Enemy>> GetMultipleByAsync(ISpecification<Enemy> specification)
+        {
+            var expression = specification.ToExpression();
+            var enemiesToReturn = await this.Context.Enemies
+                .AsQueryable()
+                .Where(expression)
                 .ToListAsync();
 
-        public async Task<Enemy?> GetById(Guid enemyId)
-            => await this.Context.Enemies
-                .FirstOrDefaultAsync(x => x.Id == enemyId);
-
-        public async Task<Enemy?> GetActiveForCombat()
-            => await this.Context.Enemies
-                .SingleOrDefaultAsync(x => x.IsActiveForCombat);
-
-        public async Task SetActiveForCombat(Guid enemyId)
-        {
-            var enemy = await this.Context.Enemies
-                .FirstOrDefaultAsync(x => x.Id == enemyId);
-
-            if (enemy != null)
-                enemy.IsActiveForCombat = true;
+            return enemiesToReturn;
         }
 
-        public async Task ClearActiveForCombat()
+        public async Task<Enemy> GetFirstAsync(ISpecification<Enemy> specification)
         {
-            var activeEnemy = await this.Context.Enemies
-                .SingleOrDefaultAsync(x => x.IsActiveForCombat);
+            var expression = specification.ToExpression();
+            var enemyToReturn = await this.Context.Enemies
+                .AsQueryable()
+                .Where(expression)
+                .FirstOrDefaultAsync();
 
-            if (activeEnemy != null)
-                activeEnemy.IsActiveForCombat = false;
+            return enemyToReturn ?? throw new ArgumentNullException(
+                nameof(enemyToReturn), "No enemy matches provided specification.");
         }
+
+        public async Task<bool> IsValidByAsync(ISpecification<Enemy> specification)
+        {
+            var expression = specification.ToExpression();
+            var boolToReturn = await this.Context.Enemies
+                .AsQueryable()
+                .Where(expression)
+                .AnyAsync();
+
+            return boolToReturn;
+        }
+
+        public void Update(Enemy enemy)
+        {
+            this.Context.Enemies.Update(enemy);
+        }
+
+        public async Task AddAsync(Enemy enemy)
+            => await this.Context.Enemies.AddAsync(enemy);
     }
 }
