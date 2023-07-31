@@ -95,8 +95,14 @@ namespace ShapeDungeon.Services
             activeCombat.IsActive = false;
             activeCombat.Player.IsInCombat = false;
 
-            if (activeCombat.CurrentEnemyHp <= 0) await PlayerWon(enemyRoom);
-            else await EnemyWon(activeCombat);
+            if (activeCombat.CurrentEnemyHp <= 0)
+            {
+                await PlayerWon(enemyRoom, activeCombat);
+            }
+            else
+            {
+                await EnemyWon(activeCombat);
+            }
 
             return enemyRoom.IsEnemyDefeated;
         }
@@ -192,12 +198,13 @@ namespace ShapeDungeon.Services
             return combat;
         }
 
-        private async Task PlayerWon(EnemyRoom enemyRoom)
+        private async Task PlayerWon(EnemyRoom enemyRoom, Combat activeCombat)
         {
             enemyRoom.IsEnemyDefeated = true;
             await _unitOfWork.Commit(() =>
             {
                 _enemyRoomRepository.Update(enemyRoom);
+                _combatRepository.Update(activeCombat);
 
             });
         }
