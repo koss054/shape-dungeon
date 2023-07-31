@@ -200,9 +200,6 @@ namespace ShapeDungeon.Services
         // Exception with string in () will be the name of the custom exception.
         private async Task<bool> IsActiveRoomValidForCombat(Room activeRoom)
         {
-            if (activeRoom == null) 
-                throw new ArgumentNullException(nameof(activeRoom));
-
             if (!activeRoom.IsEnemyRoom) 
                 throw new Exception("NotEnemyRoomException");
 
