@@ -25,9 +25,9 @@ namespace ShapeDungeon.Services
             ICombatRepository combatRepository,
             IEnemyRepository enemyRepository,
             IPlayerRepository playerRepository,
-            IUnitOfWork unitOfWork,
             IEnemyRoomRepository enemyRoomRepository,
-            IRoomRepository roomRepository)
+            IRoomRepository roomRepository,
+            IUnitOfWork unitOfWork)
         {
             _combatRepository = combatRepository;
             _enemyRepository = enemyRepository;
