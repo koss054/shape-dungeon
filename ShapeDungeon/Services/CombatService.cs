@@ -84,9 +84,6 @@ namespace ShapeDungeon.Services
             return combatDto;
         }
 
-        // TODO: Split method so it doesn't do two things at the same time.
-        // 1. Updates entity; 2. Returns value.
-        // TODO2: Debug here cuz you somehow bugged the player win, lol.
         public async Task<bool> HasPlayerWon()
         {
             var activeCombat = await _combatRepository.GetFirstAsync(
@@ -98,45 +95,8 @@ namespace ShapeDungeon.Services
             activeCombat.IsActive = false;
             activeCombat.Player.IsInCombat = false;
 
-            if (activeCombat.CurrentEnemyHp <= 0)
-            {
-                enemyRoom.IsEnemyDefeated = true;
-                await _unitOfWork.Commit(() =>
-                {
-                    _enemyRoomRepository.Update(enemyRoom);
-
-                });
-            }
-            else
-            {
-                var combatRoom = await _roomRepository.GetFirstAsync(
-                    new RoomMoveSpecification());
-
-                var prevRoom = await _roomRepository.GetFirstAsync(
-                    new RoomScoutSpecification());
-
-                var startRoom = await _roomRepository.GetFirstAsync(
-                    new RoomCoordsSpecification(0, 0));
-
-                combatRoom.IsActiveForScout = false;
-                combatRoom.IsActiveForMove = false;
-                prevRoom.IsActiveForScout = false;
-                prevRoom.IsActiveForMove = false;
-
-                // Start room always exists - seeded to db with coords x0 y0.
-                startRoom!.IsActiveForScout = true;
-                startRoom!.IsActiveForMove = true;
-
-                activeCombat.Player.CurrentExp = 0;
-
-                await _unitOfWork.Commit(() =>
-                {
-                    _roomRepository.Update(combatRoom);
-                    _roomRepository.Update(prevRoom);
-                    _roomRepository.Update(startRoom);
-                    _combatRepository.Update(activeCombat);
-                });
-            }
+            if (activeCombat.CurrentEnemyHp <= 0) await PlayerWon(enemyRoom);
+            else await EnemyWon(activeCombat);
 
             return enemyRoom.IsEnemyDefeated;
         }
@@ -230,6 +190,47 @@ namespace ShapeDungeon.Services
             };
 
             return combat;
+        }
+
+        private async Task PlayerWon(EnemyRoom enemyRoom)
+        {
+            enemyRoom.IsEnemyDefeated = true;
+            await _unitOfWork.Commit(() =>
+            {
+                _enemyRoomRepository.Update(enemyRoom);
+
+            });
+        }
+
+        private async Task EnemyWon(Combat activeCombat)
+        {
+            var combatRoom = await _roomRepository.GetFirstAsync(
+                new RoomMoveSpecification());
+
+            var prevRoom = await _roomRepository.GetFirstAsync(
+                new RoomScoutSpecification());
+
+            var startRoom = await _roomRepository.GetFirstAsync(
+                new RoomCoordsSpecification(0, 0));
+
+            combatRoom.IsActiveForScout = false;
+            combatRoom.IsActiveForMove = false;
+            prevRoom.IsActiveForScout = false;
+            prevRoom.IsActiveForMove = false;
+
+            // Start room always exists - seeded to db with coords x0 y0.
+            startRoom.IsActiveForScout = true;
+            startRoom.IsActiveForMove = true;
+
+            activeCombat.Player.CurrentExp = 0;
+
+            await _unitOfWork.Commit(() =>
+            {
+                _roomRepository.Update(combatRoom);
+                _roomRepository.Update(prevRoom);
+                _roomRepository.Update(startRoom);
+                _combatRepository.Update(activeCombat);
+            });
         }
     }
 }
