@@ -25,8 +25,11 @@ namespace ShapeDungeon.Controllers
         }
 
         [HttpGet]
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
+            var isAnyInCombat = await _playerGetService.GetIsAnyInCombat();
+            if (isAnyInCombat) return RedirectToAction("Index", "Home");
+
             var model = new PlayerDto();
             return View(model);
         }
@@ -54,6 +57,9 @@ namespace ShapeDungeon.Controllers
         [HttpGet]
         public async Task<IActionResult> Current()
         {
+            var isAnyInCombat = await _playerGetService.GetIsAnyInCombat();
+            if (isAnyInCombat) return RedirectToAction("Index", "Home");
+
             var activePlayer = await _playerGetService.GetActivePlayer();
             return View(activePlayer);
         }
@@ -61,6 +67,9 @@ namespace ShapeDungeon.Controllers
         [HttpGet]
         public async Task<IActionResult> Select()
         {
+            var isAnyInCombat = await _playerGetService.GetIsAnyInCombat();
+            if (isAnyInCombat) return RedirectToAction("Index", "Home");
+
             var playerList = await _playerGetService.GetAllPlayersAsync();
             return View(playerList);
         }
@@ -68,6 +77,9 @@ namespace ShapeDungeon.Controllers
         [HttpGet]
         public async Task<IActionResult> Switch(Guid newId)
         {
+            var isAnyInCombat = await _playerGetService.GetIsAnyInCombat();
+            if (isAnyInCombat) return RedirectToAction("Index", "Home");
+
             await _playerSelectService.UpdateActivePlayer(newId);
             return RedirectToAction("Select");
         }
@@ -75,6 +87,9 @@ namespace ShapeDungeon.Controllers
         [HttpGet]
         public async Task<IActionResult> Increase(CharacterStat statToIncrease)
         {
+            var isAnyInCombat = await _playerGetService.GetIsAnyInCombat();
+            if (isAnyInCombat) return RedirectToAction("Index", "Home");
+
             await _playerUpdateService.IncreaseStat(statToIncrease);
             return RedirectToAction("Current");
         }

@@ -1,5 +1,6 @@
 ﻿import { updateEnemyHpBar, updatePlayerHpBar } from "../combat/combat-hp-bars.js";
 import { shake } from "../animations/shake.js";
+import { disableNavbar } from "../combat/combat-navbar.js";
 
 // Buttons.
 const attackBtn = document.getElementById("attack-btn");
@@ -138,4 +139,7 @@ function onCombatPageLoad() {
     // Update hp bars.
     updateEnemyHpBar(currentHpEnemyEl.innerText, totalHpEnemyEl.innerText);
     updatePlayerHpBar(currentHpPlayerEl.innerText, totalHpPlayerEl.innerText);
+
+    console.log("bruh")
+    disableNavbar();
 }
