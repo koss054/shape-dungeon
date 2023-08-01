@@ -1,25 +1,31 @@
-name: dotnet package
+name: .NET Desktop App CI
 
-on: [push]
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
-  build:
-
+  build-and-test:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
-      
-      - name: Setup .NET Core SDK ${{ matrix.dotnet-version }}
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: 6.0.x
-          
-      - name: Install dependencies
-        run: dotnet restore
-        
-      - name: Build
-        run: dotnet build --configuration Release --no-restore
-        
-      - name: Test
-        run: dotnet test --no-restore --verbosity normal
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Setup .NET SDK
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '5.x' # You can change this to your desired .NET version
+
+    - name: Restore NuGet packages
+      run: dotnet restore ./ShapeDungeon/ShapeDungeon.sln
+
+    - name: Build the solution
+      run: dotnet build ./ShapeDungeon/ShapeDungeon.sln --configuration Release
+
+    - name: Run tests
+      run: dotnet test ./ShapeDungeon.Tests/ShapeDungeon.Tests.csproj --configuration Release
