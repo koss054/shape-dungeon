@@ -57,7 +57,7 @@ jobs:
 
     env:
       Solution_Name: ShapeDungeon.sln                         
-      Test_Project_Path: ShapeDungeon.Tests\ShapeDungeon.Tests.csproj
+      Test_Project_Path: ..\ShapeDungeon.Tests\ShapeDungeon.Tests.csproj
 
     steps:
     - name: Checkout
