@@ -10,5 +10,6 @@ namespace ShapeDungeon.Interfaces.Services.Players
         Task<PlayerDto> GetActivePlayer();
 
         Task<PlayerStatsResponse> GetActivePlayerStats();
+        Task<bool> GetIsAnyInCombat();
     }
 }

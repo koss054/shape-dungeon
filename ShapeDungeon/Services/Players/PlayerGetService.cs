@@ -44,5 +44,9 @@ namespace ShapeDungeon.Services.Players
         public async Task<PlayerStatsResponse> GetActivePlayerStats()
             => await _playerRepository.GetFirstAsync(
                 new PlayerIsActiveSpecification());
+
+        public async Task<bool> GetIsAnyInCombat()
+            => await _playerRepository.IsValidByAsync(
+                new PlayerIsInCombatSpecification());
     }
 }
