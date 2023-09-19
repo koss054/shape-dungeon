@@ -1,4 +1,5 @@
 ﻿using ShapeDungeon.DTOs.Rooms;
+using ShapeDungeon.Entities;
 using ShapeDungeon.Interfaces.Repositories;
 using ShapeDungeon.Interfaces.Services.Rooms;
 using ShapeDungeon.Specifications.Rooms;
@@ -14,7 +15,11 @@ namespace ShapeDungeon.Services.Rooms
             _roomRepository = roomRepository;
         }
 
-        public async Task<RoomDto> GetActiveForMoveAsync()
+        public async Task<Room> GetActiveForMoveAsync()
+            => await _roomRepository.GetFirstAsync(
+                new RoomMoveSpecification());
+
+        public async Task<RoomDto> GetActiveForMoveDtoAsync()
         {
             var room = await _roomRepository.GetFirstAsync(
                 new RoomMoveSpecification());

@@ -52,7 +52,7 @@ namespace ShapeDungeon.Controllers
             if (player.IsInCombat)
                 return RedirectToAction("Action", "Combat");
 
-            var room = await _getRoomService.GetActiveForMoveAsync();
+            var room = await _getRoomService.GetActiveForMoveDtoAsync();
             var roomNav = await _checkRoomNeighborsService
                 .SetDtoNeighborsAsync(room.CoordX, room.CoordY);
 

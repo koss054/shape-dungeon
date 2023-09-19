@@ -40,7 +40,7 @@ namespace ShapeDungeon.Tests.ServiceTests.Rooms
                 .ReturnsAsync(expectedRoom);
 
             // Act
-            var actualRoomDto = await _sut.GetActiveForMoveAsync();
+            var actualRoomDto = await _sut.GetActiveForMoveDtoAsync();
 
             // Assert
             actualRoomDto.Should().BeOfType<RoomDto>();
@@ -58,7 +58,7 @@ namespace ShapeDungeon.Tests.ServiceTests.Rooms
                 .ThrowsAsync(new ArgumentNullException("roomToReturn", "No room matches provided specification."));
 
             // Act
-            var action = async () => await _sut.GetActiveForMoveAsync();
+            var action = async () => await _sut.GetActiveForMoveDtoAsync();
 
             // Assert
             await action.Should().ThrowAsync<ArgumentNullException>()

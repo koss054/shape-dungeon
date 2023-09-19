@@ -1,10 +1,12 @@
 ﻿using ShapeDungeon.DTOs.Rooms;
+using ShapeDungeon.Entities;
 
 namespace ShapeDungeon.Interfaces.Services.Rooms
 {
     public interface IGetRoomService
     {
-        Task<RoomDto> GetActiveForMoveAsync();
+        Task<Room> GetActiveForMoveAsync();
+        Task<RoomDto> GetActiveForMoveDtoAsync();
         Task<RoomDto> GetActiveForScoutAsync();
         Task<RoomDetailsDto> GetActiveForEditAsync();
         Task<Guid> GetActiveForMoveId();
