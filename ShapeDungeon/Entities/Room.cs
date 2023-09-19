@@ -20,6 +20,7 @@ namespace ShapeDungeon.Entities
 
         public bool CanGoDown { get; set; }
 
+        // TODO: Change these four variables to an enum.
         public bool IsStartRoom { get; init; }
 
         public bool IsEnemyRoom { get; init; }
